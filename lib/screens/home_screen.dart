@@ -1,3 +1,4 @@
+import 'package:bimlinkz_mobile_app/widgets/bottom_navbar.dart';
 import 'package:bimlinkz_mobile_app/widgets/category_card.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -90,6 +91,7 @@ class HomeScreen extends StatelessWidget {
             ],
           ),
         )),
+        bottomNavigationBar: BottomNavBar(),
       ),
     );
   }
