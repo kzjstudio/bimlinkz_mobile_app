@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "161008572662",
+    "project_id": "bimixx-2eab2",
+    "storage_bucket": "bimixx-2eab2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:161008572662:android:c4a264be5598292e43b4d7",
+        "android_client_info": {
+          "package_name": "com.example.bimlinkz_mobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "161008572662-e3jd1ri9t0ugg15cift6frp64fpma2kd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDolSARSiBmfFp7gJOqKaX5umqi1-Gv1WY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "161008572662-e3jd1ri9t0ugg15cift6frp64fpma2kd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

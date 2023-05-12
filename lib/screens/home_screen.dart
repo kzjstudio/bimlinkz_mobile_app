@@ -1,5 +1,6 @@
 import 'package:bimlinkz_mobile_app/widgets/category_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -10,9 +11,30 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
+var collection = FirebaseFirestore.instance.collection('categories');
+bool _isLoaded = false;
+late List<Map<String, dynamic>> items;
+var categories = {};
+
 class _HomeScreenState extends State<HomeScreen> {
-  CollectionReference firestore =
-      FirebaseFirestore.instance.collection('Categories');
+  void getData() async {
+    List<Map<String, dynamic>> tempList = [];
+    var data = await collection.get();
+    data.docs.forEach((element) {
+      tempList.add(element.data());
+    });
+
+    setState(() {
+      items = tempList;
+      _isLoaded = true;
+    });
+  }
+
+  @override
+  void initState() {
+    getData();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,15 +99,16 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Container(
               height: 130,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: [
-                  CategoryCard(),
-                  CategoryCard(),
-                  CategoryCard(),
-                  CategoryCard(),
-                ],
-              ),
+              child: _isLoaded
+                  ? ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: items.length,
+                      itemBuilder: (context, index) {
+                        return CategoryCard(
+                          catText: items[index]["id"],
+                        );
+                      })
+                  : Container(child: Text("no data")),
             ),
             const SizedBox(
               height: 30,
