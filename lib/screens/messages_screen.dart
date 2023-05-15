@@ -15,6 +15,7 @@ class MessagesScreen extends StatelessWidget {
               color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
         ),
       ),
+      body: const Center(child: Text('No messages yet')),
     );
   }
 }

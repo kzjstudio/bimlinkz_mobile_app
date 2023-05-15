@@ -106,6 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       itemBuilder: (context, index) {
                         return CategoryCard(
                           catText: items[index]["id"],
+                          imageUrl: items[index]['imageUrl'],
                         );
                       })
                   : Container(child: Text("no data")),
