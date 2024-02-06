@@ -1,11 +1,11 @@
+import 'package:bimlinkz_mobile_app/screens/become_a_tradesman_landing_screen.dart';
 import 'package:bimlinkz_mobile_app/widgets/category_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -20,9 +20,9 @@ class _HomeScreenState extends State<HomeScreen> {
   void getData() async {
     List<Map<String, dynamic>> tempList = [];
     var data = await collection.get();
-    data.docs.forEach((element) {
+    for (var element in data.docs) {
       tempList.add(element.data());
-    });
+    }
 
     setState(() {
       items = tempList;
@@ -40,11 +40,24 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).primaryColor,
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const BecomeATradesManScreen()));
+            },
+            icon: const Icon(Icons.link_rounded),
+            iconSize: 40,
+            color: Colors.green.shade800,
+          )
+        ],
         title: Text(
           "Bimlinkz",
           style: GoogleFonts.inter(
-              color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
+              color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
         ),
       ),
       body: SingleChildScrollView(
@@ -88,7 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const Text(
-                  'Populart searches',
+                  'Popular searches',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
                 ),
                 TextButton(onPressed: () {}, child: const Text('See all'))
@@ -97,7 +110,7 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(
               height: 14,
             ),
-            Container(
+            SizedBox(
               height: 130,
               child: _isLoaded
                   ? ListView.builder(
@@ -109,7 +122,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           imageUrl: items[index]['imageUrl'],
                         );
                       })
-                  : Container(child: Text("no data")),
+                  : Container(child: const Text("no data")),
             ),
             const SizedBox(
               height: 30,
@@ -118,7 +131,7 @@ class _HomeScreenState extends State<HomeScreen> {
               width: 338,
               height: 316,
               color: Colors.grey,
-            )
+            ),
           ],
         ),
       )),

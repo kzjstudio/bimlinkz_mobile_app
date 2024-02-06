@@ -1,10 +1,14 @@
+import 'package:bimlinkz_mobile_app/screens/popular_selection_screen.dart';
 import 'package:flutter/material.dart';
 
 class CategoryCard extends StatefulWidget {
   final String catText;
   final String imageUrl;
-  const CategoryCard(
-      {super.key, required this.catText, required this.imageUrl});
+  const CategoryCard({
+    super.key,
+    required this.catText,
+    required this.imageUrl,
+  });
 
   @override
   State<CategoryCard> createState() => _CategoryCardState();
@@ -15,7 +19,12 @@ class _CategoryCardState extends State<CategoryCard> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        print(widget.catText);
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => PopularSelectionScrren(
+                      id: widget.catText,
+                    )));
       },
       child: Container(
         decoration: const BoxDecoration(
@@ -40,7 +49,7 @@ class _CategoryCardState extends State<CategoryCard> {
                 ),
               ),
               ClipRRect(
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                     bottomLeft: Radius.circular(10),
                     bottomRight: Radius.circular(10)),
                 child: Container(

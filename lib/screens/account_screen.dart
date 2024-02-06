@@ -1,32 +1,37 @@
+import 'package:bimlinkz_mobile_app/Controllers/auth_controller.dart';
+import 'package:bimlinkz_mobile_app/screens/become_a_tradesman_landing_screen.dart';
+import 'package:bimlinkz_mobile_app/screens/create_account_screen.dart';
+import 'package:bimlinkz_mobile_app/screens/signin.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class AccountScreen extends StatelessWidget {
-  const AccountScreen({super.key});
+  final AuthController c = Get.find();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Row(
+        elevation: 20,
+        title: const Row(
           children: [
-            const CircleAvatar(
+            CircleAvatar(
               radius: 40,
               child: Icon(Icons.person),
             ),
-            const SizedBox(
-              width: 15,
+            SizedBox(
+              width: 20,
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
+              children: [
                 Text(
                   'Guest',
-                  style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.w700),
+                  style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  'Welcome to Bimlinkz',
-                  style: TextStyle(color: Colors.white, fontSize: 16),
+                  'Welcome to Bimlinks',
+                  style: TextStyle(fontSize: 15),
                 )
               ],
             )
@@ -35,32 +40,79 @@ class AccountScreen extends StatelessWidget {
         toolbarHeight: 150,
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            ListTile(
-              shape: Border(bottom: BorderSide(width: 1.0, color: Colors.grey)),
-              leading: Icon(
-                Icons.add_box_outlined,
-                color: Theme.of(context).copyWith().primaryColor,
-              ),
-              title: Text(
-                'Join Bimlinkz',
-                style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
-                    color: Theme.of(context).copyWith().primaryColor),
-              ),
-            ),
-            const ListTile(
-              leading: const Icon(Icons.login),
-              title: Text(
-                'Sign in',
-                style: TextStyle(
-                  fontSize: 18,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              InkWell(
+                onTap: (() {
+                  Get.to(() => CreateAccountScreen());
+                }),
+                child: const ListTile(
+                  trailing: Icon(Icons.arrow_right_alt_outlined),
+                  leading: Icon(
+                    Icons.add_box_outlined,
+                  ),
+                  title: Text(
+                    'Join Bimlinkz',
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ],
+              InkWell(
+                onTap: (() {
+                  Get.to(() => SignInScreen());
+                }),
+                child: const ListTile(
+                  leading: Icon(Icons.account_box_outlined),
+                  trailing: Icon(Icons.arrow_right_alt_outlined),
+                  title: Text(
+                    'Sign in',
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+              ),
+              Obx(
+                () => c.isLoggedIn.value
+                    ? Container()
+                    : const ListTile(
+                        leading: Icon(Icons.account_box_outlined),
+                        title: Text(
+                          'Account',
+                          style: TextStyle(
+                            fontSize: 18,
+                          ),
+                        ),
+                      ),
+              ),
+              Obx(
+                () => c.isLoggedIn.value
+                    ? Container()
+                    : const ListTile(
+                        leading: Icon(Icons.favorite_border_outlined),
+                        title: Text(
+                          'Saved',
+                          style: TextStyle(
+                            fontSize: 18,
+                          ),
+                        ),
+                      ),
+              ),
+              FloatingActionButton(onPressed: () {
+                if (c.isLoggedIn.value) {
+                  c.isLoggedIn.value = false;
+                  print("pressed");
+                } else {
+                  c.isLoggedIn.value = true;
+                }
+              })
+            ],
+          ),
         ),
       ),
     );
