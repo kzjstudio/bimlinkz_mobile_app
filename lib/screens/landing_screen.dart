@@ -14,7 +14,6 @@ class LandingScreen extends StatefulWidget {
 }
 
 class _LandingScreenState extends State<LandingScreen> {
-  AuthController controller = Get.put(AuthController());
   int _selectedIndex = 0;
 
   void _onitemTapped(int index) {

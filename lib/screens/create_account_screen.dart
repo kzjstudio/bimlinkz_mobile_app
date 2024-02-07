@@ -1,11 +1,17 @@
+import 'package:bimlinkz_mobile_app/screens/create_account_with_email_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class CreateAccountScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Create Account'),
+        backgroundColor: Theme.of(context).primaryColor,
+        title: const Text(
+          'Create Account',
+          style: TextStyle(color: Colors.white),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -14,43 +20,65 @@ class CreateAccountScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Container(
                     height: 100,
                     width: 100,
                     color: Colors.amber,
+                    child: const Center(child: Text("logo")),
                   ),
                 ],
               ),
-              SizedBox(height: 24.0),
-              Text(
+              const SizedBox(height: 24.0),
+              const Text(
                 'Join bimliknz and find tradesmen and specialist for all your needs. ',
                 style: TextStyle(fontSize: 20),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () {},
-                child: Text('Sign up with Google'),
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.red),
+                style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.deepPurpleAccent,
+                    backgroundColor: Colors.white),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.g_mobiledata),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text('Sign up with Google'),
+                  ],
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               ElevatedButton(
-                onPressed: () {},
-                child: Text('Sign up with email'),
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.blue),
+                onPressed: () {
+                  Get.to(() => CreateAccountWithEmailScreen(),
+                      transition: Transition.rightToLeftWithFade);
+                },
+                style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.deepPurpleAccent,
+                    backgroundColor: Colors.white),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.email_outlined),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text('Sign up with email'),
+                  ],
                 ),
               ),
-              SizedBox(
-                height: 20,
+              const SizedBox(
+                height: 15,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('By joining you aggree to Bimlinkz'),
+                  const Text('By joining you agree to Bimlinkz'),
                   TextButton(onPressed: () {}, child: Text('terms of service'))
                 ],
               )
