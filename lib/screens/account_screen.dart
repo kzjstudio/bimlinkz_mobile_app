@@ -78,7 +78,7 @@ class AccountScreen extends StatelessWidget {
                 ),
               ),
               Obx(
-                () => c.isLoggedIn.value
+                () => c.userModel.value.isLoggedIn
                     ? Container()
                     : const ListTile(
                         leading: Icon(Icons.account_box_outlined),
@@ -91,7 +91,7 @@ class AccountScreen extends StatelessWidget {
                       ),
               ),
               Obx(
-                () => c.isLoggedIn.value
+                () => c.userModel.value.isLoggedIn
                     ? Container()
                     : const ListTile(
                         leading: Icon(Icons.favorite_border_outlined),
@@ -103,14 +103,6 @@ class AccountScreen extends StatelessWidget {
                         ),
                       ),
               ),
-              FloatingActionButton(onPressed: () {
-                if (c.isLoggedIn.value) {
-                  c.isLoggedIn.value = false;
-                  print("pressed");
-                } else {
-                  c.isLoggedIn.value = true;
-                }
-              })
             ],
           ),
         ),
@@ -118,18 +110,3 @@ class AccountScreen extends StatelessWidget {
     );
   }
 }
-
-
-
-// Row(
-//               children: [
-//                 const Icon(Icons.add_box_outlined),
-//                 TextButton(
-//                     onPressed: () {},
-//                     child: const Text(
-//                       'Join Bimlinkz ',
-//                       style:
-//                           TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
-//                     ))
-//               ],
-//             ),

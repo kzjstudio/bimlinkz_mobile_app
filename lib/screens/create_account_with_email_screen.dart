@@ -118,10 +118,7 @@ class CreateAccountWithEmailScreen extends GetWidget<AuthController> {
                         children: [
                           const Text('By joining you agree to Bimlinkz'),
                           TextButton(
-                              onPressed: () {
-                                print(controller.firebaseUser);
-                              },
-                              child: Text('terms of service'))
+                              onPressed: () {}, child: Text('terms of service'))
                         ],
                       )
                     ],

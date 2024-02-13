@@ -1,14 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class User {
-  final String id;
-  final String name;
-  final String email;
-  final String profileImage;
+class UserModel {
+  String id;
+  String name;
+  String email;
+  String profileImage;
+  bool isLoggedIn;
 
-  User(
-      {required this.id,
-      required this.name,
-      required this.email,
-      required this.profileImage});
+  UserModel(
+      {this.id = "",
+      this.name = "",
+      this.email = "",
+      this.profileImage = "",
+      this.isLoggedIn = false});
 }

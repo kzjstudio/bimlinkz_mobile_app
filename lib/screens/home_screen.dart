@@ -1,3 +1,5 @@
+import 'package:bimlinkz_mobile_app/Controllers/auth_controller.dart';
+import 'package:bimlinkz_mobile_app/models/user_model.dart';
 import 'package:bimlinkz_mobile_app/screens/become_a_tradesman_landing_screen.dart';
 import 'package:bimlinkz_mobile_app/widgets/category_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -15,6 +17,7 @@ var collection = FirebaseFirestore.instance.collection('categories');
 bool _isLoaded = false;
 late List<Map<String, dynamic>> items;
 var categories = {};
+AuthController authController = AuthController();
 
 class _HomeScreenState extends State<HomeScreen> {
   void getData() async {
@@ -132,6 +135,20 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 316,
               color: Colors.grey,
             ),
+            Row(
+              children: [
+                ElevatedButton(
+                    onPressed: () {
+                      print(authController.isLoggedIn);
+                    },
+                    child: Text('Press')),
+                ElevatedButton(
+                    onPressed: () {
+                      print(authController.signOut());
+                    },
+                    child: Text('signout'))
+              ],
+            )
           ],
         ),
       )),
