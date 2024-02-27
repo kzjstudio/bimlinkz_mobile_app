@@ -1,11 +1,12 @@
 import 'package:bimlinkz_mobile_app/models/user_model.dart';
-import 'package:bimlinkz_mobile_app/screens/home_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/landing_screen.dart';
+import 'package:bimlinkz_mobile_app/screens/loginScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthController extends GetxController {
+  static AuthController instance = Get.find();
   FirebaseAuth auth = FirebaseAuth.instance;
   final db = FirebaseFirestore.instance;
   late Rx<User?> _user;
@@ -14,17 +15,19 @@ class AuthController extends GetxController {
   Rx<UserModel> userModel = UserModel().obs;
 
   @override
-  void onInit() {
+  void onReady() {
+    super.onReady();
     _user = Rx<User?>(auth.currentUser);
     _user.bindStream(auth.userChanges());
+    ever(_user, _initialScreen);
   }
 
-  setIsLoggedIn(User? user) {
+  _initialScreen(User? user) {
     if (user == null) {
-      print('no user');
+      print('Login');
+      Get.offAll(() => LoginScreen());
     } else {
-      isLoggedIn.value = true;
-      print("logged in as ${user.email}");
+      Get.offAll(() => LandingScreen());
     }
   }
 
@@ -49,6 +52,15 @@ class AuthController extends GetxController {
       printError();
       Get.snackbar("Error creating account", e.toString(),
           snackPosition: SnackPosition.BOTTOM);
+    }
+  }
+
+  signIn(String email, String password) async {
+    try {
+      await auth.signInWithEmailAndPassword(email: email, password: password);
+    } catch (e) {
+      printError();
+      Get.snackbar("Sign in failed", "Wrong email or password");
     }
   }
 

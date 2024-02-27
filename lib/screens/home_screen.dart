@@ -137,11 +137,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Row(
               children: [
-                ElevatedButton(
-                    onPressed: () {
-                      print(authController.isLoggedIn);
-                    },
-                    child: Text('Press')),
+                ElevatedButton(onPressed: () {}, child: Text('Press')),
                 ElevatedButton(
                     onPressed: () {
                       print(authController.signOut());
