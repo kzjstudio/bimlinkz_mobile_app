@@ -1,9 +1,9 @@
 import 'package:bimlinkz_mobile_app/Controllers/auth_controller.dart';
-import 'package:bimlinkz_mobile_app/models/user_model.dart';
 import 'package:bimlinkz_mobile_app/screens/become_a_tradesman_landing_screen.dart';
 import 'package:bimlinkz_mobile_app/widgets/category_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -52,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   MaterialPageRoute(
                       builder: (context) => const BecomeATradesManScreen()));
             },
-            icon: const Icon(Icons.link_rounded),
+            icon: const FaIcon(FontAwesomeIcons.link),
             iconSize: 40,
             color: Colors.green.shade800,
           )

@@ -7,7 +7,13 @@ import 'package:google_fonts/google_fonts.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp().then((value) => Get.put(AuthController()));
+  await Firebase.initializeApp(
+          options: FirebaseOptions(
+              apiKey: 'AIzaSyA8cjWYfUqYCNo__LBkwBIF6CARzQPD5mI',
+              appId: '1:161008572662:web:4bb6f6292513552e43b4d7',
+              messagingSenderId: '161008572662',
+              projectId: 'bimixx-2eab2'))
+      .then((value) => Get.put(AuthController()));
   runApp(MyApp());
 }
 
@@ -19,7 +25,9 @@ class MyApp extends StatelessWidget {
         title: 'Bimlinkz',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(
-              seedColor: Colors.deepPurple, brightness: Brightness.light),
+              background: Colors.white,
+              seedColor: Colors.deepPurple,
+              brightness: Brightness.light),
           useMaterial3: true,
           textTheme: GoogleFonts.nunitoTextTheme(),
         ),

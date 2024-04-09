@@ -1,8 +1,10 @@
+import 'package:bimlinkz_mobile_app/screens/become_a_tradesman_landing_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/create_account_with_email_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
-class CreateAccountScreen extends StatelessWidget {
+class CreateTradesAccountScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,30 +34,13 @@ class CreateAccountScreen extends StatelessWidget {
               ),
               const SizedBox(height: 24.0),
               const Text(
-                'Join bimliknz and find tradesmen and specialist for all your needs. ',
+                'Join BimLinkz and position yourself among skilled tradespeople and specialists, connecting you to a wider network of potential clients and projects.',
                 style: TextStyle(fontSize: 20),
               ),
               const SizedBox(height: 16),
               ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.deepPurpleAccent,
-                    backgroundColor: Colors.white),
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.g_mobiledata),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Text('Sign up with Google'),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 16),
-              ElevatedButton(
                 onPressed: () {
-                  Get.to(() => CreateAccountWithEmailScreen(),
+                  Get.to(() => BecomeATradesManScreen(),
                       transition: Transition.rightToLeftWithFade);
                 },
                 style: ElevatedButton.styleFrom(
@@ -64,11 +49,7 @@ class CreateAccountScreen extends StatelessWidget {
                 child: const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.email_outlined),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Text('Sign up with email'),
+                    Text('Continue to fill your information'),
                   ],
                 ),
               ),
