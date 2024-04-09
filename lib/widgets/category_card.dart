@@ -1,4 +1,4 @@
-import 'package:bimlinkz_mobile_app/screens/popular_selection_screen.dart';
+import 'package:bimlinkz_mobile_app/screens/mobile/popular_selection_screen.dart';
 import 'package:flutter/material.dart';
 
 class CategoryCard extends StatefulWidget {

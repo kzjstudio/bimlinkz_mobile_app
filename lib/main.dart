@@ -8,7 +8,8 @@ import 'package:google_fonts/google_fonts.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-          options: FirebaseOptions(
+          name: 'Bimlinkz',
+          options: const FirebaseOptions(
               apiKey: 'AIzaSyA8cjWYfUqYCNo__LBkwBIF6CARzQPD5mI',
               appId: '1:161008572662:web:4bb6f6292513552e43b4d7',
               messagingSenderId: '161008572662',

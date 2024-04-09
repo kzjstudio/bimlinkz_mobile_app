@@ -17,20 +17,53 @@ class CreateAccountWithEmailScreen extends GetWidget<AuthController> {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Theme.of(context).primaryColor,
-          title: const Text(
-            "Sign up with email",
-            style: TextStyle(color: Colors.white),
-          ),
         ),
-        body: SingleChildScrollView(
-            child: Form(
-                key: _formKey,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: SingleChildScrollView(
+              child: Column(
+            children: [
+              const Center(
+                child: Image(
+                  width: 200,
+                  height: 200,
+                  image: AssetImage('images/logo.jpg'),
+                ),
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Create account',
+                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                  ),
+                  TextButton(onPressed: () {}, child: const Text('Login'))
+                ],
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              Form(
+                  key: _formKey,
                   child: Column(
                     children: [
+                      TextFormField(
+                        controller: userNameController,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Plesae enter a user name';
+                          }
+                          return null;
+                        },
+                        decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            hintText: 'Public user name'),
+                      ),
                       const SizedBox(
-                        height: 100,
+                        height: 25,
                       ),
                       TextFormField(
                         controller: emailController,
@@ -74,22 +107,7 @@ class CreateAccountWithEmailScreen extends GetWidget<AuthController> {
                         ),
                       ),
                       const SizedBox(
-                        height: 25,
-                      ),
-                      TextFormField(
-                        controller: userNameController,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Plesae enter a user name';
-                          }
-                          return null;
-                        },
-                        decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            hintText: 'Public user name'),
-                      ),
-                      SizedBox(
-                        height: 25,
+                        height: 20,
                       ),
                       ElevatedButton(
                         onPressed: () {
@@ -100,16 +118,47 @@ class CreateAccountWithEmailScreen extends GetWidget<AuthController> {
                                 userNameController.text);
                           }
                         },
-                        style: ElevatedButton.styleFrom(
-                            foregroundColor: Colors.deepPurpleAccent,
-                            backgroundColor: Colors.white),
+                        style: ButtonStyle(
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(6.0),
+                            )),
+                            foregroundColor:
+                                const MaterialStatePropertyAll<Color>(
+                                    Colors.white),
+                            backgroundColor:
+                                const MaterialStatePropertyAll<Color>(
+                                    Color(0xff05CFB5))),
                         child: const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            SizedBox(
-                              width: 10,
+                            Text(
+                              'SIGN UP',
+                              style: TextStyle(fontWeight: FontWeight.bold),
                             ),
-                            Text('SIGN UP'),
+                          ],
+                        ),
+                      ),
+                      OutlinedButton(
+                        onPressed: () {},
+                        style: ButtonStyle(
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(6.0),
+                            )),
+                            foregroundColor:
+                                const MaterialStatePropertyAll<Color>(
+                                    Colors.transparent),
+                            backgroundColor:
+                                const MaterialStatePropertyAll<Color>(
+                                    Colors.white)),
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Sign up with google',
+                              style: TextStyle(color: Colors.black),
+                            ),
                           ],
                         ),
                       ),
@@ -122,9 +171,13 @@ class CreateAccountWithEmailScreen extends GetWidget<AuthController> {
                         ],
                       )
                     ],
-                  ),
-                ))),
+                  )),
+            ],
+          )),
+        ),
       ),
     );
   }
 }
+
+//color code #05CFB5

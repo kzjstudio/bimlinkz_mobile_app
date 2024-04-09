@@ -1,5 +1,5 @@
-import 'package:bimlinkz_mobile_app/screens/landing_screen.dart';
-import 'package:bimlinkz_mobile_app/screens/loginScreen.dart';
+import 'package:bimlinkz_mobile_app/screens/mobile/landing_screen.dart';
+import 'package:bimlinkz_mobile_app/screens/mobile/loginScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';

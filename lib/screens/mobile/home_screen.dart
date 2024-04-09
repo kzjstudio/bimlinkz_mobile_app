@@ -1,5 +1,5 @@
 import 'package:bimlinkz_mobile_app/Controllers/auth_controller.dart';
-import 'package:bimlinkz_mobile_app/screens/become_a_tradesman_landing_screen.dart';
+import 'package:bimlinkz_mobile_app/screens/mobile/become_a_tradesman_landing_screen.dart';
 import 'package:bimlinkz_mobile_app/widgets/category_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';

@@ -1,10 +1,8 @@
-import 'package:bimlinkz_mobile_app/Controllers/auth_controller.dart';
-import 'package:bimlinkz_mobile_app/screens/account_screen.dart';
-import 'package:bimlinkz_mobile_app/screens/home_screen.dart';
-import 'package:bimlinkz_mobile_app/screens/messages_screen.dart';
-import 'package:bimlinkz_mobile_app/screens/search_screen.dart';
+import 'package:bimlinkz_mobile_app/screens/mobile/account_screen.dart';
+import 'package:bimlinkz_mobile_app/screens/mobile/home_screen.dart';
+import 'package:bimlinkz_mobile_app/screens/mobile/messages_screen.dart';
+import 'package:bimlinkz_mobile_app/screens/mobile/search_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class LandingScreen extends StatefulWidget {
   const LandingScreen({super.key});

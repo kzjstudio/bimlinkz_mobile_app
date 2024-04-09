@@ -1,6 +1,5 @@
 import 'package:bimlinkz_mobile_app/Controllers/auth_controller.dart';
-import 'package:bimlinkz_mobile_app/screens/create_trades_account_screen.dart';
-import 'package:bimlinkz_mobile_app/screens/create_account_with_email_screen.dart';
+import 'package:bimlinkz_mobile_app/screens/mobile/create_account_with_email_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
