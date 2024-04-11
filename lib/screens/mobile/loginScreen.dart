@@ -18,71 +18,64 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
         body: SingleChildScrollView(
           child: Center(
-            // Center the content horizontally
             child: ConstrainedBox(
-              // Constrain the width
               constraints: BoxConstraints(maxWidth: 500),
-              child: Form(
-                key: _formKey,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: Form(
+                  key: _formKey,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Container(
-                        height: 250.0,
-                        width: 250.0,
-                        padding: const EdgeInsets.only(top: 40),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(200),
-                        ),
-                        child: const Center(
-                          child: Image(
-                            width: 300,
-                            height: 300,
-                            image: AssetImage('images/logo.jpg'),
-                          ),
+                      Center(
+                        child: Image.asset(
+                          'images/logo.jpg',
+                          width: 200,
+                          height: 200,
                         ),
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 30),
                       const Text(
-                        'Welcome to Bimlinkz',
-                        style: TextStyle(fontSize: 20),
+                        'Welcome Back!',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                      Text(width.toString()),
-                      SizedBox(
-                        height: 16,
-                      ),
+                      const SizedBox(height: 10),
                       TextFormField(
                         controller: emailController,
-                        decoration: const InputDecoration(
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: InputDecoration(
                           border: OutlineInputBorder(),
                           labelText: 'Email',
-                          hintText: 'Enter valid mail id as abc@gmail.com',
+                          hintText: 'Enter your email',
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter your email';
+                          } else if (!RegExp(
+                                  r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+                              .hasMatch(value)) {
+                            return 'Enter a valid email address';
                           }
                           return null;
                         },
                       ),
-                      const SizedBox(
-                        height: 30,
-                      ),
+                      const SizedBox(height: 20),
                       TextFormField(
                         controller: passwordController,
                         obscureText: true,
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                           border: OutlineInputBorder(),
                           labelText: 'Password',
-                          hintText: 'Enter your secure password',
+                          hintText: 'Enter your password',
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -91,61 +84,23 @@ class _LoginScreenState extends State<LoginScreen> {
                           return null;
                         },
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          TextButton(
-                              style: ButtonStyle(
-                                overlayColor: MaterialStateColor.resolveWith(
-                                    (states) => Colors.transparent),
-                              ),
-                              onPressed: () {},
-                              child: Text('Forgot Password?')),
-                        ],
+                      const SizedBox(height: 20),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: TextButton(
+                          onPressed: () {},
+                          child: Text('Forgot Password?'),
+                        ),
                       ),
-                      const SizedBox(height: 16),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          ElevatedButton.icon(
-                            style: ElevatedButton.styleFrom(
-                              minimumSize: Size(170, 35),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                            ),
-                            onPressed: () {},
-                            icon: const FaIcon(
-                              FontAwesomeIcons.google,
-                              size: 20,
-                            ),
-                            label: const Text("Sign in"),
-                          ),
-                          ElevatedButton.icon(
-                            style: ElevatedButton.styleFrom(
-                              minimumSize: Size(170, 35),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                            ),
-                            onPressed: () {},
-                            icon: const FaIcon(
-                              FontAwesomeIcons.facebook,
-                              size: 20,
-                            ),
-                            label: const Text("Sign in"),
-                          )
-                        ],
-                      ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 20),
                       ElevatedButton(
-                        style: ButtonStyle(
-                            shape: MaterialStateProperty.all(
-                                const RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(8)))),
-                            minimumSize: MaterialStateProperty.all(
-                                const Size(double.infinity, 40))),
+                        style: ElevatedButton.styleFrom(
+                          minimumSize:
+                              Size(double.infinity, 50), // set minimum size
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
                             AuthController.instance.signIn(
@@ -154,18 +109,19 @@ class _LoginScreenState extends State<LoginScreen> {
                         },
                         child: const Text('Login'),
                       ),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 20),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Text('Not a Member yet?'),
+                          const Text('Don’t have an account?'),
                           TextButton(
-                              onPressed: () {
-                                Get.to(() => CreateAccountWithEmailScreen());
-                              },
-                              child: const Text(' Sign up now'))
+                            onPressed: () {
+                              Get.to(() => CreateAccountWithEmailScreen());
+                            },
+                            child: const Text('Sign up'),
+                          ),
                         ],
-                      )
+                      ),
                     ],
                   ),
                 ),

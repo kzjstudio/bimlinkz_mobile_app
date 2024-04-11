@@ -1,4 +1,5 @@
 import 'package:bimlinkz_mobile_app/screens/mobile/account_screen.dart';
+import 'package:bimlinkz_mobile_app/screens/mobile/company_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/home_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/messages_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/search_screen.dart';
@@ -22,6 +23,7 @@ class _LandingScreenState extends State<LandingScreen> {
 
   final screens = [
     HomeScreen(),
+    Companies(),
     const MessagesScreen(),
     const SearchScreen(),
     AccountScreen(),
@@ -44,12 +46,17 @@ class _LandingScreenState extends State<LandingScreen> {
                     icon: Icon(Icons.home_outlined),
                   ),
                   BottomNavigationBarItem(
+                      label: 'Companies',
+                      icon: Icon(
+                        Icons.business_center_outlined,
+                      )),
+                  BottomNavigationBarItem(
                     label: 'Messages',
                     icon: Icon(Icons.mail_outline_outlined),
                   ),
                   BottomNavigationBarItem(
-                    label: 'Search',
-                    icon: Icon(Icons.search_outlined),
+                    label: 'Tasks',
+                    icon: Icon(Icons.task_outlined),
                   ),
                   BottomNavigationBarItem(
                     label: 'Account',

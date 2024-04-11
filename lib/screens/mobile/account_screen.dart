@@ -1,7 +1,6 @@
 import 'package:bimlinkz_mobile_app/Controllers/auth_controller.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/become_a_tradesman_landing_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/create_trades_account_screen.dart';
-import 'package:bimlinkz_mobile_app/screens/mobile/signin.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

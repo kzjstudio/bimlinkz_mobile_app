@@ -53,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       builder: (context) => const BecomeATradesManScreen()));
             },
             icon: const FaIcon(FontAwesomeIcons.link),
-            iconSize: 40,
+            iconSize: 20,
             color: Colors.green.shade800,
           )
         ],
@@ -64,90 +64,65 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       body: SingleChildScrollView(
-          child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-        child: Column(
-          children: [
-            const SizedBox(
-              height: 14,
-            ),
-            Container(
-              decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                      color: Colors.grey.shade300,
-                      blurRadius: 10,
-                      spreadRadius: 5)
-                ],
-                color: const Color(0xFFFFFFFF),
-                borderRadius: const BorderRadius.all(Radius.circular(10)),
-              ),
-              child: TextField(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextField(
                 decoration: InputDecoration(
-                    hintText: 'Search...',
-                    suffixIcon: IconButton(
-                      icon: const Icon(Icons.clear),
-                      onPressed: () {},
-                    ),
-                    prefixIcon: IconButton(
-                      onPressed: () {},
-                      icon: const Icon(Icons.search),
-                    ),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10))),
-              ),
-            ),
-            const SizedBox(
-              height: 14,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Popular searches',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+                  hintText: 'Search...',
+                  suffixIcon: IconButton(
+                    icon: const Icon(Icons.clear),
+                    onPressed: () {},
+                  ),
+                  prefixIcon: const Icon(Icons.search),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide.none,
+                  ),
+                  filled: true,
+                  fillColor: Colors.white,
                 ),
-                TextButton(onPressed: () {}, child: const Text('See all'))
-              ],
-            ),
-            const SizedBox(
-              height: 14,
-            ),
-            SizedBox(
-              height: 130,
-              child: _isLoaded
-                  ? ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: items.length,
-                      itemBuilder: (context, index) {
-                        return CategoryCard(
-                          catText: items[index]["id"],
-                          imageUrl: items[index]['imageUrl'],
-                        );
-                      })
-                  : Container(child: const Text("no data")),
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-            Container(
-              width: 338,
-              height: 316,
-              color: Colors.grey,
-            ),
-            Row(
-              children: [
-                ElevatedButton(onPressed: () {}, child: Text('Press')),
-                ElevatedButton(
-                    onPressed: () {
-                      print(authController.signOut());
-                    },
-                    child: Text('signout'))
-              ],
-            )
-          ],
+              ),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Popular searches',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  TextButton(onPressed: () {}, child: const Text('See all'))
+                ],
+              ),
+              const SizedBox(height: 20),
+              SizedBox(
+                height: 130,
+                child: _isLoaded
+                    ? ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: items.length,
+                        itemBuilder: (context, index) {
+                          return CategoryCard(
+                            catText: items[index]["id"],
+                            imageUrl: items[index]['imageUrl'],
+                          );
+                        })
+                    : const Center(child: CircularProgressIndicator()),
+              ),
+              const SizedBox(height: 30),
+              Container(
+                width: double.infinity,
+                height: 200,
+                color: Colors.grey.shade300,
+                child: Center(child: Text('Feature Area')),
+              ),
+              const SizedBox(height: 20),
+            ],
+          ),
         ),
-      )),
+      ),
     );
   }
 }

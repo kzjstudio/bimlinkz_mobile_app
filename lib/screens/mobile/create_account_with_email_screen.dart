@@ -16,58 +16,59 @@ class CreateAccountWithEmailScreen extends GetWidget<AuthController> {
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         appBar: AppBar(
+          title: Text('Create Account'),
           backgroundColor: Theme.of(context).primaryColor,
         ),
         body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          padding: const EdgeInsets.all(16.0),
           child: SingleChildScrollView(
-              child: Column(
-            children: [
-              const Center(
-                child: Image(
-                  width: 200,
-                  height: 200,
-                  image: AssetImage('images/logo.jpg'),
-                ),
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'Create account',
-                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                  child: Image(
+                    width: MediaQuery.of(context).size.width * 0.5,
+                    image: AssetImage('images/logo.jpg'),
                   ),
-                  TextButton(onPressed: () {}, child: const Text('Login'))
-                ],
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              Form(
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  'Create account',
+                  style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                ),
+                TextButton(
+                  onPressed: () {},
+                  child: Text('Login'),
+                  style: TextButton.styleFrom(
+                    foregroundColor: Theme.of(context).primaryColor,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Form(
                   key: _formKey,
                   child: Column(
                     children: [
                       TextFormField(
                         controller: userNameController,
+                        decoration: const InputDecoration(
+                          labelText: 'Public user name',
+                          border: OutlineInputBorder(),
+                        ),
                         validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Plesae enter a user name';
+                          if (value?.isEmpty ?? true) {
+                            return 'Please enter a user name';
                           }
                           return null;
                         },
-                        decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            hintText: 'Public user name'),
                       ),
-                      const SizedBox(
-                        height: 25,
-                      ),
+                      const SizedBox(height: 16),
                       TextFormField(
                         controller: emailController,
                         keyboardType: TextInputType.emailAddress,
+                        decoration: const InputDecoration(
+                          labelText: 'Email',
+                          border: OutlineInputBorder(),
+                        ),
                         validator: (value) {
                           if (value!.isEmpty) {
                             return 'Please enter an email address';
@@ -76,39 +77,36 @@ class CreateAccountWithEmailScreen extends GetWidget<AuthController> {
                               .hasMatch(value)) {
                             return 'Please enter a valid email address';
                           }
-                          return null; // Return null if the input is valid
+                          return null;
                         },
-                        decoration: const InputDecoration(
-                            border: OutlineInputBorder(), hintText: 'Email'),
                       ),
-                      const SizedBox(
-                        height: 25,
-                      ),
+                      const SizedBox(height: 16),
                       Obx(
                         () => TextFormField(
                           controller: passwordController,
                           obscureText: passwordVisable.value,
                           keyboardType: TextInputType.text,
+                          decoration: InputDecoration(
+                            labelText: 'Password',
+                            suffixIcon: IconButton(
+                              icon: Icon(passwordVisable.value
+                                  ? Icons.visibility
+                                  : Icons.visibility_off),
+                              onPressed: () {
+                                passwordVisable.value = !passwordVisable.value;
+                              },
+                            ),
+                            border: OutlineInputBorder(),
+                          ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Please enter a password';
                             }
                             return null;
                           },
-                          decoration: InputDecoration(
-                              suffixIcon: IconButton(
-                                  onPressed: () {
-                                    passwordVisable.value =
-                                        !passwordVisable.value;
-                                  },
-                                  icon: Icon(Icons.visibility)),
-                              border: OutlineInputBorder(),
-                              hintText: 'Password'),
                         ),
                       ),
-                      const SizedBox(
-                        height: 20,
-                      ),
+                      const SizedBox(height: 20),
                       ElevatedButton(
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
@@ -118,62 +116,44 @@ class CreateAccountWithEmailScreen extends GetWidget<AuthController> {
                                 userNameController.text);
                           }
                         },
-                        style: ButtonStyle(
-                            shape: MaterialStateProperty.all<
-                                RoundedRectangleBorder>(RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(6.0),
-                            )),
-                            foregroundColor:
-                                const MaterialStatePropertyAll<Color>(
-                                    Colors.white),
-                            backgroundColor:
-                                const MaterialStatePropertyAll<Color>(
-                                    Color(0xff05CFB5))),
-                        child: const Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'SIGN UP',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ],
+                        child: Text(
+                          'SIGN UP',
+                          style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ),
                       OutlinedButton(
                         onPressed: () {},
-                        style: ButtonStyle(
-                            shape: MaterialStateProperty.all<
-                                RoundedRectangleBorder>(RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(6.0),
-                            )),
-                            foregroundColor:
-                                const MaterialStatePropertyAll<Color>(
-                                    Colors.transparent),
-                            backgroundColor:
-                                const MaterialStatePropertyAll<Color>(
-                                    Colors.white)),
-                        child: const Row(
+                        child: Text(
+                          'Sign up with Google',
+                          style:
+                              TextStyle(color: Theme.of(context).primaryColor),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(
-                              'Sign up with google',
-                              style: TextStyle(color: Colors.black),
+                            Text('By joining you agree to our '),
+                            GestureDetector(
+                              onTap: () {},
+                              child: Text(
+                                'Terms of Service',
+                                style: TextStyle(
+                                  color: Theme.of(context).primaryColor,
+                                  decoration: TextDecoration.underline,
+                                ),
+                              ),
                             ),
                           ],
                         ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text('By joining you agree to Bimlinkz'),
-                          TextButton(
-                              onPressed: () {}, child: Text('terms of service'))
-                        ],
                       )
                     ],
-                  )),
-            ],
-          )),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
