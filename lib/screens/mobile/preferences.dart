@@ -1,4 +1,6 @@
+import 'package:bimlinkz_mobile_app/Controllers/theme_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class PreferencesPage extends StatefulWidget {
   @override
@@ -7,7 +9,7 @@ class PreferencesPage extends StatefulWidget {
 
 class _PreferencesPageState extends State<PreferencesPage> {
   ThemeMode themeMode = ThemeMode.system;
-  bool isDarkTheme = false;
+  RxBool isDarkTheme = false.obs; // Updated to use GetX observable
   bool isRemindersOn = false;
   String language = 'English'; // Example default language
 
@@ -19,23 +21,24 @@ class _PreferencesPageState extends State<PreferencesPage> {
       ),
       body: ListView(
         children: [
+          const SizedBox(height: 10), // Adds space at the top of the list
           const Padding(
-            padding: EdgeInsets.all(8.0),
+            padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: Text(
               'Theme and Language',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
           ),
-          SwitchListTile(
-            title: const Text('Dark Theme'),
-            subtitle: const Text('Enable dark theme'),
-            value: isDarkTheme,
-            onChanged: (bool value) {
-              setState(() {
-                isDarkTheme = value;
-                // Add logic to change theme in app settings
-              });
-            },
+          Obx(
+            () => SwitchListTile(
+              title: const Text('Dark Theme'),
+              subtitle: const Text('Enable dark theme'),
+              value: isDarkTheme.value,
+              onChanged: (bool value) {
+                isDarkTheme.value = value;
+                Get.find<ThemeController>().toggleTheme(value);
+              },
+            ),
           ),
           ListTile(
             title: const Text('Language'),
@@ -45,7 +48,6 @@ class _PreferencesPageState extends State<PreferencesPage> {
               onChanged: (String? newValue) {
                 setState(() {
                   language = newValue!;
-                  // Add logic to change language in app settings
                 });
               },
               items: <String>['English', 'Spanish', 'French']
@@ -57,8 +59,9 @@ class _PreferencesPageState extends State<PreferencesPage> {
               }).toList(),
             ),
           ),
+          const Divider(), // Visual separator
           const Padding(
-            padding: EdgeInsets.all(8.0),
+            padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: Text(
               'App Settings',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -71,10 +74,10 @@ class _PreferencesPageState extends State<PreferencesPage> {
             onChanged: (bool value) {
               setState(() {
                 isRemindersOn = value;
-                // Add logic to enable/disable reminders in app settings
               });
             },
           ),
+          const SizedBox(height: 20), // Adds space at the bottom of the list
         ],
       ),
     );

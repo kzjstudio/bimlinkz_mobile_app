@@ -1,9 +1,11 @@
 import 'package:bimlinkz_mobile_app/Controllers/auth_controller.dart';
-import 'package:bimlinkz_mobile_app/screens/mobile/create_trades_account_screen.dart';
+import 'package:bimlinkz_mobile_app/screens/mobile/about_us_screen.dart';
+import 'package:bimlinkz_mobile_app/screens/mobile/contact_us_screen.dart';
+import 'package:bimlinkz_mobile_app/screens/mobile/notifications.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/preferences.dart';
-import 'package:bimlinkz_mobile_app/widgets/account_list_button.dart';
+import 'package:bimlinkz_mobile_app/screens/mobile/profile.dart';
+import 'package:bimlinkz_mobile_app/widgets/list_button.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 class AccountScreen extends StatelessWidget {
@@ -16,7 +18,6 @@ class AccountScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          elevation: 20,
           title: Row(
             children: [
               const CircleAvatar(
@@ -42,7 +43,10 @@ class AccountScreen extends StatelessWidget {
                           shape: MaterialStatePropertyAll(
                               RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(6)))),
-                      onPressed: () {},
+                      onPressed: () {
+                        Get.to(() => UserProfilePage(),
+                            transition: Transition.leftToRightWithFade);
+                      },
                       child: const Text('EDIT PROFILE'))
                 ],
               )
@@ -58,7 +62,8 @@ class AccountScreen extends StatelessWidget {
               children: [
                 ListButton(
                     tapped: () {
-                      Get.to(() => PreferencesPage());
+                      Get.to(() => PreferencesPage(),
+                          transition: Transition.rightToLeftWithFade);
                     },
                     icon: Icons.settings_outlined,
                     title: 'Preferences',
@@ -68,7 +73,10 @@ class AccountScreen extends StatelessWidget {
                   color: Theme.of(context).colorScheme.shadow,
                 ),
                 ListButton(
-                    tapped: () {},
+                    tapped: () {
+                      Get.to(() => NotificationSettingsPage(),
+                          transition: Transition.rightToLeftWithFade);
+                    },
                     icon: Icons.notifications_none,
                     title: 'Notifications',
                     subTitle: 'Ringtone, Message, Notifications'),
@@ -77,10 +85,35 @@ class AccountScreen extends StatelessWidget {
                   color: Theme.of(context).colorScheme.shadow,
                 ),
                 ListButton(
-                    tapped: () {},
+                    tapped: () {
+                      Get.to(() => ContactUsPage(),
+                          transition: Transition.rightToLeftWithFade);
+                    },
                     icon: Icons.help_outline_outlined,
                     title: 'Help',
                     subTitle: 'Contact Us'),
+                Divider(
+                  thickness: .2,
+                  color: Theme.of(context).colorScheme.shadow,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Get.to(() => AboutPage(),
+                        transition: Transition.rightToLeftWithFade);
+                  },
+                  child: const ListTile(
+                    dense: true,
+                    isThreeLine: true,
+                    leading: Icon(
+                      Icons.info_outline,
+                    ),
+                    title: Text(
+                      'About',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: const Text('About the application'),
+                  ),
+                ),
                 Divider(
                   thickness: .2,
                   color: Theme.of(context).colorScheme.shadow,

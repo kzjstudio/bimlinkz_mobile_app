@@ -1,6 +1,7 @@
 import 'package:bimlinkz_mobile_app/Controllers/auth_controller.dart';
-import 'package:bimlinkz_mobile_app/constants.dart';
+import 'package:bimlinkz_mobile_app/theme.dart';
 import 'package:bimlinkz_mobile_app/screens/splash_screen.dart';
+import 'package:bimlinkz_mobile_app/Controllers/theme_controller.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -20,6 +21,8 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
+  final ThemeController themeController =
+      Get.put(ThemeController()); // Initialize the controller
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
@@ -27,7 +30,7 @@ class MyApp extends StatelessWidget {
         title: 'Bimlinkz',
         theme: lightTheme,
         darkTheme: darkTheme,
-        themeMode: ThemeMode.system,
+        themeMode: themeController.themeMode.value,
         home: SplashScreen());
   }
 }

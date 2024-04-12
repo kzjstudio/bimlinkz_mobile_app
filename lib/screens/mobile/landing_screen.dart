@@ -33,41 +33,37 @@ class _LandingScreenState extends State<LandingScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-            body: screens[_selectedIndex],
-            bottomNavigationBar: Theme(
-              data: Theme.of(context).copyWith(
-                  canvasColor: Theme.of(context).primaryColor,
-                  primaryColor: Colors.red),
-              child: BottomNavigationBar(
-                elevation: 15,
-                items: const [
-                  BottomNavigationBarItem(
-                    label: "Home",
-                    icon: Icon(Icons.home_outlined),
-                  ),
-                  BottomNavigationBarItem(
-                      label: 'Companies',
-                      icon: Icon(
-                        Icons.business_center_outlined,
-                      )),
-                  BottomNavigationBarItem(
-                    label: 'Messages',
-                    icon: Icon(Icons.mail_outline_outlined),
-                  ),
-                  BottomNavigationBarItem(
-                    label: 'Tasks',
-                    icon: Icon(Icons.task_outlined),
-                  ),
-                  BottomNavigationBarItem(
-                    label: 'Account',
-                    icon: Icon(
-                      Icons.account_circle_outlined,
-                    ),
-                  )
-                ],
-                currentIndex: _selectedIndex,
-                onTap: _onitemTapped,
-              ),
-            )));
+      body: screens[_selectedIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        elevation: 15,
+        items: const [
+          BottomNavigationBarItem(
+            label: "Home",
+            icon: Icon(Icons.home_outlined),
+          ),
+          BottomNavigationBarItem(
+              label: 'Companies',
+              icon: Icon(
+                Icons.business_center_outlined,
+              )),
+          BottomNavigationBarItem(
+            label: 'Messages',
+            icon: Icon(Icons.mail_outline_outlined),
+          ),
+          BottomNavigationBarItem(
+            label: 'Tasks',
+            icon: Icon(Icons.task_outlined),
+          ),
+          BottomNavigationBarItem(
+            label: 'Account',
+            icon: Icon(
+              Icons.account_circle_outlined,
+            ),
+          )
+        ],
+        currentIndex: _selectedIndex,
+        onTap: _onitemTapped,
+      ),
+    ));
   }
 }
