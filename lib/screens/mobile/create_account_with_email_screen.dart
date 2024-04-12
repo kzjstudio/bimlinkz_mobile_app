@@ -17,7 +17,6 @@ class CreateAccountWithEmailScreen extends GetWidget<AuthController> {
       child: Scaffold(
         appBar: AppBar(
           title: Text('Create Account'),
-          backgroundColor: Theme.of(context).primaryColor,
         ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),

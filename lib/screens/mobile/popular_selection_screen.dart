@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 
-class PopularSelectionScrren extends StatefulWidget {
-  const PopularSelectionScrren({super.key, required this.id});
+class PopularSelectionScreen extends StatefulWidget {
+  const PopularSelectionScreen({super.key, required this.id});
 
   final String id;
 
   @override
-  State<PopularSelectionScrren> createState() => _PopularSelectionScrrenState();
+  State<PopularSelectionScreen> createState() => _PopularSelectionScreenState();
 }
 
 var selectedCollection = FirebaseFirestore.instance.collection('categories');
@@ -16,7 +16,7 @@ bool _isLoaded = false;
 late List<Map<String, dynamic>> items;
 var categories = {};
 
-class _PopularSelectionScrrenState extends State<PopularSelectionScrren> {
+class _PopularSelectionScreenState extends State<PopularSelectionScreen> {
   void getData() async {
     List<Map<String, dynamic>> dataList = [];
     var data = await selectedCollection

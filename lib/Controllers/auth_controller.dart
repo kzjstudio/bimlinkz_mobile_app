@@ -10,6 +10,8 @@ class AuthController extends GetxController {
   final db = FirebaseFirestore.instance;
   late Rx<User?> _user;
   var isLoggedIn = false.obs;
+  var userName = ''.obs;
+  var isLoaded = false.obs;
 
   @override
   void onReady() {
@@ -17,6 +19,7 @@ class AuthController extends GetxController {
     _user = Rx<User?>(auth.currentUser);
     _user.bindStream(auth.userChanges());
     ever(_user, _initialScreen);
+    getUserInfo();
   }
 
   _initialScreen(User? user) {
@@ -28,6 +31,19 @@ class AuthController extends GetxController {
       Get.offAll(() => LandingScreen());
       isLoggedIn.value = true;
     }
+  }
+
+  getUserInfo() {
+    final docref = db.collection('users').doc(auth.currentUser?.uid);
+    docref.get().then((DocumentSnapshot doc) {
+      var data = doc.data() as Map<String, dynamic>;
+      userName.value = data['name'];
+      print(data['name']);
+      isLoaded.value = true;
+    }, onError: (e) {
+      isLoaded.value = false;
+      print(e);
+    });
   }
 
   void createUser(String email, String password, String userName) async {

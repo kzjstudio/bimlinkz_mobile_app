@@ -1,4 +1,5 @@
 import 'package:bimlinkz_mobile_app/Controllers/auth_controller.dart';
+import 'package:bimlinkz_mobile_app/constants.dart';
 import 'package:bimlinkz_mobile_app/screens/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -24,14 +25,9 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Bimlinkz',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(
-              background: Colors.white,
-              seedColor: Colors.deepPurple,
-              brightness: Brightness.light),
-          useMaterial3: true,
-          textTheme: GoogleFonts.nunitoTextTheme(),
-        ),
+        theme: lightTheme,
+        darkTheme: darkTheme,
+        themeMode: ThemeMode.system,
         home: SplashScreen());
   }
 }

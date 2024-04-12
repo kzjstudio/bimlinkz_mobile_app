@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 class CategoryCard extends StatefulWidget {
   final String catText;
   final String imageUrl;
+
   const CategoryCard({
     super.key,
     required this.catText,
@@ -20,49 +21,58 @@ class _CategoryCardState extends State<CategoryCard> {
     return InkWell(
       onTap: () {
         Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => PopularSelectionScrren(
-                      id: widget.catText,
-                    )));
+          context,
+          MaterialPageRoute(
+            builder: (context) => PopularSelectionScreen(id: widget.catText),
+          ),
+        );
       },
       child: Container(
-        decoration: const BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(10))),
         width: 100,
         height: 130,
-        child: Card(
-          shadowColor: Colors.white,
-          elevation: 5,
-          shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10))),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            // crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  widget.catText,
-                  style: const TextStyle(
-                      fontSize: 14, fontWeight: FontWeight.w700),
+        margin: const EdgeInsets.all(8), // Add some margin around the card
+        decoration: BoxDecoration(
+          color: Colors.white, // Card background color
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 1,
+              blurRadius: 5,
+              offset: const Offset(0, 3), // changes position of shadow
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: ClipRRect(
+                borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    topRight: Radius.circular(10)),
+                child: Image.network(
+                  widget.imageUrl,
+                  fit: BoxFit.cover,
+                  width: double.infinity,
                 ),
               ),
-              ClipRRect(
-                borderRadius: const BorderRadius.only(
-                    bottomLeft: Radius.circular(10),
-                    bottomRight: Radius.circular(10)),
-                child: Container(
-                  child: Image.network(
-                    widget.imageUrl,
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                    height: 80,
-                  ),
+            ),
+            Container(
+              padding: const EdgeInsets.all(8),
+              alignment: Alignment.center,
+              child: Text(
+                widget.catText,
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.deepPurple, // Text color for better contrast
                 ),
-              )
-            ],
-          ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
         ),
       ),
     );
