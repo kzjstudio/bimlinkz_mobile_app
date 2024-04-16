@@ -25,6 +25,7 @@ class AppColors {
   static const Color buttonDarkText =
       Color(0xffffffff); // Button text color for dark theme
   static const Color unselectedIcon = Color.fromARGB(255, 114, 114, 114);
+  static const Color divider = Color.fromARGB(255, 221, 221, 221);
 }
 
 // Update Theme Data with enhanced button styles
@@ -62,7 +63,8 @@ final ThemeData lightTheme = ThemeData(
         type: BottomNavigationBarType.fixed,
         backgroundColor: AppColors.lightBackground,
         unselectedIconTheme: IconThemeData(color: AppColors.unselectedIcon),
-        selectedIconTheme: IconThemeData(color: AppColors.primary)));
+        selectedIconTheme: IconThemeData(color: AppColors.primary)),
+    dividerTheme: const DividerThemeData(color: AppColors.divider));
 
 final ThemeData darkTheme = ThemeData(
     colorScheme: const ColorScheme.dark(

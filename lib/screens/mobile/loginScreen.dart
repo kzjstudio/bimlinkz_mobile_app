@@ -1,5 +1,5 @@
 import 'package:bimlinkz_mobile_app/Controllers/auth_controller.dart';
-import 'package:bimlinkz_mobile_app/screens/mobile/create_account_with_email_screen.dart';
+import 'package:bimlinkz_mobile_app/screens/mobile/signup_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -52,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       TextFormField(
                         controller: emailController,
                         keyboardType: TextInputType.emailAddress,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           border: OutlineInputBorder(),
                           labelText: 'Email',
                           hintText: 'Enter your email',
@@ -72,7 +72,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       TextFormField(
                         controller: passwordController,
                         obscureText: true,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           border: OutlineInputBorder(),
                           labelText: 'Password',
                           hintText: 'Enter your password',
@@ -89,14 +89,14 @@ class _LoginScreenState extends State<LoginScreen> {
                         alignment: Alignment.centerRight,
                         child: TextButton(
                           onPressed: () {},
-                          child: Text('Forgot Password?'),
+                          child: const Text('Forgot Password?'),
                         ),
                       ),
                       const SizedBox(height: 20),
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          minimumSize:
-                              Size(double.infinity, 50), // set minimum size
+                          minimumSize: const Size(
+                              double.infinity, 50), // set minimum size
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
@@ -116,7 +116,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           const Text('Don’t have an account?'),
                           TextButton(
                             onPressed: () {
-                              Get.to(() => CreateAccountWithEmailScreen());
+                              Get.to(() => SignUpPage(),
+                                  duration: const Duration(milliseconds: 500),
+                                  transition: Transition.rightToLeftWithFade);
                             },
                             child: const Text('Sign up'),
                           ),

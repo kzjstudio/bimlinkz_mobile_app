@@ -1,4 +1,4 @@
-import 'package:bimlinkz_mobile_app/Controllers/auth_controller.dart';
+import 'package:bimlinkz_mobile_app/Controllers/global.dart';
 import 'package:bimlinkz_mobile_app/theme.dart';
 import 'package:bimlinkz_mobile_app/screens/splash_screen.dart';
 import 'package:bimlinkz_mobile_app/Controllers/theme_controller.dart';
@@ -16,7 +16,10 @@ void main() async {
               appId: '1:161008572662:web:4bb6f6292513552e43b4d7',
               messagingSenderId: '161008572662',
               projectId: 'bimixx-2eab2'))
-      .then((value) => Get.put(AuthController()));
+      .then((value) {
+    Global.init();
+  });
+
   runApp(MyApp());
 }
 

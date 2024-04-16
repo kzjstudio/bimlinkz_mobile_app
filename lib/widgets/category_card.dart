@@ -66,7 +66,6 @@ class _CategoryCardState extends State<CategoryCard> {
                 style: const TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
-                  color: Colors.deepPurple, // Text color for better contrast
                 ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,

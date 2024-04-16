@@ -1,4 +1,5 @@
 import 'package:bimlinkz_mobile_app/Controllers/auth_controller.dart';
+import 'package:bimlinkz_mobile_app/Controllers/user_profile_controller.dart';
 import 'package:bimlinkz_mobile_app/widgets/category_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,7 @@ bool _isLoaded = false;
 late List<Map<String, dynamic>> items;
 var categories = {};
 final AuthController c = Get.find();
+final UserProfileController usercontroller = Get.find();
 
 class _HomeScreenState extends State<HomeScreen> {
   void getData() async {
@@ -50,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               const Text('Hello,'),
               Text(
-                c.userName.value,
+                usercontroller.name.value,
                 style:
                     const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
               )
