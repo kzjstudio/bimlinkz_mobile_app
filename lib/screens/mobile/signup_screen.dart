@@ -19,7 +19,12 @@ class _SignUpPageState extends State<SignUpPage> {
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _roleSpecificController = TextEditingController();
+  final companyController = TextEditingController();
+  final usernameController = TextEditingController();
+  final parishController = TextEditingController();
+  final streetController = TextEditingController();
+  final buildingController = TextEditingController();
+  String? selectedIndustry;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   List<String> skills = [
     'Web Development',
@@ -27,6 +32,14 @@ class _SignUpPageState extends State<SignUpPage> {
     'Graphic Design',
     'Data Analysis',
     'SEO'
+  ];
+  List<String> industries = [
+    'Technology',
+    'Finance',
+    'Healthcare',
+    'Education',
+    'Manufacturing',
+    'Retail'
   ];
   var selectedSkills = [].obs;
 
@@ -227,16 +240,54 @@ class _SignUpPageState extends State<SignUpPage> {
 
   Widget _buildCompanyForm() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TextFormField(
-          keyboardType: TextInputType.number,
-          decoration: const InputDecoration(labelText: 'Number of Employees'),
+          controller: companyController,
+          decoration: const InputDecoration(labelText: 'Company Name'),
           validator: (value) =>
-              value!.isEmpty ? 'Please enter the number of employees' : null,
+              value!.isEmpty ? 'Please enter your company name' : null,
         ),
         TextFormField(
-          decoration: const InputDecoration(labelText: 'Headquarters Location'),
-          validator: (value) => value!.isEmpty ? 'Please enter location' : null,
+          controller: usernameController,
+          decoration: const InputDecoration(labelText: 'Username'),
+          validator: (value) =>
+              value!.isEmpty ? 'Please enter a username' : null,
+        ),
+        DropdownButtonFormField<String>(
+          value: selectedIndustry,
+          decoration: const InputDecoration(labelText: 'Industry'),
+          onChanged: (String? newValue) {
+            setState(() {
+              selectedIndustry = newValue;
+            });
+          },
+          items: industries.map<DropdownMenuItem<String>>((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(value),
+            );
+          }).toList(),
+          validator: (value) =>
+              value == null ? 'Please select an industry' : null,
+        ),
+        TextFormField(
+          controller: parishController,
+          decoration: const InputDecoration(labelText: 'Parish'),
+          validator: (value) =>
+              value!.isEmpty ? 'Please enter the parish' : null,
+        ),
+        TextFormField(
+          controller: streetController,
+          decoration: const InputDecoration(labelText: 'Street'),
+          validator: (value) =>
+              value!.isEmpty ? 'Please enter the street' : null,
+        ),
+        TextFormField(
+          controller: buildingController,
+          decoration: const InputDecoration(labelText: 'Building'),
+          validator: (value) =>
+              value!.isEmpty ? 'Please enter the building number/name' : null,
         ),
       ],
     );
@@ -273,7 +324,7 @@ class _SignUpPageState extends State<SignUpPage> {
       }
       // If a role is selected, proceed to the next step.
       setState(() => _currentStep += 1);
-    } else if (_currentStep == 1) {
+    } else if (_currentStep == 1 && _selectedRole == UserRole.freelancer) {
       // Check if skills are selected on the second step (specific to Freelancers).
       if (selectedSkills.isEmpty) {
         Get.showSnackbar(const GetSnackBar(
