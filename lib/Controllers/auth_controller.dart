@@ -33,14 +33,15 @@ class AuthController extends GetxController {
     }
   }
 
-  void createUser(String email, String password, String userName) async {
+  void createUser(
+      String email, String password, String userName, String role) async {
     try {
       await auth
           .createUserWithEmailAndPassword(email: email, password: password)
           .then((result) {
         var _userId = result.user?.uid;
 
-        addUserToFireStore(_userId.toString(), userName, email);
+        addUserToFireStore(_userId.toString(), userName, email, role);
       });
     } catch (e) {
       printError();
@@ -69,13 +70,13 @@ class AuthController extends GetxController {
   }
 
   void addUserToFireStore(
-    String userId,
-    String userName,
-    String email,
-  ) {
-    db
-        .collection("users")
-        .doc(userId)
-        .set({'name': userName, 'id': userId, 'email': email});
+      String userId, String userName, String email, String role) {
+    db.collection("users").doc(userId).set({
+      'name': userName,
+      'id': userId,
+      'email': email,
+      'datejoined': Timestamp.now(),
+      'role': role
+    });
   }
 }

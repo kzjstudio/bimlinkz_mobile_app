@@ -1,312 +1,168 @@
+import 'package:bimlinkz_mobile_app/Controllers/auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-enum UserRole { freelancer, company, client }
-
 class SignUpPage extends StatefulWidget {
-  final UserRole? userRole;
-
-  SignUpPage({Key? key, this.userRole}) : super(key: key);
-
   @override
   _SignUpPageState createState() => _SignUpPageState();
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-  int _currentStep = 0;
-  UserRole? _selectedRole;
-  String _roleDescription = '';
-  final _nameController = TextEditingController();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _roleSpecificController = TextEditingController();
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  List<String> skills = [
-    'Web Development',
-    'Mobile App Development',
-    'Graphic Design',
-    'Data Analysis',
-    'SEO'
-  ];
-  var selectedSkills = [].obs;
-
-  Map<UserRole, String> roleDescriptions = {
-    UserRole.freelancer:
-        "Freelancers provide services or work on projects for various clients without committing to a single employer.",
-    UserRole.company:
-        "Companies seek services from freelancers or may offer projects to individuals on a contractual basis.",
-    UserRole.client:
-        "Clients look for professionals to hire for specific tasks or projects in their personal or professional ventures."
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  String? _selectedRole;
+  var isButtonActive = true.obs;
+  final List<String> _roles = const ['Freelancer', 'Company', 'Client'];
+  final Map<String, String> _roleDescriptions = {
+    'Freelancer':
+        'Freelancers provide services or work on projects for various clients without committing to a single employer.',
+    'Company':
+        'Companies frequently engage freelancers for specific services or extend project-based opportunities to individuals on a contractual basis.',
+    'Client':
+        'Clients seek professionals to engage for specific tasks or projects related to their personal or professional endeavors.'
   };
 
-  bool _validateField(String? value) {
-    if (value == null || value.isEmpty) {
-      return false; // Return false if validation fails
-    }
-    return true; // Return true if validation passes
-  }
-
-  void _showSkillsDialog() {
-    Get.defaultDialog(
-      title: 'Select your skills',
-      content: SingleChildScrollView(
-        child: ListBody(
-          children: skills.map((skill) {
-            return Obx(() => CheckboxListTile(
-                  title: Text(skill),
-                  value: selectedSkills.contains(skill),
-                  onChanged: (bool? value) {
-                    if (value == true) {
-                      selectedSkills.add(skill);
-                      print(selectedSkills);
-                    } else {
-                      selectedSkills.remove(skill);
-                      print(selectedSkills);
-                    }
-                    ;
-                  },
-                ));
-          }).toList(),
-        ),
-      ),
-      actions: <Widget>[
-        TextButton(
-          child: Text('Done'),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-      ],
-    );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    if (widget.userRole != null) {
-      _selectedRole = widget.userRole;
-      _roleDescription = roleDescriptions[_selectedRole!]!;
-    }
-  }
+  String? _selectedRoleDescription;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
       child: Scaffold(
-        appBar: AppBar(
-          title: Text('Complete Your Profile'),
-        ),
-        body: Form(
-          key: _formKey,
-          child: Stepper(
-            type: StepperType.vertical,
-            currentStep: _currentStep,
-            onStepContinue: _onStepContinue,
-            onStepCancel: _onStepCancel,
-            steps: _buildSteps(),
-            controlsBuilder: (context, details) {
-              return Container(
-                margin: EdgeInsets.only(top: 50),
-                child: Row(
-                  children: [
-                    Expanded(
-                        child: ElevatedButton(
-                            onPressed: _onStepContinue, child: Text('Next'))),
-                    const SizedBox(
-                      width: 12,
-                    ),
-                    if (_currentStep != 0)
-                      Expanded(
-                          child: ElevatedButton(
-                              onPressed: _onStepCancel, child: Text('Back')))
-                  ],
+        appBar: AppBar(title: const Text('Bimlinkz Sign Up')),
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const Center(
+                  child: Column(
+                    children: [
+                      Image(
+                        image: AssetImage(
+                            'images/logotrans.png'), // Ensure the logo asset is in the correct folder
+                        width: 100,
+                        height: 100,
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        'Welcome to Bimlinkz',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                    ],
+                  ),
                 ),
-              );
-            },
-          ),
-        ),
-      ),
-    );
-  }
-
-  List<Step> _buildSteps() {
-    return [
-      Step(
-        title: Text("Select Role"),
-        content: Column(
-          children: [
-            DropdownButton<UserRole>(
-              hint: Text('Select a role'),
-              value: _selectedRole,
-              onChanged: (UserRole? newValue) {
-                setState(() {
-                  _selectedRole = newValue;
-                  _roleDescription = roleDescriptions[newValue!]!;
-                });
-              },
-              items: UserRole.values.map((UserRole role) {
-                return DropdownMenuItem<UserRole>(
-                  value: role,
-                  child: Text(role.toString().split('.').last),
-                );
-              }).toList(),
+                TextFormField(
+                  controller: _nameController,
+                  decoration: const InputDecoration(
+                    labelText: 'Name',
+                    border: OutlineInputBorder(),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your name';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 15),
+                TextFormField(
+                  controller: _emailController,
+                  decoration: const InputDecoration(
+                    labelText: 'Email',
+                    border: OutlineInputBorder(),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your email';
+                    } else if (!value.contains('@')) {
+                      return 'Please enter a valid email';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 15),
+                TextFormField(
+                  controller: _passwordController,
+                  obscureText: true,
+                  decoration: const InputDecoration(
+                    labelText: 'Password',
+                    border: OutlineInputBorder(),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter a password';
+                    } else if (value.length < 6) {
+                      return 'Password must be at least 6 characters';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 15),
+                DropdownButtonFormField<String>(
+                  value: _selectedRole,
+                  decoration: const InputDecoration(
+                    labelText: 'Select your role',
+                    border: OutlineInputBorder(),
+                  ),
+                  onChanged: (newValue) {
+                    setState(() {
+                      _selectedRole = newValue;
+                      _selectedRoleDescription = _roleDescriptions[newValue];
+                    });
+                  },
+                  items: _roles.map((role) {
+                    return DropdownMenuItem(
+                      value: role,
+                      child: Text(role),
+                    );
+                  }).toList(),
+                  validator: (value) =>
+                      value == null ? 'Please select a role' : null,
+                ),
+                if (_selectedRoleDescription != null)
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      _selectedRoleDescription!,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontStyle: FontStyle.italic,
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                  ),
+                const SizedBox(height: 20),
+                Obx(
+                  () => ElevatedButton(
+                    onPressed: isButtonActive.isTrue
+                        ? () {
+                            if (_formKey.currentState!.validate()) {
+                              isButtonActive.value = false;
+                              AuthController.instance.createUser(
+                                  _emailController.text,
+                                  _passwordController.text,
+                                  _nameController.text,
+                                  _selectedRole.toString());
+                            }
+                          }
+                        : null,
+                    child: const Text('Sign Up'),
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(height: 10),
-            Text(_roleDescription),
-          ],
-        ),
-        isActive: _currentStep == 0,
-        state: _currentStep > 0 ? StepState.complete : StepState.indexed,
-      ),
-      Step(
-        title: const Text("Role-Specific Information"),
-        content: _buildDetailedInformationForm(),
-        isActive: _currentStep == 1,
-        state: _currentStep > 1 ? StepState.complete : StepState.indexed,
-      ),
-      // New Step: Detailed Information
-      Step(
-        title: const Text("Detailed Information"),
-        content: _buildRoleSpecificForm(),
-        isActive: _currentStep == 2,
-        state: _currentStep > 2 ? StepState.complete : StepState.indexed,
-      ),
-    ];
-  }
-
-  Widget _buildRoleSpecificForm() {
-    // Implement the role-specific form as before
-    return const Center(
-      child: Text('Form'),
-    );
-  }
-
-  Widget _buildDetailedInformationForm() {
-    switch (_selectedRole) {
-      case UserRole.freelancer:
-        return _buildFreelancerForm();
-      case UserRole.company:
-        return _buildCompanyForm();
-      case UserRole.client:
-        return _buildClientForm();
-      default:
-        return const Text("No role selected");
-    }
-  }
-
-  Widget _buildFreelancerForm() {
-    return Column(
-      children: [
-        ListTile(
-          title: const Text('Select Your Top Skills'),
-          onTap: () => _showSkillsDialog(),
-        ),
-        // Display selected skills
-        Obx(
-          () => Wrap(
-            spacing: 10.0,
-            children: List.generate(selectedSkills.length,
-                (index) => Chip(label: Text(selectedSkills[index]))),
           ),
         ),
-        TextFormField(
-          keyboardType: TextInputType.number,
-          decoration: const InputDecoration(labelText: 'Starting from (\$)'),
-          validator: (value) =>
-              value!.isEmpty ? 'Please enter your rate' : null,
-        ),
-        TextFormField(
-          decoration: const InputDecoration(labelText: 'Professional Summary'),
-          validator: (value) =>
-              value!.isEmpty ? 'Please enter a summary' : null,
-        ),
-      ],
+      ),
     );
-  }
-
-  Widget _buildCompanyForm() {
-    return Column(
-      children: [
-        TextFormField(
-          keyboardType: TextInputType.number,
-          decoration: const InputDecoration(labelText: 'Number of Employees'),
-          validator: (value) =>
-              value!.isEmpty ? 'Please enter the number of employees' : null,
-        ),
-        TextFormField(
-          decoration: const InputDecoration(labelText: 'Headquarters Location'),
-          validator: (value) => value!.isEmpty ? 'Please enter location' : null,
-        ),
-      ],
-    );
-  }
-
-  Widget _buildClientForm() {
-    return Column(
-      children: [
-        TextFormField(
-          decoration: const InputDecoration(labelText: 'Areas of Interest'),
-          validator: (value) =>
-              value!.isEmpty ? 'Please specify your interests' : null,
-        ),
-        TextFormField(
-          decoration:
-              const InputDecoration(labelText: 'Preferred Contact Method'),
-          validator: (value) =>
-              value!.isEmpty ? 'Please enter a contact method' : null,
-        ),
-      ],
-    );
-  }
-
-  void _onStepContinue() {
-    if (_currentStep == 0) {
-      // Check if a role is selected on the first step.
-      if (_selectedRole == null) {
-        Get.showSnackbar(const GetSnackBar(
-          title: 'Select a Role',
-          message: 'Please select a user role before continuing.',
-          duration: Duration(seconds: 3),
-        ));
-        return;
-      }
-      // If a role is selected, proceed to the next step.
-      setState(() => _currentStep += 1);
-    } else if (_currentStep == 1) {
-      // Check if skills are selected on the second step (specific to Freelancers).
-      if (selectedSkills.isEmpty) {
-        Get.showSnackbar(const GetSnackBar(
-          title: 'Skills Required',
-          message: 'Please select at least one skill set.',
-          duration: Duration(seconds: 3),
-        ));
-        return;
-      }
-      // Perform form validation for current step before proceeding.
-      if (_formKey.currentState!.validate()) {
-        setState(() => _currentStep += 1);
-      }
-    } else {
-      // Handle any additional steps similarly...
-      final isLastStep = _currentStep == _buildSteps().length - 1;
-      if (isLastStep) {
-        if (_formKey.currentState!.validate()) {
-          // All validations are done, proceed to send data to the server
-          print('Form is valid, send data to server');
-        }
-      } else {
-        // Proceed to next step if not the last step and the form is valid.
-        if (_formKey.currentState!.validate()) {
-          setState(() => _currentStep += 1);
-        }
-      }
-    }
-  }
-
-  void _onStepCancel() {
-    if (_currentStep > 0) {
-      setState(() => _currentStep -= 1);
-    }
   }
 }

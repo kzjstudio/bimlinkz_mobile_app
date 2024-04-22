@@ -12,31 +12,20 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-var collection = FirebaseFirestore.instance.collection('categories');
-bool _isLoaded = false;
-late List<Map<String, dynamic>> items;
-var categories = {};
+var collection = FirebaseFirestore.instance.collection('categories').get();
+
 final AuthController c = Get.find();
 final UserProfileController usercontroller = Get.find();
 
 class _HomeScreenState extends State<HomeScreen> {
-  void getData() async {
-    List<Map<String, dynamic>> tempList = [];
-    var data = await collection.get();
-    for (var element in data.docs) {
-      tempList.add(element.data());
+  showFinisheProfileMessage() {
+    if (UserProfileController.instance.isUserProfileFinished.isFalse) {
+      Get.defaultDialog(
+          title: 'finish setting up your profile',
+          content: ElevatedButton(
+              onPressed: () {}, child: Text('Go to user profile')));
     }
-
-    setState(() {
-      items = tempList;
-      _isLoaded = true;
-    });
-  }
-
-  @override
-  void initState() {
-    getData();
-    super.initState();
+    return;
   }
 
   @override
@@ -44,6 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).requestFocus(FocusNode());
+        showFinisheProfileMessage();
       },
       child: SafeArea(
         child: Scaffold(
@@ -58,74 +48,89 @@ class _HomeScreenState extends State<HomeScreen> {
               )
             ]),
             actions: [
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(Icons.notifications_none),
-                iconSize: 20,
-              )
+              Obx(() => IconButton(
+                    highlightColor: Colors.green,
+                    onPressed: () {
+                      print(UserProfileController.instance.isAccountFinished);
+                    },
+                    icon:
+                        UserProfileController.instance.isAccountFinished.isTrue
+                            ? Icon(Icons.notifications_none)
+                            : Icon(Icons.notification_important_outlined),
+                    iconSize: 25,
+                  )),
             ],
           ),
-          body: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  TextField(
-                    decoration: InputDecoration(
-                      hintText: 'Search...',
-                      suffixIcon: IconButton(
-                        icon: const Icon(Icons.clear),
-                        onPressed: () {},
+          body: FutureBuilder(
+              future: collection,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          TextField(
+                            decoration: InputDecoration(
+                              hintText: 'Search...',
+                              suffixIcon: IconButton(
+                                icon: const Icon(Icons.clear),
+                                onPressed: () {},
+                              ),
+                              prefixIcon: const Icon(Icons.search),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: BorderSide.none,
+                              ),
+                              filled: true,
+                              fillColor: Colors.white,
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text(
+                                'Popular searches',
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              ),
+                              TextButton(
+                                  onPressed: () {},
+                                  child: const Text('See all'))
+                            ],
+                          ),
+                          const SizedBox(height: 20),
+                          SizedBox(
+                            height: 130,
+                            child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: snapshot.data!.docs.length,
+                                itemBuilder: (context, index) {
+                                  final data = snapshot.data!.docs;
+                                  return CategoryCard(
+                                    catText: data[index]["id"],
+                                    imageUrl: data[index]['imageUrl'],
+                                  );
+                                }),
+                          ),
+                          const SizedBox(height: 30),
+                          Container(
+                            width: double.infinity,
+                            height: 200,
+                            color: Colors.grey.shade300,
+                            child: Center(child: Text('Feature Area')),
+                          ),
+                          const SizedBox(height: 20),
+                        ],
                       ),
-                      prefixIcon: const Icon(Icons.search),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide.none,
-                      ),
-                      filled: true,
-                      fillColor: Colors.white,
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        'Popular searches',
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                      TextButton(onPressed: () {}, child: const Text('See all'))
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  SizedBox(
-                    height: 130,
-                    child: _isLoaded
-                        ? ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: items.length,
-                            itemBuilder: (context, index) {
-                              return CategoryCard(
-                                catText: items[index]["id"],
-                                imageUrl: items[index]['imageUrl'],
-                              );
-                            })
-                        : const Center(child: CircularProgressIndicator()),
-                  ),
-                  const SizedBox(height: 30),
-                  Container(
-                    width: double.infinity,
-                    height: 200,
-                    color: Colors.grey.shade300,
-                    child: Center(child: Text('Feature Area')),
-                  ),
-                  const SizedBox(height: 20),
-                ],
-              ),
-            ),
-          ),
+                  );
+                }
+
+                return const Center(child: CircularProgressIndicator());
+              }),
         ),
       ),
     );
