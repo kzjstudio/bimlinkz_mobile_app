@@ -1,5 +1,6 @@
 import 'package:bimlinkz_mobile_app/Controllers/auth_controller.dart';
 import 'package:bimlinkz_mobile_app/Controllers/user_profile_controller.dart';
+import 'package:bimlinkz_mobile_app/screens/mobile/profile.dart';
 import 'package:bimlinkz_mobile_app/widgets/category_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -21,9 +22,35 @@ class _HomeScreenState extends State<HomeScreen> {
   showFinisheProfileMessage() {
     if (UserProfileController.instance.isUserProfileFinished.isFalse) {
       Get.defaultDialog(
-          title: 'finish setting up your profile',
-          content: ElevatedButton(
-              onPressed: () {}, child: Text('Go to user profile')));
+        radius: 8.0, // Rounded corners for the dialog
+        title: 'Finish Setting Up Your Profile',
+        titleStyle: const TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
+        middleText: '',
+        content: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: ElevatedButton(
+            onPressed: () {
+              Get.to(() => UserProfilePage());
+            },
+            style: ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                borderRadius:
+                    BorderRadius.circular(30), // Rounded corners for the button
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+            ),
+            child: const Text(
+              'Go to User Profile',
+              style: TextStyle(fontSize: 16),
+            ),
+          ),
+        ),
+        barrierDismissible:
+            true, // Allows dismissing the dialog by tapping outside of it
+      );
     }
     return;
   }
@@ -33,7 +60,6 @@ class _HomeScreenState extends State<HomeScreen> {
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).requestFocus(FocusNode());
-        showFinisheProfileMessage();
       },
       child: SafeArea(
         child: Scaffold(
@@ -41,22 +67,25 @@ class _HomeScreenState extends State<HomeScreen> {
             title:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               const Text('Hello,'),
-              Text(
-                usercontroller.name.value,
-                style:
-                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-              )
+              Obx(() => Text(
+                    usercontroller.name.value,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 20),
+                  ))
             ]),
             actions: [
               Obx(() => IconButton(
-                    highlightColor: Colors.green,
                     onPressed: () {
                       print(UserProfileController.instance.isAccountFinished);
+                      showFinisheProfileMessage();
                     },
                     icon:
                         UserProfileController.instance.isAccountFinished.isTrue
                             ? Icon(Icons.notifications_none)
-                            : Icon(Icons.notification_important_outlined),
+                            : Icon(
+                                Icons.notification_important_outlined,
+                                color: Colors.orange,
+                              ),
                     iconSize: 25,
                   )),
             ],

@@ -42,6 +42,7 @@ class AuthController extends GetxController {
         var _userId = result.user?.uid;
 
         addUserToFireStore(_userId.toString(), userName, email, role);
+        UserProfileController.instance.getUser();
       });
     } catch (e) {
       printError();
@@ -53,6 +54,7 @@ class AuthController extends GetxController {
   signIn(String email, String password) async {
     try {
       await auth.signInWithEmailAndPassword(email: email, password: password);
+      UserProfileController.instance.getUser();
     } catch (e) {
       printError();
       Get.snackbar("Sign in failed", "Wrong email or password",
