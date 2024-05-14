@@ -15,7 +15,7 @@ class _PostJobPageState extends State<PostJobPage> {
   final TextEditingController _locationController = TextEditingController();
 
   final db = FirebaseFirestore.instance;
-  SfRangeValues _values = SfRangeValues(40.0, 80.0);
+  SfRangeValues _values = SfRangeValues(0.floor(), 100.floor());
 
   var _categories = <String>[];
   String? _selectedCategory;
@@ -141,7 +141,10 @@ class _PostJobPageState extends State<PostJobPage> {
               const SizedBox(
                 height: 20,
               ),
-
+              Text(
+                'From \$${_values.start.toString()} BBD to \$${_values.end.toString()} BBD',
+                style: TextStyle(fontSize: 18),
+              ),
               SfRangeSlider(
                 min: 0.0,
                 max: 300,
@@ -151,7 +154,7 @@ class _PostJobPageState extends State<PostJobPage> {
                 showTicks: true,
                 showLabels: true,
                 enableTooltip: true,
-                minorTicksPerInterval: 5,
+                minorTicksPerInterval: 2,
                 onChanged: (value) => setState(() {
                   _values = value;
                   print(_values);
