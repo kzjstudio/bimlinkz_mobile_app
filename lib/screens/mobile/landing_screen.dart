@@ -42,16 +42,13 @@ class _LandingScreenState extends State<LandingScreen> {
             icon: Icon(Icons.home_outlined),
           ),
           BottomNavigationBarItem(
-              label: 'Companies',
-              icon: Icon(
-                Icons.business_center_outlined,
-              )),
+              label: 'Contractors', icon: Icon(Icons.cases_outlined)),
           BottomNavigationBarItem(
             label: 'Messages',
             icon: Icon(Icons.mail_outline_outlined),
           ),
           BottomNavigationBarItem(
-            label: 'Tasks',
+            label: 'Jobs',
             icon: Icon(Icons.task_outlined),
           ),
           BottomNavigationBarItem(

@@ -1,5 +1,6 @@
 import 'package:bimlinkz_mobile_app/Controllers/auth_controller.dart';
 import 'package:bimlinkz_mobile_app/Controllers/user_profile_controller.dart';
+import 'package:bimlinkz_mobile_app/screens/mobile/jobpost_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/profile.dart';
 import 'package:bimlinkz_mobile_app/widgets/category_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -152,6 +153,20 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: Center(child: Text('Feature Area')),
                           ),
                           const SizedBox(height: 20),
+                          Container(
+                            width: double.infinity,
+                            height: 200,
+                            color: Colors.grey.shade300,
+                            child: Center(child: Text('Feature Area')),
+                          ),
+                          const SizedBox(height: 20),
+                          Container(
+                            width: double.infinity,
+                            height: 200,
+                            color: Colors.grey.shade300,
+                            child: Center(child: Text('Feature Area')),
+                          ),
+                          const SizedBox(height: 20),
                         ],
                       ),
                     ),
@@ -160,6 +175,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
                 return const Center(child: CircularProgressIndicator());
               }),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              Get.to(() => PostJobPage(),
+                  transition: Transition.downToUp,
+                  duration: Duration(milliseconds: 200));
+            },
+            child: Icon(Icons.post_add_outlined),
+          ),
         ),
       ),
     );

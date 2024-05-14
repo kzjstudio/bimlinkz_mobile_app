@@ -32,15 +32,18 @@ class SignUpPage extends StatelessWidget {
         body: SingleChildScrollView(
           child: Center(
             child: Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding: const EdgeInsets.all(24.0),
               child: Form(
                 key: _formKey,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Image.asset(
-                        'images/logotrans.png'), // Ensure you have an image asset named 'logo.png' in your assets folder
+                      'images/logotrans.png',
+                      width: 200,
+                      height: 200,
+                    ), // Ensure you have an image asset named 'logo.png' in your assets folder
                     const SizedBox(height: 10),
                     const Text(
                       'Welcome to Bimlinks',
@@ -77,12 +80,12 @@ class SignUpPage extends StatelessWidget {
                     TextFormField(
                       controller: _nameController,
                       decoration: const InputDecoration(
-                        labelText: 'Name',
+                        labelText: 'User name',
                         border: OutlineInputBorder(),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter your name';
+                          return 'Please enter a user name';
                         }
                         return null;
                       },
@@ -130,7 +133,11 @@ class SignUpPage extends StatelessWidget {
                       ),
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
-                          print('signin up');
+                          AuthController.instance.createUser(
+                              _emailController.text,
+                              _passwordController.text,
+                              _nameController.text,
+                              _selectedRole.value);
                         }
                       },
                       child: const Text('Sign Up'),
