@@ -1,6 +1,7 @@
 import 'package:bimlinkz_mobile_app/Controllers/auth_controller.dart';
 import 'package:bimlinkz_mobile_app/Controllers/user_profile_controller.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/home_screen.dart';
+import 'package:bimlinkz_mobile_app/screens/mobile/landing_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,7 +16,6 @@ class _PostJobPageState extends State<PostJobPage> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
-  final TextEditingController _locationController = TextEditingController();
 
   final db = FirebaseFirestore.instance;
   SfRangeValues _values = SfRangeValues(0.floor(), 100.floor());
@@ -55,7 +55,6 @@ class _PostJobPageState extends State<PostJobPage> {
     });
   }
 
-  List<String> _skills = [];
   String? _lowerBudget;
   String? _upperBudget;
 
@@ -159,7 +158,7 @@ class _PostJobPageState extends State<PostJobPage> {
                 minorTicksPerInterval: 2,
                 onChanged: (value) => setState(() {
                   _values = value;
-                  print(_values);
+
                   _lowerBudget = _values.start.toString();
                   _upperBudget = _values.end.toString();
                 }),
@@ -184,10 +183,7 @@ class _PostJobPageState extends State<PostJobPage> {
                       'userName': UserProfileController.instance.name.value,
                     };
                     try {
-                      await db
-                          .collection('posted jobs')
-                          .doc(AuthController.instance.auth.currentUser!.uid)
-                          .set(jobData);
+                      await db.collection('posted jobs').add(jobData);
                       Get.showSnackbar(const GetSnackBar(
                         title: 'Job Posted successfully',
                         message: 'Job posted successfully',
@@ -195,13 +191,13 @@ class _PostJobPageState extends State<PostJobPage> {
                       ));
                       _titleController.clear();
                       _descriptionController.clear();
-                      Get.off(HomeScreen());
+                      Get.off(() => LandingScreen());
                     } catch (e) {
                       print(e.toString());
                     }
                   }
                 },
-                child: Text('Post Job'),
+                child: const Text('Post Job'),
               ),
             ],
           ),

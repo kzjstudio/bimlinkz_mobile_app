@@ -8,8 +8,8 @@ class PreferencesPage extends StatefulWidget {
 }
 
 class _PreferencesPageState extends State<PreferencesPage> {
-  ThemeMode themeMode = ThemeMode.system;
-  RxBool isDarkTheme = false.obs; // Updated to use GetX observable
+  final ThemeController themeController = Get.find();
+
   bool isRemindersOn = false;
   String language = 'English'; // Example default language
 
@@ -33,10 +33,9 @@ class _PreferencesPageState extends State<PreferencesPage> {
             () => SwitchListTile(
               title: const Text('Dark Theme'),
               subtitle: const Text('Enable dark theme'),
-              value: isDarkTheme.value,
+              value: themeController.isDarkMode,
               onChanged: (bool value) {
-                isDarkTheme.value = value;
-                Get.find<ThemeController>().toggleTheme(value);
+                themeController.toggleTheme(value);
               },
             ),
           ),

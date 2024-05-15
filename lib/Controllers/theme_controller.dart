@@ -5,6 +5,18 @@ class ThemeController extends GetxController {
   // Observable for theme mode
   Rx<ThemeMode> themeMode = ThemeMode.system.obs;
 
+  @override
+  void onInit() {
+    super.onInit();
+    // Set the initial theme mode based on system settings
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final brightness = Get.context!.theme.brightness;
+      themeMode.value =
+          (brightness == Brightness.dark) ? ThemeMode.dark : ThemeMode.light;
+    });
+  }
+
   // Function to toggle theme mode
   void toggleTheme(bool isDarkMode) {
     themeMode.value = isDarkMode ? ThemeMode.dark : ThemeMode.light;
@@ -12,6 +24,9 @@ class ThemeController extends GetxController {
     saveThemeMode(
         isDarkMode); // Save preference locally, implement this method based on your preference management
   }
+
+  // Getter to determine if current theme is dark
+  bool get isDarkMode => themeMode.value == ThemeMode.dark;
 
   // Implement loading the theme mode when the app starts
   void loadThemeMode() {

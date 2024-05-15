@@ -2,7 +2,7 @@ import 'package:bimlinkz_mobile_app/screens/mobile/account_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/company_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/home_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/messages_screen.dart';
-import 'package:bimlinkz_mobile_app/screens/mobile/search_screen.dart';
+import 'package:bimlinkz_mobile_app/screens/mobile/jobs_screen.dart';
 import 'package:flutter/material.dart';
 
 class LandingScreen extends StatefulWidget {
@@ -25,7 +25,7 @@ class _LandingScreenState extends State<LandingScreen> {
     HomeScreen(),
     Companies(),
     const MessagesScreen(),
-    const SearchScreen(),
+    JobScreen(),
     AccountScreen(),
   ];
 
