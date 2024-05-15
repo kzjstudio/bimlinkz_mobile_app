@@ -1,3 +1,6 @@
+import 'package:bimlinkz_mobile_app/Controllers/auth_controller.dart';
+import 'package:bimlinkz_mobile_app/Controllers/user_profile_controller.dart';
+import 'package:bimlinkz_mobile_app/screens/mobile/home_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -53,9 +56,8 @@ class _PostJobPageState extends State<PostJobPage> {
   }
 
   List<String> _skills = [];
-  double? _budget;
-  DateTime? _deadline;
-  bool _isPublic = true;
+  String? _lowerBudget;
+  String? _upperBudget;
 
   @override
   Widget build(BuildContext context) {
@@ -158,6 +160,8 @@ class _PostJobPageState extends State<PostJobPage> {
                 onChanged: (value) => setState(() {
                   _values = value;
                   print(_values);
+                  _lowerBudget = _values.start.toString();
+                  _upperBudget = _values.end.toString();
                 }),
               ),
               const SizedBox(
@@ -166,9 +170,35 @@ class _PostJobPageState extends State<PostJobPage> {
 
               // Additional fields...
               ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    // Logic to handle form submission
+                    final jobData = {
+                      'title': _titleController.text,
+                      'description': _descriptionController.text,
+                      'parish': selectedParish,
+                      'lowerBudget': _values.start.toString(),
+                      'upperBudget': _values.end.toString(),
+                      'jobCategory': _selectedCategory,
+                      'date': DateTime.now(),
+                      'userId': AuthController.instance.auth.currentUser!.uid,
+                      'userName': UserProfileController.instance.name.value,
+                    };
+                    try {
+                      await db
+                          .collection('posted jobs')
+                          .doc(AuthController.instance.auth.currentUser!.uid)
+                          .set(jobData);
+                      Get.showSnackbar(const GetSnackBar(
+                        title: 'Job Posted successfully',
+                        message: 'Job posted successfully',
+                        duration: Duration(seconds: 2),
+                      ));
+                      _titleController.clear();
+                      _descriptionController.clear();
+                      Get.off(HomeScreen());
+                    } catch (e) {
+                      print(e.toString());
+                    }
                   }
                 },
                 child: Text('Post Job'),
