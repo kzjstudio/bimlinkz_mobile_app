@@ -5,6 +5,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 
 class JobScreen extends StatefulWidget {
+  const JobScreen({super.key});
+
   @override
   _JobScreenState createState() => _JobScreenState();
 }
@@ -40,7 +42,7 @@ class _JobScreenState extends State<JobScreen>
       ),
       body: TabBarView(
         controller: _tabController,
-        children: [
+        children: const [
           JobList(tab: 'all'),
           JobList(tab: 'yours'),
         ],
@@ -52,7 +54,7 @@ class _JobScreenState extends State<JobScreen>
 class JobList extends StatelessWidget {
   final String tab;
 
-  JobList({required this.tab});
+  const JobList({super.key, required this.tab});
 
   @override
   Widget build(BuildContext context) {

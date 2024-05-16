@@ -6,7 +6,7 @@ class ListButton extends StatelessWidget {
   String title;
   String subTitle;
 
-  ListButton({
+  ListButton({super.key, 
     required this.tapped,
     required this.icon,
     required this.title,

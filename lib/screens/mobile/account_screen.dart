@@ -14,6 +14,8 @@ class AccountScreen extends StatelessWidget {
   var data;
   var isLoaded = false.obs;
 
+  AccountScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,7 +34,7 @@ class AccountScreen extends StatelessWidget {
                 children: [
                   Text(
                     c.userName.value,
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   const Text(
                     'Welcome back!',
@@ -44,7 +46,7 @@ class AccountScreen extends StatelessWidget {
                               RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(6)))),
                       onPressed: () {
-                        Get.to(() => UserProfilePage(),
+                        Get.to(() => const UserProfilePage(),
                             transition: Transition.leftToRightWithFade);
                       },
                       child: const Text('EDIT PROFILE'))
@@ -62,7 +64,7 @@ class AccountScreen extends StatelessWidget {
               children: [
                 ListButton(
                     tapped: () {
-                      Get.to(() => PreferencesPage(),
+                      Get.to(() => const PreferencesPage(),
                           transition: Transition.rightToLeftWithFade);
                     },
                     icon: Icons.settings_outlined,
@@ -74,7 +76,7 @@ class AccountScreen extends StatelessWidget {
                 ),
                 ListButton(
                     tapped: () {
-                      Get.to(() => NotificationSettingsPage(),
+                      Get.to(() => const NotificationSettingsPage(),
                           transition: Transition.rightToLeftWithFade);
                     },
                     icon: Icons.notifications_none,
@@ -86,7 +88,7 @@ class AccountScreen extends StatelessWidget {
                 ),
                 ListButton(
                     tapped: () {
-                      Get.to(() => ContactUsPage(),
+                      Get.to(() => const ContactUsPage(),
                           transition: Transition.rightToLeftWithFade);
                     },
                     icon: Icons.help_outline_outlined,
@@ -98,7 +100,7 @@ class AccountScreen extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Get.to(() => AboutPage(),
+                    Get.to(() => const AboutPage(),
                         transition: Transition.rightToLeftWithFade);
                   },
                   child: const ListTile(
@@ -111,7 +113,7 @@ class AccountScreen extends StatelessWidget {
                       'About',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    subtitle: const Text('About the application'),
+                    subtitle: Text('About the application'),
                   ),
                 ),
                 Divider(

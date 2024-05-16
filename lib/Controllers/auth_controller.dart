@@ -24,11 +24,10 @@ class AuthController extends GetxController {
 
   _initialScreen(User? user) {
     if (user == null) {
-      print('Login');
-      Get.offAll(() => LoginScreen());
+      Get.offAll(() => const LoginScreen());
       isLoggedIn.value = false;
     } else {
-      Get.offAll(() => LandingScreen());
+      Get.offAll(() => const LandingScreen());
       isLoggedIn.value = true;
     }
   }
@@ -39,9 +38,9 @@ class AuthController extends GetxController {
       await auth
           .createUserWithEmailAndPassword(email: email, password: password)
           .then((result) {
-        var _userId = result.user?.uid;
+        var userId = result.user?.uid;
 
-        addUserToFireStore(_userId.toString(), userName, email, role);
+        addUserToFireStore(userId.toString(), userName, email, role);
         UserProfileController.instance.getUser();
       });
     } catch (e) {
@@ -58,14 +57,14 @@ class AuthController extends GetxController {
     } catch (e) {
       printError();
       Get.snackbar("Sign in failed", "Wrong email or password",
-          snackPosition: SnackPosition.BOTTOM, duration: Duration(seconds: 5));
+          snackPosition: SnackPosition.BOTTOM,
+          duration: const Duration(seconds: 5));
     }
   }
 
   signOut() {
     try {
       auth.signOut();
-      print("signed out");
     } catch (e) {
       e.printError();
     }

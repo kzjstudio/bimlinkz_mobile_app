@@ -25,7 +25,6 @@ class UserProfileController extends GetxController {
   void onReady() {
     getUser();
     super.onReady();
-    print('getting data');
   }
 
   getUser() {
@@ -40,8 +39,6 @@ class UserProfileController extends GetxController {
       print(isAccountFinished);
       isLoaded.value = true;
     });
-
-    onError:
     (e) {
       isLoaded.value = false;
       print(e);

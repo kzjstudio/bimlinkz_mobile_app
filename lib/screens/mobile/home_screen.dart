@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class HomeScreen extends StatefulWidget {
-  HomeScreen({super.key});
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -34,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
           padding: const EdgeInsets.all(16.0),
           child: ElevatedButton(
             onPressed: () {
-              Get.to(() => UserProfilePage());
+              Get.to(() => const UserProfilePage());
             },
             style: ElevatedButton.styleFrom(
               shape: RoundedRectangleBorder(
@@ -82,8 +82,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                     icon:
                         UserProfileController.instance.isAccountFinished.isTrue
-                            ? Icon(Icons.notifications_none)
-                            : Icon(
+                            ? const Icon(Icons.notifications_none)
+                            : const Icon(
                                 Icons.notification_important_outlined,
                                 color: Colors.orange,
                               ),
@@ -150,21 +150,21 @@ class _HomeScreenState extends State<HomeScreen> {
                             width: double.infinity,
                             height: 200,
                             color: Colors.grey.shade300,
-                            child: Center(child: Text('Feature Area')),
+                            child: const Center(child: Text('Feature Area')),
                           ),
                           const SizedBox(height: 20),
                           Container(
                             width: double.infinity,
                             height: 200,
                             color: Colors.grey.shade300,
-                            child: Center(child: Text('Feature Area')),
+                            child: const Center(child: Text('Feature Area')),
                           ),
                           const SizedBox(height: 20),
                           Container(
                             width: double.infinity,
                             height: 200,
                             color: Colors.grey.shade300,
-                            child: Center(child: Text('Feature Area')),
+                            child: const Center(child: Text('Feature Area')),
                           ),
                           const SizedBox(height: 20),
                         ],
@@ -177,11 +177,11 @@ class _HomeScreenState extends State<HomeScreen> {
               }),
           floatingActionButton: FloatingActionButton(
             onPressed: () {
-              Get.to(() => PostJobPage(),
+              Get.to(() => const PostJobPage(),
                   transition: Transition.downToUp,
-                  duration: Duration(milliseconds: 200));
+                  duration: const Duration(milliseconds: 200));
             },
-            child: Icon(Icons.post_add_outlined),
+            child: const Icon(Icons.post_add_outlined),
           ),
         ),
       ),

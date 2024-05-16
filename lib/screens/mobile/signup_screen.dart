@@ -22,6 +22,8 @@ class SignUpPage extends StatelessWidget {
         'Looking for services and solutions for personal or business needs.'
   };
 
+  SignUpPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -70,13 +72,12 @@ class SignUpPage extends StatelessWidget {
                         }).toList(),
                       ),
                     ),
-                    if (_selectedRole != null)
-                      Padding(
-                        padding: const EdgeInsets.only(top: 10.0),
-                        child:
-                            Obx(() => Text(roleDescriptions[_selectedRole]!)),
-                      ),
-                    SizedBox(height: 20),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10.0),
+                      child:
+                          Obx(() => Text(roleDescriptions[_selectedRole]!)),
+                    ),
+                    const SizedBox(height: 20),
                     TextFormField(
                       controller: _nameController,
                       decoration: const InputDecoration(

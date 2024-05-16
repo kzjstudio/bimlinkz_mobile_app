@@ -1,6 +1,5 @@
 import 'package:bimlinkz_mobile_app/Controllers/auth_controller.dart';
 import 'package:bimlinkz_mobile_app/Controllers/user_profile_controller.dart';
-import 'package:bimlinkz_mobile_app/screens/mobile/home_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/landing_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +7,8 @@ import 'package:get/get.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 
 class PostJobPage extends StatefulWidget {
+  const PostJobPage({super.key});
+
   @override
   _PostJobPageState createState() => _PostJobPageState();
 }
@@ -20,7 +21,7 @@ class _PostJobPageState extends State<PostJobPage> {
   final db = FirebaseFirestore.instance;
   SfRangeValues _values = SfRangeValues(0.floor(), 100.floor());
 
-  var _categories = <String>[];
+  final _categories = <String>[];
   String? _selectedCategory;
   final List<String> _parishes = [
     'Christ Church',
@@ -144,7 +145,7 @@ class _PostJobPageState extends State<PostJobPage> {
               ),
               Text(
                 'From \$${_values.start.toString()} BBD to \$${_values.end.toString()} BBD',
-                style: TextStyle(fontSize: 18),
+                style: const TextStyle(fontSize: 18),
               ),
               SfRangeSlider(
                 min: 0.0,
@@ -191,7 +192,7 @@ class _PostJobPageState extends State<PostJobPage> {
                       ));
                       _titleController.clear();
                       _descriptionController.clear();
-                      Get.off(() => LandingScreen());
+                      Get.off(() => const LandingScreen());
                     } catch (e) {
                       print(e.toString());
                     }

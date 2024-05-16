@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class JobDetailScreen extends StatelessWidget {
   final Job job;
 
-  const JobDetailScreen({required this.job});
+  const JobDetailScreen({super.key, required this.job});
 
   @override
   Widget build(BuildContext context) {

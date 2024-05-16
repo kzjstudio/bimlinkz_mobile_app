@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ThemeController extends GetxController {
   // Observable for theme mode
@@ -10,7 +11,8 @@ class ThemeController extends GetxController {
     super.onInit();
     // Set the initial theme mode based on system settings
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      loadThemeMode();
       final brightness = Get.context!.theme.brightness;
       themeMode.value =
           (brightness == Brightness.dark) ? ThemeMode.dark : ThemeMode.light;
@@ -29,21 +31,21 @@ class ThemeController extends GetxController {
   bool get isDarkMode => themeMode.value == ThemeMode.dark;
 
   // Implement loading the theme mode when the app starts
-  void loadThemeMode() {
-    bool isDarkMode =
-        loadThemeModeFromPreferences(); // Implement this method to load saved theme preferences
-    themeMode.value = isDarkMode ? ThemeMode.dark : ThemeMode.light;
-    Get.changeThemeMode(themeMode.value);
+  // Save the theme mode to local preferences
+  saveThemeMode(bool isDarkMode) async {
+    // final SharedPreferences prefs = await SharedPreferences.getInstance();
+    // await prefs.setBool('isDarkMode', isDarkMode);
+    print('theme saved');
   }
 
-  // Dummy function for saving theme mode in local storage
-  void saveThemeMode(bool isDarkMode) {
-    // Use shared_preferences or other local storage options to save the theme mode
-  }
+  // Load the theme mode from local preferences
 
-  // Dummy function for loading theme mode from local storage
-  bool loadThemeModeFromPreferences() {
-    // Implement loading logic here, return true if dark mode is enabled, otherwise false
-    return false; // Default to light mode
+  Future<void> loadThemeMode() async {
+    // final SharedPreferences prefs = await SharedPreferences.getInstance();
+    // bool isDarkMode = prefs.getBool('isDarkMode') ?? false;
+    // themeMode.value = isDarkMode ? ThemeMode.dark : ThemeMode.light;
+    // Get.changeThemeMode(themeMode.value);
+
+    print('theme loaded');
   }
 }

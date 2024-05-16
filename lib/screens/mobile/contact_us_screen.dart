@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ContactUsPage extends StatefulWidget {
+  const ContactUsPage({super.key});
+
   @override
   _ContactUsPageState createState() => _ContactUsPageState();
 }
@@ -12,9 +14,9 @@ class _ContactUsPageState extends State<ContactUsPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController messageController = TextEditingController();
 
-  String _name = '';
-  String _email = '';
-  String _message = '';
+  final String _name = '';
+  final String _email = '';
+  final String _message = '';
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {

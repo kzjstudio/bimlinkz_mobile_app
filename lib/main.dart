@@ -5,7 +5,7 @@ import 'package:bimlinkz_mobile_app/Controllers/theme_controller.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,8 +24,10 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  final ThemeController themeController =
-      Get.put(ThemeController()); // Initialize the controller
+  final ThemeController themeController = Get.put(ThemeController());
+  final Future<SharedPreferences> prefs = SharedPreferences.getInstance();
+
+  MyApp({super.key}); // Initialize the controller
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
@@ -34,6 +36,6 @@ class MyApp extends StatelessWidget {
         theme: lightTheme,
         darkTheme: darkTheme,
         themeMode: themeController.themeMode.value,
-        home: SplashScreen());
+        home: const SplashScreen());
   }
 }

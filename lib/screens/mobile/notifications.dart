@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class NotificationSettingsPage extends StatefulWidget {
+  const NotificationSettingsPage({super.key});
+
   @override
   _NotificationSettingsPageState createState() =>
       _NotificationSettingsPageState();
@@ -19,20 +21,20 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Notification Settings"),
+        title: const Text("Notification Settings"),
       ),
       body: ListView(
         padding:
-            EdgeInsets.symmetric(vertical: 12), // Padding around the whole list
+            const EdgeInsets.symmetric(vertical: 12), // Padding around the whole list
         children: [
           Padding(
             padding:
                 const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
             child: Text("General Notifications",
-                style: Theme.of(context).textTheme.headline6),
+                style: Theme.of(context).textTheme.titleLarge),
           ),
           SwitchListTile(
-            title: Text("Push Notifications"),
+            title: const Text("Push Notifications"),
             value: pushNotifications,
             onChanged: (bool value) {
               setState(() {
@@ -41,7 +43,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
             },
           ),
           SwitchListTile(
-            title: Text("New Job Notifications"),
+            title: const Text("New Job Notifications"),
             value: newJobNotifications,
             onChanged: (bool value) {
               setState(() {
@@ -49,15 +51,15 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
               });
             },
           ),
-          Divider(), // Divider between sections
+          const Divider(), // Divider between sections
           Padding(
             padding:
                 const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
             child: Text("Message Notifications",
-                style: Theme.of(context).textTheme.headline6),
+                style: Theme.of(context).textTheme.titleLarge),
           ),
           SwitchListTile(
-            title: Text("Message"),
+            title: const Text("Message"),
             value: messageNotifications,
             onChanged: (bool value) {
               setState(() {
@@ -66,7 +68,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
             },
           ),
           SwitchListTile(
-            title: Text("Reminders"),
+            title: const Text("Reminders"),
             value: reminderNotifications,
             onChanged: (bool value) {
               setState(() {
@@ -74,15 +76,15 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
               });
             },
           ),
-          Divider(), // Another divider
+          const Divider(), // Another divider
           Padding(
             padding:
                 const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
             child: Text("App Notifications",
-                style: Theme.of(context).textTheme.headline6),
+                style: Theme.of(context).textTheme.titleLarge),
           ),
           SwitchListTile(
-            title: Text("Sound"),
+            title: const Text("Sound"),
             value: sound,
             onChanged: (bool value) {
               setState(() {
@@ -91,7 +93,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
             },
           ),
           SwitchListTile(
-            title: Text("Ringtone"),
+            title: const Text("Ringtone"),
             value: ringtone,
             onChanged: (bool value) {
               setState(() {
@@ -100,7 +102,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
             },
           ),
           SwitchListTile(
-            title: Text("Vibrate"),
+            title: const Text("Vibrate"),
             value: vibrate,
             onChanged: (bool value) {
               setState(() {

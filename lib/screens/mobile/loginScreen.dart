@@ -1,7 +1,6 @@
 import 'package:bimlinkz_mobile_app/Controllers/auth_controller.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/signup_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -25,7 +24,7 @@ class _LoginScreenState extends State<LoginScreen> {
           body: SingleChildScrollView(
             child: Center(
               child: ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: 500),
+                constraints: const BoxConstraints(maxWidth: 500),
                 child: Padding(
                   padding: const EdgeInsets.all(24.0),
                   child: Form(

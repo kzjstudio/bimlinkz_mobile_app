@@ -1,12 +1,11 @@
-import 'package:bimlinkz_mobile_app/screens/mobile/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:bimlinkz_mobile_app/Controllers/user_profile_controller.dart';
 import 'package:get/get.dart';
 
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class UserProfilePage extends StatefulWidget {
+  const UserProfilePage({super.key});
+
   @override
   _UserProfilePageState createState() => _UserProfilePageState();
 }
@@ -39,7 +38,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
-                    IconButton(onPressed: () {}, icon: Icon(Icons.edit))
+                    IconButton(onPressed: () {}, icon: const Icon(Icons.edit))
                   ],
                 ),
                 Text(usercontroller.about.value.toString())
@@ -101,13 +100,13 @@ class _UserProfilePageState extends State<UserProfilePage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         ListTile(
-          title: Text('Specialty'),
+          title: const Text('Specialty'),
           subtitle: Text(
               usercontroller.specialty.value.isEmpty
                   ? 'Add Specialty'
                   : usercontroller.specialty.value,
-              style: TextStyle(color: Colors.black54)),
-          trailing: Icon(Icons.edit, color: Colors.blueGrey),
+              style: const TextStyle(color: Colors.black54)),
+          trailing: const Icon(Icons.edit, color: Colors.blueGrey),
           onTap: () => _editSpecialty(),
         ),
       ],
@@ -129,21 +128,21 @@ class _UserProfilePageState extends State<UserProfilePage> {
         ListTile(
           title: const Text('Email Address'),
           subtitle: Text(usercontroller.email.value,
-              style: TextStyle(color: Colors.black54)),
+              style: const TextStyle(color: Colors.black54)),
           trailing: const Icon(Icons.lock_outline, color: Colors.grey),
         ),
         ListTile(
           title: const Text('Phone Number'),
           subtitle: Text(usercontroller.phoneNumber ?? 'Add Phone Number',
-              style: TextStyle(color: Colors.black54)),
-          trailing: Icon(Icons.edit, color: Colors.blueGrey),
+              style: const TextStyle(color: Colors.black54)),
+          trailing: const Icon(Icons.edit, color: Colors.blueGrey),
           onTap: () => _editPhoneNumber(),
         ),
         ListTile(
           title: const Text('Address'),
           subtitle: Text(usercontroller.address ?? 'Add Address',
-              style: TextStyle(color: Colors.black54)),
-          trailing: Icon(Icons.edit, color: Colors.blueGrey),
+              style: const TextStyle(color: Colors.black54)),
+          trailing: const Icon(Icons.edit, color: Colors.blueGrey),
           onTap: () => _editAddress(),
         ),
       ],
@@ -161,7 +160,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
   Widget _buildResumeSection() {
     return ListTile(
       title: const Text('Resume'),
-      subtitle: Text('Upload or update your resume',
+      subtitle: const Text('Upload or update your resume',
           style: TextStyle(color: Colors.black54)),
       trailing: ElevatedButton(
         onPressed: () {

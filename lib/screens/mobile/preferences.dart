@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class PreferencesPage extends StatefulWidget {
+  const PreferencesPage({super.key});
+
   @override
   _PreferencesPageState createState() => _PreferencesPageState();
 }
