@@ -1,4 +1,5 @@
 import 'package:bimlinkz_mobile_app/screens/mobile/popular_selection_screen.dart';
+import 'package:bimlinkz_mobile_app/theme.dart';
 import 'package:flutter/material.dart';
 
 class CategoryCard extends StatefulWidget {
@@ -32,7 +33,7 @@ class _CategoryCardState extends State<CategoryCard> {
         height: 130,
         margin: const EdgeInsets.all(8), // Add some margin around the card
         decoration: BoxDecoration(
-          color: Colors.white, // Card background color
+          color: Color.fromARGB(255, 239, 239, 239), // Card background color
           borderRadius: BorderRadius.circular(10),
           boxShadow: [
             BoxShadow(
@@ -64,9 +65,9 @@ class _CategoryCardState extends State<CategoryCard> {
               child: Text(
                 widget.catText,
                 style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                ),
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.darkBackground),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),

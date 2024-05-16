@@ -33,18 +33,18 @@ class ThemeController extends GetxController {
   // Implement loading the theme mode when the app starts
   // Save the theme mode to local preferences
   saveThemeMode(bool isDarkMode) async {
-    // final SharedPreferences prefs = await SharedPreferences.getInstance();
-    // await prefs.setBool('isDarkMode', isDarkMode);
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isDarkMode', isDarkMode);
     print('theme saved');
   }
 
   // Load the theme mode from local preferences
 
   Future<void> loadThemeMode() async {
-    // final SharedPreferences prefs = await SharedPreferences.getInstance();
-    // bool isDarkMode = prefs.getBool('isDarkMode') ?? false;
-    // themeMode.value = isDarkMode ? ThemeMode.dark : ThemeMode.light;
-    // Get.changeThemeMode(themeMode.value);
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool isDarkMode = prefs.getBool('isDarkMode') ?? false;
+    themeMode.value = isDarkMode ? ThemeMode.dark : ThemeMode.light;
+    Get.changeThemeMode(themeMode.value);
 
     print('theme loaded');
   }

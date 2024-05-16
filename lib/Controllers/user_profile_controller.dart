@@ -34,9 +34,7 @@ class UserProfileController extends GetxController {
       email.value = event['email'];
       isUserProfileFinished.value = event['isuserprofilefinished'];
       isAccountFinished.value = event['isAccountFinished'];
-      print(name.value);
-      print(email.value);
-      print(isAccountFinished);
+
       isLoaded.value = true;
     });
     (e) {

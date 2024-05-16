@@ -34,13 +34,12 @@ final ThemeData lightTheme = ThemeData(
       primary: AppColors.primary,
       secondary: AppColors.secondary,
       surface: AppColors.lightSurface,
-      background: AppColors.lightBackground,
       error: AppColors.error,
       onPrimary: AppColors.onPrimary,
       onSecondary: AppColors.onSecondary,
       onSurface:
           AppColors.buttonText, // Use for better visibility on light theme
-      onBackground: AppColors.onBackground,
+
       onError: AppColors.onError,
     ),
     scaffoldBackgroundColor: AppColors.lightBackground,
@@ -67,36 +66,41 @@ final ThemeData lightTheme = ThemeData(
     dividerTheme: const DividerThemeData(color: AppColors.divider));
 
 final ThemeData darkTheme = ThemeData(
-    colorScheme: const ColorScheme.dark(
-      primary: AppColors.primary,
-      secondary: AppColors.secondary,
-      surface: AppColors.darkSurface,
-      background: AppColors.darkBackground,
-      error: AppColors.error,
-      onPrimary: AppColors.onPrimary,
-      onSecondary: AppColors.onSecondary,
-      onSurface:
-          AppColors.buttonDarkText, // Use for better visibility on dark theme
-      onBackground: AppColors.onDarkBackground,
-      onError: AppColors.onError,
+  colorScheme: const ColorScheme.dark(
+    primary: AppColors.primary,
+    secondary: AppColors.secondary,
+    surface: AppColors.darkSurface,
+
+    error: AppColors.error,
+    onPrimary: AppColors.onPrimary,
+    onSecondary: AppColors.onSecondary,
+    onSurface:
+        AppColors.buttonDarkText, // Use for better visibility on dark theme
+
+    onError: AppColors.onError,
+  ),
+  scaffoldBackgroundColor: AppColors.darkBackground,
+  appBarTheme: const AppBarTheme(
+    backgroundColor: AppColors.darkBackground,
+    iconTheme: IconThemeData(color: AppColors.onDarkBackground),
+    titleTextStyle: TextStyle(
+      color: AppColors.onDarkBackground,
+      fontSize: 20,
+      fontWeight: FontWeight.bold,
     ),
-    scaffoldBackgroundColor: AppColors.darkBackground,
-    appBarTheme: const AppBarTheme(
-      backgroundColor: AppColors.darkBackground,
-      iconTheme: IconThemeData(color: AppColors.onPrimary),
-      titleTextStyle: TextStyle(
-          color: AppColors.onPrimary,
-          fontSize: 20,
-          fontWeight: FontWeight.bold),
+  ),
+  outlinedButtonTheme: OutlinedButtonThemeData(
+    style: OutlinedButton.styleFrom(
+      foregroundColor: AppColors.primary, // Text and icon color
+      backgroundColor: Colors.transparent,
+      side: const BorderSide(color: AppColors.primary),
     ),
-    outlinedButtonTheme: OutlinedButtonThemeData(
-      style: OutlinedButton.styleFrom(
-        foregroundColor: AppColors.buttonDarkText, // Text and icon color
-        backgroundColor: Colors.transparent,
-        side: const BorderSide(color: AppColors.primary),
-      ),
-    ),
-    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-        backgroundColor: AppColors.lightBackground,
-        selectedIconTheme: IconThemeData(color: AppColors.primary),
-        unselectedIconTheme: IconThemeData(color: AppColors.secondary)));
+  ),
+  bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+    type: BottomNavigationBarType.fixed,
+    backgroundColor: AppColors.darkBackground,
+    unselectedIconTheme: IconThemeData(color: AppColors.unselectedIcon),
+    selectedIconTheme: IconThemeData(color: AppColors.primary),
+  ),
+  dividerTheme: const DividerThemeData(color: AppColors.divider),
+);
