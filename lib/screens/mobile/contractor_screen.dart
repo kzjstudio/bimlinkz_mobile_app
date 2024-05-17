@@ -11,7 +11,10 @@ class _ContractorsPageState extends State<ContractorsPage> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Future<List<Contractor>> _fetchContractors() async {
-    QuerySnapshot snapshot = await _firestore.collection('contractors').get();
+    QuerySnapshot snapshot = await _firestore
+        .collection('users')
+        .where('role', isEqualTo: "freelancer")
+        .get();
     return snapshot.docs
         .map((doc) => Contractor.fromMap(doc.data() as Map<String, dynamic>))
         .toList();
@@ -20,7 +23,7 @@ class _ContractorsPageState extends State<ContractorsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Contractors')),
+      appBar: AppBar(title: const Text('Contractors you have worked with')),
       body: FutureBuilder<List<Contractor>>(
         future: _fetchContractors(),
         builder: (context, snapshot) {
@@ -44,12 +47,12 @@ class _ContractorsPageState extends State<ContractorsPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text('Email: ${contractor.email}'),
-                        Text('Phone: ${contractor.phoneNumber}'),
-                        Text('Address: ${contractor.address}'),
+                        // Text('Phone: ${contractor.phoneNumber}'),
+                        // Text('Address: ${contractor.address}'),
                         Row(
                           children: [
                             Icon(Icons.star, color: Colors.amber),
-                            Text('${contractor.rating}'),
+                            // Text('${contractor.rating}'),
                           ],
                         ),
                       ],
