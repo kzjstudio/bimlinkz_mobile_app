@@ -1,6 +1,7 @@
 import 'package:bimlinkz_mobile_app/Controllers/auth_controller.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/about_us_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/contact_us_screen.dart';
+import 'package:bimlinkz_mobile_app/screens/mobile/contractor_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/notifications.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/preferences.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/profile.dart';
@@ -64,6 +65,18 @@ class AccountScreen extends StatelessWidget {
               children: [
                 ListButton(
                     tapped: () {
+                      Get.to(() => ContractorsPage(),
+                          transition: Transition.rightToLeftWithFade);
+                    },
+                    icon: Icons.work_history_outlined,
+                    title: 'Contractors',
+                    subTitle: "Person's you have worked with before "),
+                Divider(
+                  thickness: .2,
+                  color: Theme.of(context).colorScheme.shadow,
+                ),
+                ListButton(
+                    tapped: () {
                       Get.to(() => const PreferencesPage(),
                           transition: Transition.rightToLeftWithFade);
                     },
@@ -98,24 +111,14 @@ class AccountScreen extends StatelessWidget {
                   thickness: .2,
                   color: Theme.of(context).colorScheme.shadow,
                 ),
-                GestureDetector(
-                  onTap: () {
-                    Get.to(() => const AboutPage(),
-                        transition: Transition.rightToLeftWithFade);
-                  },
-                  child: const ListTile(
-                    dense: true,
-                    isThreeLine: true,
-                    leading: Icon(
-                      Icons.info_outline,
-                    ),
-                    title: Text(
-                      'About',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    subtitle: Text('About the application'),
-                  ),
-                ),
+                ListButton(
+                    tapped: () {
+                      Get.to(() => const AboutPage(),
+                          transition: Transition.rightToLeftWithFade);
+                    },
+                    icon: Icons.info_outline,
+                    title: 'About',
+                    subTitle: 'About the application'),
                 Divider(
                   thickness: .2,
                   color: Theme.of(context).colorScheme.shadow,

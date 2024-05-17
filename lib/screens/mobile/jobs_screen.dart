@@ -35,16 +35,16 @@ class _JobScreenState extends State<JobScreen>
         bottom: TabBar(
           controller: _tabController,
           tabs: const [
-            Tab(text: 'All Jobs'),
             Tab(text: 'Your Jobs'),
+            Tab(text: 'All Jobs'),
           ],
         ),
       ),
       body: TabBarView(
         controller: _tabController,
         children: const [
-          JobList(tab: 'all'),
           JobList(tab: 'yours'),
+          JobList(tab: 'all'),
         ],
       ),
     );
@@ -59,13 +59,13 @@ class JobList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: (tab == 'all')
-          ? FirebaseFirestore.instance.collection('posted jobs').snapshots()
-          : FirebaseFirestore.instance
+      stream: (tab == 'yours')
+          ? FirebaseFirestore.instance
               .collection('posted jobs')
               .where('userId',
                   isEqualTo: AuthController.instance.auth.currentUser!.uid)
-              .snapshots(),
+              .snapshots()
+          : FirebaseFirestore.instance.collection('posted jobs').snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
@@ -98,10 +98,14 @@ class JobList extends StatelessWidget {
                         ],
                       ),
                       trailing: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Text('Looking for ${job.jobCategory}'),
+                          const SizedBox(
+                            height: 5,
+                          ),
                           const Text('In the range of'),
-                          Text('${job.lowerBudget} to ${job.upperBudget}')
+                          Text('\$${job.lowerBudget} to \$${job.upperBudget}')
                         ],
                       ),
                       onTap: () {

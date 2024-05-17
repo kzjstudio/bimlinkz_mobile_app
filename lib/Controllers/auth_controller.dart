@@ -33,14 +33,17 @@ class AuthController extends GetxController {
   }
 
   void createUser(
-      String email, String password, String userName, String role) async {
+    String email,
+    String password,
+    String userName,
+  ) async {
     try {
       await auth
           .createUserWithEmailAndPassword(email: email, password: password)
           .then((result) {
         var userId = result.user?.uid;
 
-        addUserToFireStore(userId.toString(), userName, email, role);
+        addUserToFireStore(userId.toString(), userName, email);
         UserProfileController.instance.getUser();
       });
     } catch (e) {
@@ -70,14 +73,12 @@ class AuthController extends GetxController {
     }
   }
 
-  void addUserToFireStore(
-      String userId, String userName, String email, String role) {
+  void addUserToFireStore(String userId, String userName, String email) {
     db.collection("users").doc(userId).set({
       'name': userName,
       'id': userId,
       'email': email,
       'datejoined': Timestamp.now(),
-      'role': role
     });
   }
 }

@@ -5,8 +5,6 @@ import 'package:get/get.dart';
 class SignUpPage extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
 
-  final _selectedRole = 'Freelancer'.obs;
-
   List<String> roles = ['Freelancer', 'Company', 'Client'];
 
   final TextEditingController _nameController = TextEditingController();
@@ -14,13 +12,6 @@ class SignUpPage extends StatelessWidget {
   final TextEditingController _emailController = TextEditingController();
 
   final TextEditingController _passwordController = TextEditingController();
-
-  Map<String, String> roleDescriptions = {
-    'Freelancer': 'Individual providing services to multiple clients.',
-    'Company': 'Business seeking to expand its network and hire talent.',
-    'Client':
-        'Looking for services and solutions for personal or business needs.'
-  };
 
   SignUpPage({super.key});
 
@@ -39,7 +30,7 @@ class SignUpPage extends StatelessWidget {
                 key: _formKey,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     Image.asset(
                       'images/logotrans.png',
@@ -53,30 +44,7 @@ class SignUpPage extends StatelessWidget {
                           TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 40),
-                    Obx(
-                      () => DropdownButtonFormField(
-                        value: _selectedRole.value,
-                        decoration: const InputDecoration(
-                          labelText: 'Select Your Role',
-                          border: OutlineInputBorder(),
-                        ),
-                        onChanged: (String? newValue) {
-                          _selectedRole.value = newValue.toString();
-                        },
-                        items:
-                            roles.map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 10.0),
-                      child:
-                          Obx(() => Text(roleDescriptions[_selectedRole]!)),
-                    ),
+
                     const SizedBox(height: 20),
                     TextFormField(
                       controller: _nameController,
@@ -137,8 +105,7 @@ class SignUpPage extends StatelessWidget {
                           AuthController.instance.createUser(
                               _emailController.text,
                               _passwordController.text,
-                              _nameController.text,
-                              _selectedRole.value);
+                              _nameController.text);
                         }
                       },
                       child: const Text('Sign Up'),

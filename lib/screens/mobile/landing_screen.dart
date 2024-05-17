@@ -23,7 +23,6 @@ class _LandingScreenState extends State<LandingScreen> {
 
   final screens = [
     const HomeScreen(),
-    ContractorsPage(),
     const MessagesScreen(),
     const JobScreen(),
     AccountScreen(),
@@ -41,8 +40,6 @@ class _LandingScreenState extends State<LandingScreen> {
             label: "Home",
             icon: Icon(Icons.home_outlined),
           ),
-          BottomNavigationBarItem(
-              label: 'Contractors', icon: Icon(Icons.cases_outlined)),
           BottomNavigationBarItem(
             label: 'Messages',
             icon: Icon(Icons.mail_outline_outlined),

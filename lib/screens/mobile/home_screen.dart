@@ -74,22 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         fontWeight: FontWeight.bold, fontSize: 20),
                   ))
             ]),
-            actions: [
-              Obx(() => IconButton(
-                    onPressed: () {
-                      print(UserProfileController.instance.isAccountFinished);
-                      showFinisheProfileMessage();
-                    },
-                    icon:
-                        UserProfileController.instance.isAccountFinished.isTrue
-                            ? const Icon(Icons.notifications_none)
-                            : const Icon(
-                                Icons.notification_important_outlined,
-                                color: Colors.orange,
-                              ),
-                    iconSize: 25,
-                  )),
-            ],
+            actions: [],
           ),
           body: FutureBuilder(
               future: collection,
