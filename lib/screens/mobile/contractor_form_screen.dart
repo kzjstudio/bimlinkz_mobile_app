@@ -1,3 +1,4 @@
+import 'package:bimlinkz_mobile_app/Controllers/auth_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -7,9 +8,36 @@ class ContractorForm extends StatefulWidget {
 }
 
 class _ContractorFormState extends State<ContractorForm> {
+  FirebaseFirestore db = FirebaseFirestore.instance;
   final _formKey = GlobalKey<FormState>();
   final Map<String, dynamic> _formData = {};
   bool _isPrivacyPolicyChecked = false;
+  List<String> jobCategories = [];
+  String selectedSkill = "";
+
+  TextEditingController firstName = TextEditingController();
+  TextEditingController lastName = TextEditingController();
+  TextEditingController telNumber = TextEditingController();
+  TextEditingController email = TextEditingController();
+  TextEditingController yearsExperience = TextEditingController();
+
+  Future<void> getJobCategories() async {
+    try {
+      QuerySnapshot snapshot = await db.collection('categories').get();
+      setState(() {
+        jobCategories =
+            snapshot.docs.map((doc) => doc['id'].toString()).toList();
+      });
+    } catch (e) {
+      print('Error fetching job titles: $e');
+    }
+  }
+
+  @override
+  void initState() {
+    getJobCategories();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,20 +60,17 @@ class _ContractorFormState extends State<ContractorForm> {
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 20),
-                _buildTextField('First Name', 'first Name'),
-                _buildTextField('Last Name', 'Last Name'),
-                _buildTextField('Phone', 'phone',
+                _buildTextField('First Name', 'first Name', firstName),
+                _buildTextField('Last Name', 'Last Name', lastName),
+                _buildTextField('Phone', 'phone', telNumber,
                     keyboardType: TextInputType.phone),
-                _buildTextField('Email', 'email',
+                _buildTextField('Email', 'email', email,
                     keyboardType: TextInputType.emailAddress),
-                _buildTextField('Job Title/Occupation', 'jobTitle'),
-                _buildTextField('Skills/Expertise', 'skills', maxLines: 3),
-                _buildTextField('Years of Experience', 'experience',
+                _buildDropdown('Skill', selectedSkill, jobCategories),
+                _buildTextField(
+                    'Years of Experience', 'experience', yearsExperience,
                     keyboardType: TextInputType.number),
-                _buildTextField('Work History', 'workHistory', maxLines: 3),
-                _buildTextField('Ratings and Reviews', 'ratings', maxLines: 3),
                 const SizedBox(height: 20),
-                SizedBox(height: 20),
                 Row(
                   children: [
                     Checkbox(
@@ -62,8 +87,8 @@ class _ContractorFormState extends State<ContractorForm> {
                           showDialog(
                             context: context,
                             builder: (context) => AlertDialog(
-                              title: Text('Privacy Policy'),
-                              content: SingleChildScrollView(
+                              title: const Text('Privacy Policy'),
+                              content: const SingleChildScrollView(
                                 child: Text(
                                   'Your privacy policy content goes here. '
                                   'Make sure to include all necessary information regarding user data and privacy.',
@@ -72,13 +97,13 @@ class _ContractorFormState extends State<ContractorForm> {
                               actions: [
                                 TextButton(
                                   onPressed: () => Navigator.of(context).pop(),
-                                  child: Text('Close'),
+                                  child: const Text('Close'),
                                 ),
                               ],
                             ),
                           );
                         },
-                        child: Text(
+                        child: const Text(
                           'I agree to the Privacy Policy',
                           style: TextStyle(
                             decoration: TextDecoration.underline,
@@ -105,11 +130,13 @@ class _ContractorFormState extends State<ContractorForm> {
     );
   }
 
-  Widget _buildTextField(String label, String key,
+  Widget _buildTextField(
+      String label, String key, TextEditingController controller,
       {TextInputType keyboardType = TextInputType.text, int maxLines = 1}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: TextFormField(
+        controller: controller,
         decoration: InputDecoration(
           labelText: label,
           border: OutlineInputBorder(
@@ -164,11 +191,17 @@ class _ContractorFormState extends State<ContractorForm> {
     if (_formKey.currentState?.validate() ?? false) {
       _formKey.currentState?.save();
       try {
-        await FirebaseFirestore.instance
-            .collection('contractors')
-            .add(_formData);
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Profile updated successfully!')));
+        await db
+            .collection('users')
+            .doc(AuthController().auth.currentUser!.uid)
+            .update({
+          'First name': firstName.text,
+          'last name': lastName.text,
+          'phone number': telNumber.text,
+          'skill': selectedSkill,
+          'experiance': yearsExperience.text
+        }).then((_) => ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Profile updated successfully!'))));
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('Error updating profile: $e')));
