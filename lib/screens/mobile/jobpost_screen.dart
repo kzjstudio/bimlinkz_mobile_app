@@ -20,6 +20,8 @@ class _PostJobPageState extends State<PostJobPage> {
 
   final db = FirebaseFirestore.instance;
   SfRangeValues _values = SfRangeValues(0.floor(), 100.floor());
+  String? _lowerBudget;
+  String? _upperBudget;
 
   final _categories = <String>[];
   String? _selectedCategory;
@@ -55,9 +57,6 @@ class _PostJobPageState extends State<PostJobPage> {
       }
     });
   }
-
-  String? _lowerBudget;
-  String? _upperBudget;
 
   @override
   Widget build(BuildContext context) {

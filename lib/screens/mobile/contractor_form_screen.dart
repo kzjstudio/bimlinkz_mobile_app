@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:bimlinkz_mobile_app/Controllers/auth_controller.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/landing_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ContractorForm extends StatefulWidget {
   @override
@@ -17,12 +21,58 @@ class _ContractorFormState extends State<ContractorForm> {
   List<String> jobCategories = [];
   String selectedSkill = "";
   var isLoading = false.obs;
+  File? _image;
+  final ImagePicker _picker = ImagePicker();
+  bool _isUploading = false;
+  String _uploadUrl = '';
 
   TextEditingController firstName = TextEditingController();
   TextEditingController lastName = TextEditingController();
   TextEditingController telNumber = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController yearsExperience = TextEditingController();
+
+  Future<void> _pickImage() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _image = File(pickedFile.path);
+      });
+    }
+  }
+
+  Future<void> _uploadImage() async {
+    if (_image == null) return;
+
+    setState(() {
+      _isUploading = true;
+    });
+
+    try {
+      final storageRef = FirebaseStorage.instance.ref();
+      final imagesRef =
+          storageRef.child("images/${DateTime.now().toIso8601String()}.jpg");
+
+      await imagesRef.putFile(_image!);
+      final url = await imagesRef.getDownloadURL();
+
+      setState(() {
+        _uploadUrl = url;
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Upload successful!')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Upload failed: $e')),
+      );
+    } finally {
+      setState(() {
+        _isUploading = false;
+      });
+    }
+  }
 
   Future<void> getJobCategories() async {
     try {
@@ -61,6 +111,38 @@ class _ContractorFormState extends State<ContractorForm> {
                   'We value your privacy and ensure that your information will be kept secure.',
                   style: TextStyle(fontSize: 16),
                   textAlign: TextAlign.center,
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: _pickImage,
+                        child: CircleAvatar(
+                          radius: 80,
+                          backgroundColor: Colors.grey[200],
+                          backgroundImage:
+                              _image != null ? FileImage(_image!) : null,
+                          child: _image == null
+                              ? Icon(
+                                  Icons.camera_alt,
+                                  size: 50,
+                                  color: Colors.grey[800],
+                                )
+                              : null,
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      if (_uploadUrl.isNotEmpty)
+                        Text(
+                          'Uploaded Image URL: $_uploadUrl',
+                          textAlign: TextAlign.center,
+                        ),
+                    ],
+                  ),
                 ),
                 const SizedBox(height: 20),
                 _buildTextField('First Name', 'first Name', firstName),

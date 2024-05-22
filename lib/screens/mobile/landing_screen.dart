@@ -1,5 +1,4 @@
 import 'package:bimlinkz_mobile_app/screens/mobile/account_screen.dart';
-import 'package:bimlinkz_mobile_app/screens/mobile/contractor_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/home_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/messages_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/jobs_screen.dart';

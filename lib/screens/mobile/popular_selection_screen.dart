@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:loading_indicator/loading_indicator.dart';
 
 class PopularSelectionScreen extends StatefulWidget {
   const PopularSelectionScreen({super.key, required this.id});
@@ -57,8 +56,6 @@ class _PopularSelectionScreenState extends State<PopularSelectionScreen> {
             : const Center(
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                    LoadingIndicator(indicatorType: Indicator.ballPulse)
-                  ])));
+                    children: <Widget>[CircularProgressIndicator()])));
   }
 }

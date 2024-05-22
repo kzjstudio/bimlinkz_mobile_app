@@ -1,7 +1,6 @@
 import 'package:bimlinkz_mobile_app/Controllers/auth_controller.dart';
 import 'package:bimlinkz_mobile_app/Controllers/user_profile_controller.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/jobpost_screen.dart';
-import 'package:bimlinkz_mobile_app/screens/mobile/profile.dart';
 import 'package:bimlinkz_mobile_app/widgets/category_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';

@@ -1,11 +1,8 @@
 import 'package:bimlinkz_mobile_app/Controllers/auth_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class SignUpPage extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
-
-  List<String> roles = ['Freelancer', 'Company', 'Client'];
 
   final TextEditingController _nameController = TextEditingController();
 
