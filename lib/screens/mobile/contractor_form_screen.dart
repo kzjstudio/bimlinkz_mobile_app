@@ -7,6 +7,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:bimlinkz_mobile_app/Controllers/auth_controller.dart';
 
 class ContractorForm extends StatefulWidget {
   @override
@@ -33,11 +34,30 @@ class _ContractorFormState extends State<ContractorForm> {
   TextEditingController yearsExperience = TextEditingController();
 
   Future<void> _pickImage() async {
-    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      setState(() {
-        _image = File(pickedFile.path);
-      });
+    final source = await showDialog<ImageSource>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Select Image Source'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context, ImageSource.camera),
+            child: Text('Camera'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, ImageSource.gallery),
+            child: Text('Gallery'),
+          ),
+        ],
+      ),
+    );
+
+    if (source != null) {
+      final pickedFile = await _picker.pickImage(source: source);
+      if (pickedFile != null) {
+        setState(() {
+          _image = File(pickedFile.path);
+        });
+      }
     }
   }
 
@@ -50,8 +70,8 @@ class _ContractorFormState extends State<ContractorForm> {
 
     try {
       final storageRef = FirebaseStorage.instance.ref();
-      final imagesRef =
-          storageRef.child("images/${DateTime.now().toIso8601String()}.jpg");
+      final imagesRef = storageRef.child(
+          "user images/ ${AuthController.instance.auth.currentUser!.uid}/ ${DateTime.now().toIso8601String()}.jpg");
 
       await imagesRef.putFile(_image!);
       final url = await imagesRef.getDownloadURL();
@@ -98,7 +118,7 @@ class _ContractorFormState extends State<ContractorForm> {
       onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Become a Contractor'),
+          title: const Text('Become a Contractor'),
         ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -113,7 +133,7 @@ class _ContractorFormState extends State<ContractorForm> {
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(
-                  height: 10,
+                  height: 20,
                 ),
                 Center(
                   child: Column(
@@ -136,11 +156,6 @@ class _ContractorFormState extends State<ContractorForm> {
                         ),
                       ),
                       const SizedBox(height: 20),
-                      if (_uploadUrl.isNotEmpty)
-                        Text(
-                          'Uploaded Image URL: $_uploadUrl',
-                          textAlign: TextAlign.center,
-                        ),
                     ],
                   ),
                 ),
@@ -149,11 +164,11 @@ class _ContractorFormState extends State<ContractorForm> {
                 _buildTextField('Last Name', 'Last Name', lastName),
                 _buildTextField('Phone', 'phone', telNumber,
                     keyboardType: TextInputType.phone),
-                _buildDropdown('Skill', selectedSkill, jobCategories),
+                _buildDropdown('Skill or trade', selectedSkill, jobCategories),
                 _buildTextField(
                     'Years of Experience', 'experience', yearsExperience,
                     keyboardType: TextInputType.number),
-                const SizedBox(height: 20),
+                const SizedBox(height: 10),
                 Row(
                   children: [
                     Checkbox(
@@ -197,14 +212,15 @@ class _ContractorFormState extends State<ContractorForm> {
                     ),
                   ],
                 ),
+                const SizedBox(height: 20),
                 Obx(
                   () => ElevatedButton(
                     onPressed: isLoading.isFalse ? () => _submitForm() : null,
-                    child: const Text('Submit'),
                     style: ElevatedButton.styleFrom(
-                      shape: StadiumBorder(),
-                      padding: EdgeInsets.symmetric(vertical: 16),
+                      shape: const StadiumBorder(),
+                      padding: const EdgeInsets.symmetric(vertical: 16),
                     ),
+                    child: const Text('Submit'),
                   ),
                 )
               ],
@@ -274,45 +290,58 @@ class _ContractorFormState extends State<ContractorForm> {
   }
 
   void _submitForm() async {
-    if (_formKey.currentState?.validate() ?? false) {
-      _formKey.currentState?.save();
-      if (_isPrivacyPolicyChecked) {
-        isLoading.value = true;
-        try {
-          await db
-              .collection('users')
-              .doc(AuthController().auth.currentUser!.uid)
-              .update({
-            'First name': firstName.text,
-            'last name': lastName.text,
-            'phone number': telNumber.text,
-            'skill': selectedSkill,
-            'experiance': yearsExperience.text
-          }).then((_) {
-            firstName.clear();
-            lastName.clear();
-            telNumber.clear();
-            yearsExperience.clear();
-            selectedSkill = 'Select Skill';
-            Get.defaultDialog(
-                contentPadding: const EdgeInsets.all(25),
-                onConfirm: () => Get.offAll(() => LandingScreen()),
-                title: 'Profile updated successfully!',
-                content: const Text(
-                    'Your account has been successfully updated to a contractor profile. You are now ready to offer your skills and services to users across Barbados.'));
-            isLoading.value = false;
-          });
-        } catch (e) {
-          ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Error updating profile: $e')));
+    if (_image != null) {
+      _uploadImage();
+      if (_formKey.currentState?.validate() ?? false) {
+        _formKey.currentState?.save();
+        if (_isPrivacyPolicyChecked) {
+          isLoading.value = true;
+          try {
+            await db
+                .collection('users')
+                .doc(AuthController().auth.currentUser!.uid)
+                .update({
+              'First name': firstName.text,
+              'last name': lastName.text,
+              'phone number': telNumber.text,
+              'skill': selectedSkill,
+              'experiance': yearsExperience.text,
+              'imageUrl': _uploadUrl,
+            }).then((_) {
+              firstName.clear();
+              lastName.clear();
+              telNumber.clear();
+              yearsExperience.clear();
+              selectedSkill = 'Select Skill';
+              Get.defaultDialog(
+                  contentPadding: const EdgeInsets.all(25),
+                  onConfirm: () {
+                    print(_uploadUrl);
+                    isLoading.value = false;
+                    Get.offAll(() => const LandingScreen());
+                  },
+                  title: 'Profile updated successfully!',
+                  content: const Text(
+                      'Your account has been successfully updated to a contractor profile. You are now ready to offer your skills and services to users across Barbados.'));
+            });
+          } catch (e) {
+            ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Error updating profile: $e')));
+          }
+        } else {
+          Get.showSnackbar(const GetSnackBar(
+            title: 'Privacy Policy',
+            message: 'Please read and accept our privacy policy',
+            duration: Duration(seconds: 3),
+          ));
         }
-      } else {
-        Get.showSnackbar(const GetSnackBar(
-          title: 'Privacy Policy',
-          message: 'Please read and accept our privacy policy',
-          duration: Duration(seconds: 3),
-        ));
       }
+    } else {
+      Get.showSnackbar(const GetSnackBar(
+        title: 'Image',
+        message: 'Please select a display image',
+        duration: Duration(seconds: 3),
+      ));
     }
   }
 }

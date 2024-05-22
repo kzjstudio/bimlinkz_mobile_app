@@ -4,6 +4,7 @@ import 'package:bimlinkz_mobile_app/screens/mobile/about_us_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/contact_us_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/contractor_form_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/contractor_screen.dart';
+import 'package:bimlinkz_mobile_app/screens/mobile/home_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/notifications.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/preferences.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/profile.dart';
@@ -23,9 +24,37 @@ class AccountScreen extends StatelessWidget {
         appBar: AppBar(
           title: Row(
             children: [
-              const CircleAvatar(
-                radius: 40,
-                child: Icon(Icons.person),
+              Container(
+                width: 90,
+                height: 90,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 10,
+                      offset: Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: CircleAvatar(
+                  radius: 40,
+                  backgroundColor: Colors.white,
+                  child: ClipOval(
+                    child: UserProfileController.instance.imageUrl.isNotEmpty
+                        ? Image.network(
+                            UserProfileController.instance.imageUrl.value,
+                            width: 80,
+                            height: 80,
+                            fit: BoxFit.cover,
+                          )
+                        : Icon(
+                            Icons.person,
+                            size: 40,
+                            color: Colors.grey[400],
+                          ),
+                  ),
+                ),
               ),
               const SizedBox(
                 width: 20,

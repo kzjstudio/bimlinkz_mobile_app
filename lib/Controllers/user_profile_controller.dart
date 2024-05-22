@@ -12,7 +12,7 @@ class UserProfileController extends GetxController {
   var isAccountFinished = false.obs;
   String? phoneNumber;
   String? address;
-  String? resumeUrl;
+  var imageUrl = "".obs;
   var name = ''.obs;
   List<String> skills = [];
   var isLoaded = false.obs;
@@ -34,6 +34,7 @@ class UserProfileController extends GetxController {
       email.value = event['email'];
       isContractor.value = event['iscontractor'];
       isLoaded.value = true;
+      imageUrl.value = event['imageUrl'];
     });
     (e) {
       isLoaded.value = false;
