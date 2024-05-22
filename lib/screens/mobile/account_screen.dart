@@ -1,4 +1,5 @@
 import 'package:bimlinkz_mobile_app/Controllers/auth_controller.dart';
+import 'package:bimlinkz_mobile_app/Controllers/user_profile_controller.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/about_us_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/contact_us_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/contractor_form_screen.dart';
@@ -42,9 +43,8 @@ class AccountScreen extends StatelessWidget {
                   ),
                   OutlinedButton(
                       style: ButtonStyle(
-                          shape: MaterialStatePropertyAll(
-                              RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5)))),
+                          shape: WidgetStateProperty.all(RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5)))),
                       onPressed: () {
                         Get.to(() => const UserProfilePage(),
                             transition: Transition.leftToRightWithFade);
@@ -62,33 +62,34 @@ class AccountScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Divider(
-                  thickness: .2,
-                  color: Theme.of(context).colorScheme.shadow,
+                Obx(
+                  () => UserProfileController.instance.isContractor.isFalse
+                      ? ListTile(
+                          onTap: () {
+                            Get.to(() => ContractorForm(),
+                                transition: Transition.rightToLeftWithFade);
+                          },
+                          title: const Row(
+                            children: [
+                              Icon(
+                                Icons.add_box_outlined,
+                                color: AppColors.primary,
+                                size: 30,
+                              ),
+                              SizedBox(
+                                  width:
+                                      8), // Space between the icon and the text
+                              Text(
+                                'Become a Contractor',
+                                style: TextStyle(
+                                    color: AppColors.primary, fontSize: 20),
+                              ),
+                            ],
+                          ),
+                          subtitle: const Text(
+                              "Join our network of contractors to access new business opportunities"))
+                      : Container(),
                 ),
-                ListTile(
-                    onTap: () {
-                      Get.to(() => ContractorForm(),
-                          transition: Transition.rightToLeftWithFade);
-                    },
-                    title: const Row(
-                      children: [
-                        Icon(
-                          Icons.add_box_outlined,
-                          color: AppColors.primary,
-                          size: 30,
-                        ),
-                        SizedBox(
-                            width: 8), // Space between the icon and the text
-                        Text(
-                          'Become a Contractor',
-                          style:
-                              TextStyle(color: AppColors.primary, fontSize: 20),
-                        ),
-                      ],
-                    ),
-                    subtitle: const Text(
-                        "Join our network of contractors to access new business opportunities")),
                 const SizedBox(
                   height: 10,
                 ),

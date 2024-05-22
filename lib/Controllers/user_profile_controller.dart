@@ -16,7 +16,7 @@ class UserProfileController extends GetxController {
   var name = ''.obs;
   List<String> skills = [];
   var isLoaded = false.obs;
-  var isUserProfileFinished = false.obs;
+  var isContractor = false.obs;
 
   final db = FirebaseFirestore.instance;
   final FirebaseAuth auth = FirebaseAuth.instance;
@@ -32,9 +32,7 @@ class UserProfileController extends GetxController {
     docref.snapshots().listen((event) {
       name.value = event['name'];
       email.value = event['email'];
-      isUserProfileFinished.value = event['isuserprofilefinished'];
-      isAccountFinished.value = event['isAccountFinished'];
-
+      isContractor.value = event['iscontractor'];
       isLoaded.value = true;
     });
     (e) {

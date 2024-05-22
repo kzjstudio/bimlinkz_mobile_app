@@ -20,42 +20,6 @@ final AuthController c = Get.find();
 final UserProfileController usercontroller = Get.find();
 
 class _HomeScreenState extends State<HomeScreen> {
-  showFinisheProfileMessage() {
-    if (UserProfileController.instance.isUserProfileFinished.isFalse) {
-      Get.defaultDialog(
-        radius: 8.0, // Rounded corners for the dialog
-        title: 'Finish Setting Up Your Profile',
-        titleStyle: const TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-        ),
-        middleText: '',
-        content: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: ElevatedButton(
-            onPressed: () {
-              Get.to(() => const UserProfilePage());
-            },
-            style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                borderRadius:
-                    BorderRadius.circular(30), // Rounded corners for the button
-              ),
-              padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
-            ),
-            child: const Text(
-              'Go to User Profile',
-              style: TextStyle(fontSize: 16),
-            ),
-          ),
-        ),
-        barrierDismissible:
-            true, // Allows dismissing the dialog by tapping outside of it
-      );
-    }
-    return;
-  }
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(

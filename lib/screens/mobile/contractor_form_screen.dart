@@ -1,6 +1,8 @@
 import 'package:bimlinkz_mobile_app/Controllers/auth_controller.dart';
+import 'package:bimlinkz_mobile_app/screens/mobile/landing_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ContractorForm extends StatefulWidget {
   @override
@@ -14,6 +16,7 @@ class _ContractorFormState extends State<ContractorForm> {
   bool _isPrivacyPolicyChecked = false;
   List<String> jobCategories = [];
   String selectedSkill = "";
+  var isLoading = false.obs;
 
   TextEditingController firstName = TextEditingController();
   TextEditingController lastName = TextEditingController();
@@ -64,8 +67,6 @@ class _ContractorFormState extends State<ContractorForm> {
                 _buildTextField('Last Name', 'Last Name', lastName),
                 _buildTextField('Phone', 'phone', telNumber,
                     keyboardType: TextInputType.phone),
-                _buildTextField('Email', 'email', email,
-                    keyboardType: TextInputType.emailAddress),
                 _buildDropdown('Skill', selectedSkill, jobCategories),
                 _buildTextField(
                     'Years of Experience', 'experience', yearsExperience,
@@ -114,14 +115,16 @@ class _ContractorFormState extends State<ContractorForm> {
                     ),
                   ],
                 ),
-                ElevatedButton(
-                  onPressed: _submitForm,
-                  child: const Text('Submit'),
-                  style: ElevatedButton.styleFrom(
-                    shape: StadiumBorder(),
-                    padding: EdgeInsets.symmetric(vertical: 16),
+                Obx(
+                  () => ElevatedButton(
+                    onPressed: isLoading.isFalse ? () => _submitForm() : null,
+                    child: const Text('Submit'),
+                    style: ElevatedButton.styleFrom(
+                      shape: StadiumBorder(),
+                      padding: EdgeInsets.symmetric(vertical: 16),
+                    ),
                   ),
-                ),
+                )
               ],
             ),
           ),
@@ -181,6 +184,7 @@ class _ContractorFormState extends State<ContractorForm> {
           return null;
         },
         onChanged: (value) {
+          selectedSkill = value.toString();
           _formData[key] = value;
         },
       ),
@@ -190,21 +194,42 @@ class _ContractorFormState extends State<ContractorForm> {
   void _submitForm() async {
     if (_formKey.currentState?.validate() ?? false) {
       _formKey.currentState?.save();
-      try {
-        await db
-            .collection('users')
-            .doc(AuthController().auth.currentUser!.uid)
-            .update({
-          'First name': firstName.text,
-          'last name': lastName.text,
-          'phone number': telNumber.text,
-          'skill': selectedSkill,
-          'experiance': yearsExperience.text
-        }).then((_) => ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Profile updated successfully!'))));
-      } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Error updating profile: $e')));
+      if (_isPrivacyPolicyChecked) {
+        isLoading.value = true;
+        try {
+          await db
+              .collection('users')
+              .doc(AuthController().auth.currentUser!.uid)
+              .update({
+            'First name': firstName.text,
+            'last name': lastName.text,
+            'phone number': telNumber.text,
+            'skill': selectedSkill,
+            'experiance': yearsExperience.text
+          }).then((_) {
+            firstName.clear();
+            lastName.clear();
+            telNumber.clear();
+            yearsExperience.clear();
+            selectedSkill = 'Select Skill';
+            Get.defaultDialog(
+                contentPadding: const EdgeInsets.all(25),
+                onConfirm: () => Get.offAll(() => LandingScreen()),
+                title: 'Profile updated successfully!',
+                content: const Text(
+                    'Your account has been successfully updated to a contractor profile. You are now ready to offer your skills and services to users across Barbados.'));
+            isLoading.value = false;
+          });
+        } catch (e) {
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Error updating profile: $e')));
+        }
+      } else {
+        Get.showSnackbar(const GetSnackBar(
+          title: 'Privacy Policy',
+          message: 'Please read and accept our privacy policy',
+          duration: Duration(seconds: 3),
+        ));
       }
     }
   }

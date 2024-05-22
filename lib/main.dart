@@ -1,6 +1,6 @@
 import 'package:bimlinkz_mobile_app/Controllers/global.dart';
+import 'package:bimlinkz_mobile_app/screens/mobile/landing_screen.dart';
 import 'package:bimlinkz_mobile_app/theme.dart';
-import 'package:bimlinkz_mobile_app/screens/splash_screen.dart';
 import 'package:bimlinkz_mobile_app/Controllers/theme_controller.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -36,6 +36,6 @@ class MyApp extends StatelessWidget {
         theme: lightTheme,
         darkTheme: darkTheme,
         themeMode: themeController.themeMode.value,
-        home: const SplashScreen());
+        home: const LandingScreen());
   }
 }
