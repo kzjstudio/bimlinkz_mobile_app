@@ -20,6 +20,7 @@ final UserProfileController usercontroller = Get.find();
 
 class _HomeScreenState extends State<HomeScreen> {
   late Future<List<Map<String, dynamic>>> _categoriesFuture;
+  late Future<List<Map<String, dynamic>>> _recentContractorsFuture;
   List<Map<String, dynamic>> _categories = [];
   List<Map<String, dynamic>> _filteredCategories = [];
   TextEditingController _searchController = TextEditingController();
@@ -28,6 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     _categoriesFuture = _fetchCategories();
+    _recentContractorsFuture = _fetchRecentContractors();
     _searchController.addListener(_onSearchChanged);
   }
 
@@ -40,6 +42,16 @@ class _HomeScreenState extends State<HomeScreen> {
       _filteredCategories = categories;
     });
     return categories;
+  }
+
+  Future<List<Map<String, dynamic>>> _fetchRecentContractors() async {
+    DateTime fourWeeksAgo = DateTime.now().subtract(const Duration(days: 28));
+    var collection = await FirebaseFirestore.instance
+        .collection('users')
+        .where('became_contractor_date', isGreaterThanOrEqualTo: fourWeeksAgo)
+        .get();
+    var recentContractors = collection.docs.map((doc) => doc.data()).toList();
+    return recentContractors;
   }
 
   void _onSearchChanged() {
@@ -72,14 +84,8 @@ class _HomeScreenState extends State<HomeScreen> {
             title: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('Hello,'),
-                Obx(() => Text(
-                      usercontroller.name.value,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                      ),
-                    ))
+                Text(
+                    'Welcome back ${UserProfileController.instance.name.value}!'),
               ],
             ),
           ),
@@ -121,6 +127,18 @@ class _HomeScreenState extends State<HomeScreen> {
                         _searchController.text.isNotEmpty
                             ? _buildSuggestions()
                             : _buildPopularSearches(),
+                        const SizedBox(height: 30),
+                        const Text(
+                          'Contrectors who Recently joined',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        _buildFeaturedArea(),
                       ],
                     ),
                   ),
@@ -187,7 +205,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ],
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 10),
         SizedBox(
           height: 130,
           child: ListView.builder(
@@ -202,29 +220,101 @@ class _HomeScreenState extends State<HomeScreen> {
             },
           ),
         ),
-        const SizedBox(height: 30),
-        Container(
-          width: double.infinity,
-          height: 200,
-          color: Colors.grey.shade300,
-          child: const Center(child: Text('Feature Area')),
-        ),
-        const SizedBox(height: 20),
-        Container(
-          width: double.infinity,
-          height: 200,
-          color: Colors.grey.shade300,
-          child: const Center(child: Text('Feature Area')),
-        ),
-        const SizedBox(height: 20),
-        Container(
-          width: double.infinity,
-          height: 200,
-          color: Colors.grey.shade300,
-          child: const Center(child: Text('Feature Area')),
-        ),
-        const SizedBox(height: 20),
       ],
+    );
+  }
+
+  Widget _buildFeaturedArea() {
+    return FutureBuilder<List<Map<String, dynamic>>>(
+      future: _recentContractorsFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return const Center(child: Text('Error loading recent contractors'));
+        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return const Center(child: Text('No recent contractors found'));
+        } else {
+          final recentContractors = snapshot.data!;
+          return SizedBox(
+            height: 200,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: recentContractors.length,
+              itemBuilder: (context, index) {
+                final contractor = recentContractors[index];
+                return Card(
+                  color: const Color.fromARGB(255, 239, 239, 239),
+                  margin: const EdgeInsets.all(8.0),
+                  child: SizedBox(
+                    width: 150,
+                    child: Padding(
+                      padding: const EdgeInsets.all(0.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: ClipRRect(
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10),
+                              ),
+                              child: Image.network(
+                                contractor['imageUrl'] ?? '',
+                                fit: BoxFit.cover,
+                                width: double.infinity,
+                                height: 150,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Container(
+                                    color: Colors.grey,
+                                    child: const Center(
+                                      child: Icon(
+                                        Icons.error,
+                                        color: Colors.red,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Row(
+                            children: [
+                              Text(
+                                contractor['First name'] ?? '',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              const SizedBox(width: 5),
+                              Text(
+                                contractor['last name'] ?? '',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            '${contractor['experiance']} years as a ${contractor['skill']}' ??
+                                '',
+                            style: const TextStyle(fontSize: 14),
+                          ),
+                          const SizedBox(height: 8),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          );
+        }
+      },
     );
   }
 }

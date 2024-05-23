@@ -65,9 +65,9 @@ class AccountScreen extends StatelessWidget {
                     c.userName.value,
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  const Text(
-                    'Welcome back!',
-                    style: TextStyle(fontSize: 15),
+                  Text(
+                    'Hi ${UserProfileController.instance.name}!',
+                    style: const TextStyle(fontSize: 15),
                   ),
                   OutlinedButton(
                       style: ButtonStyle(
