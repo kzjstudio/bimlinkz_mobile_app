@@ -4,10 +4,12 @@ import 'package:bimlinkz_mobile_app/theme.dart';
 import 'package:bimlinkz_mobile_app/Controllers/theme_controller.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
+  SystemChrome.restoreSystemUIOverlays();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
           name: 'Bimlinkz',

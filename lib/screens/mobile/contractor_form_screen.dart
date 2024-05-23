@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:bimlinkz_mobile_app/Controllers/auth_controller.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/landing_screen.dart';
+import 'package:bimlinkz_mobile_app/theme.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -24,8 +25,8 @@ class _ContractorFormState extends State<ContractorForm> {
   var isLoading = false.obs;
   File? _image;
   final ImagePicker _picker = ImagePicker();
-  bool _isUploading = false;
-  String _uploadUrl = '';
+  var _isUploading = false.obs;
+  var _uploadUrl = ''.obs;
 
   TextEditingController firstName = TextEditingController();
   TextEditingController lastName = TextEditingController();
@@ -56,6 +57,7 @@ class _ContractorFormState extends State<ContractorForm> {
       if (pickedFile != null) {
         setState(() {
           _image = File(pickedFile.path);
+          _uploadImage();
         });
       }
     }
@@ -63,10 +65,7 @@ class _ContractorFormState extends State<ContractorForm> {
 
   Future<void> _uploadImage() async {
     if (_image == null) return;
-
-    setState(() {
-      _isUploading = true;
-    });
+    _isUploading.value = true;
 
     try {
       final storageRef = FirebaseStorage.instance.ref();
@@ -74,11 +73,7 @@ class _ContractorFormState extends State<ContractorForm> {
           "user images/ ${AuthController.instance.auth.currentUser!.uid}/ ${DateTime.now().toIso8601String()}.jpg");
 
       await imagesRef.putFile(_image!);
-      final url = await imagesRef.getDownloadURL();
-
-      setState(() {
-        _uploadUrl = url;
-      });
+      await imagesRef.getDownloadURL().then((url) => _uploadUrl.value = url);
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Upload successful!')),
@@ -88,9 +83,7 @@ class _ContractorFormState extends State<ContractorForm> {
         SnackBar(content: Text('Upload failed: $e')),
       );
     } finally {
-      setState(() {
-        _isUploading = false;
-      });
+      _isUploading.value = false;
     }
   }
 
@@ -143,7 +136,7 @@ class _ContractorFormState extends State<ContractorForm> {
                         onTap: _pickImage,
                         child: CircleAvatar(
                           radius: 80,
-                          backgroundColor: Colors.grey[200],
+                          backgroundColor: AppColors.primary,
                           backgroundImage:
                               _image != null ? FileImage(_image!) : null,
                           child: _image == null
@@ -237,6 +230,7 @@ class _ContractorFormState extends State<ContractorForm> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: TextFormField(
+        textCapitalization: TextCapitalization.words,
         controller: controller,
         decoration: InputDecoration(
           labelText: label,
@@ -291,7 +285,6 @@ class _ContractorFormState extends State<ContractorForm> {
 
   void _submitForm() async {
     if (_image != null) {
-      _uploadImage();
       if (_formKey.currentState?.validate() ?? false) {
         _formKey.currentState?.save();
         if (_isPrivacyPolicyChecked) {
@@ -306,7 +299,8 @@ class _ContractorFormState extends State<ContractorForm> {
               'phone number': telNumber.text,
               'skill': selectedSkill,
               'experiance': yearsExperience.text,
-              'imageUrl': _uploadUrl,
+              'imageUrl': _uploadUrl.value,
+              'iscontractor': true,
             }).then((_) {
               firstName.clear();
               lastName.clear();
@@ -324,7 +318,9 @@ class _ContractorFormState extends State<ContractorForm> {
                   content: const Text(
                       'Your account has been successfully updated to a contractor profile. You are now ready to offer your skills and services to users across Barbados.'));
             });
+            isLoading.value = false;
           } catch (e) {
+            print('error $e');
             ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text('Error updating profile: $e')));
           }

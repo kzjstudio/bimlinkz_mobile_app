@@ -4,7 +4,6 @@ import 'package:bimlinkz_mobile_app/screens/mobile/about_us_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/contact_us_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/contractor_form_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/contractor_screen.dart';
-import 'package:bimlinkz_mobile_app/screens/mobile/home_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/notifications.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/preferences.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/profile.dart';
@@ -39,13 +38,13 @@ class AccountScreen extends StatelessWidget {
                 ),
                 child: CircleAvatar(
                   radius: 40,
-                  backgroundColor: Colors.white,
+                  backgroundColor: AppColors.primary,
                   child: ClipOval(
                     child: UserProfileController.instance.imageUrl.isNotEmpty
                         ? Image.network(
                             UserProfileController.instance.imageUrl.value,
-                            width: 80,
-                            height: 80,
+                            width: 88,
+                            height: 88,
                             fit: BoxFit.cover,
                           )
                         : Icon(
