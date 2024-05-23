@@ -42,39 +42,63 @@ class PopularSelectionScreen extends StatelessWidget {
                 final contractor = items[index];
                 final String? imageUrl = contractor['imageUrl'];
 
-                return Card(
-                  margin:
-                      const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                  child: ListTile(
-                    contentPadding: const EdgeInsets.all(16),
-                    title: Text(
-                      '${contractor["First name"]} ${contractor["last name"]}',
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 18),
+                return Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                  child: Card(
+                    elevation: 4,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
                     ),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    child: Row(
                       children: [
-                        Text('Email: ${contractor["email"]}'),
-                        Text('Phone: ${contractor["phone number"]}'),
-                        Text('Experience: ${contractor["experiance"]} years'),
+                        ClipRRect(
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(12),
+                            bottomLeft: Radius.circular(12),
+                          ),
+                          child: Container(
+                            width: 100,
+                            height: 100,
+                            decoration: BoxDecoration(
+                              color: AppColors.primary,
+                              image: imageUrl != null
+                                  ? DecorationImage(
+                                      image: NetworkImage(imageUrl),
+                                      fit: BoxFit.cover,
+                                    )
+                                  : null,
+                            ),
+                            child: imageUrl == null
+                                ? const Icon(Icons.person,
+                                    size: 40, color: Colors.white)
+                                : null,
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '${contractor["First name"]} ${contractor["last name"]}',
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 18),
+                              ),
+                              Text(
+                                contractor["skill"],
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                              Text(
+                                'Experience: ${contractor["experiance"]} years',
+                                style: TextStyle(color: Colors.green),
+                              ),
+                              Text('Email: ${contractor["email"]}'),
+                              Text('Phone: ${contractor["phone number"]}'),
+                            ],
+                          ),
+                        ),
                       ],
-                    ),
-                    leading: Container(
-                      width: 80, // Width of the leading image
-                      height: double.infinity, // Fill the height of the card
-                      decoration: BoxDecoration(
-                        color: AppColors.primary,
-                        image: imageUrl != null
-                            ? DecorationImage(
-                                image: NetworkImage(imageUrl),
-                                fit: BoxFit.cover,
-                              )
-                            : null,
-                      ),
-                      child: imageUrl == null
-                          ? Icon(Icons.person, size: 40, color: Colors.white)
-                          : null,
                     ),
                   ),
                 );

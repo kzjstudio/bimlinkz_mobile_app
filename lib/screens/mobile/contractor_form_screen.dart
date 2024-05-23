@@ -8,7 +8,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:bimlinkz_mobile_app/Controllers/auth_controller.dart';
 
 class ContractorForm extends StatefulWidget {
   @override
@@ -38,15 +37,15 @@ class _ContractorFormState extends State<ContractorForm> {
     final source = await showDialog<ImageSource>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Select Image Source'),
+        title: const Text('Select Image Source'),
         actions: <Widget>[
           TextButton(
             onPressed: () => Navigator.pop(context, ImageSource.camera),
-            child: Text('Camera'),
+            child: const Text('Camera'),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, ImageSource.gallery),
-            child: Text('Gallery'),
+            child: const Text('Gallery'),
           ),
         ],
       ),
