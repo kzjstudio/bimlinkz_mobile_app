@@ -3,6 +3,7 @@ import 'package:bimlinkz_mobile_app/Controllers/user_profile_controller.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/jobpost_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/see_all_categories_screen.dart';
 import 'package:bimlinkz_mobile_app/widgets/category_card.dart';
+import 'package:bimlinkz_mobile_app/screens/mobile/popular_selection_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -19,17 +20,44 @@ final UserProfileController usercontroller = Get.find();
 
 class _HomeScreenState extends State<HomeScreen> {
   late Future<List<Map<String, dynamic>>> _categoriesFuture;
+  List<Map<String, dynamic>> _categories = [];
+  List<Map<String, dynamic>> _filteredCategories = [];
+  TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     _categoriesFuture = _fetchCategories();
+    _searchController.addListener(_onSearchChanged);
   }
 
   Future<List<Map<String, dynamic>>> _fetchCategories() async {
     var collection =
         await FirebaseFirestore.instance.collection('categories').get();
-    return collection.docs.map((doc) => doc.data()).toList();
+    var categories = collection.docs.map((doc) => doc.data()).toList();
+    setState(() {
+      _categories = categories;
+      _filteredCategories = categories;
+    });
+    return categories;
+  }
+
+  void _onSearchChanged() {
+    setState(() {
+      _filteredCategories = _categories
+          .where((category) => category['id']
+              .toString()
+              .toLowerCase()
+              .contains(_searchController.text.toLowerCase()))
+          .toList();
+    });
+  }
+
+  @override
+  void dispose() {
+    _searchController.removeListener(_onSearchChanged);
+    _searchController.dispose();
+    super.dispose();
   }
 
   @override
@@ -65,7 +93,6 @@ class _HomeScreenState extends State<HomeScreen> {
               } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                 return const Center(child: Text('No categories found'));
               } else {
-                final categories = snapshot.data!;
                 return SingleChildScrollView(
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
@@ -73,11 +100,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         TextField(
+                          controller: _searchController,
                           decoration: InputDecoration(
                             hintText: 'Search...',
                             suffixIcon: IconButton(
                               icon: const Icon(Icons.clear),
-                              onPressed: () {},
+                              onPressed: () {
+                                _searchController.clear();
+                              },
                             ),
                             prefixIcon: const Icon(Icons.search),
                             border: OutlineInputBorder(
@@ -88,62 +118,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                         const SizedBox(height: 20),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Text(
-                              'Popular searches',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                Get.to(() => SeeAllCategoriesScreen(),
-                                    transition: Transition.rightToLeft);
-                              },
-                              child: const Text('See all'),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 20),
-                        SizedBox(
-                          height: 130,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: categories.length,
-                            itemBuilder: (context, index) {
-                              final data = categories[index];
-                              return CategoryCard(
-                                catText: data["id"],
-                                imageUrl: data['imageUrl'],
-                              );
-                            },
-                          ),
-                        ),
-                        const SizedBox(height: 30),
-                        Container(
-                          width: double.infinity,
-                          height: 200,
-                          color: Colors.grey.shade300,
-                          child: const Center(child: Text('Feature Area')),
-                        ),
-                        const SizedBox(height: 20),
-                        Container(
-                          width: double.infinity,
-                          height: 200,
-                          color: Colors.grey.shade300,
-                          child: const Center(child: Text('Feature Area')),
-                        ),
-                        const SizedBox(height: 20),
-                        Container(
-                          width: double.infinity,
-                          height: 200,
-                          color: Colors.grey.shade300,
-                          child: const Center(child: Text('Feature Area')),
-                        ),
-                        const SizedBox(height: 20),
+                        _searchController.text.isNotEmpty
+                            ? _buildSuggestions()
+                            : _buildPopularSearches(),
                       ],
                     ),
                   ),
@@ -161,6 +138,93 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildSuggestions() {
+    if (_filteredCategories.isEmpty) {
+      return const Center(
+        child: Text('No categories available at the moment'),
+      );
+    }
+    return ListView.builder(
+      shrinkWrap: true,
+      itemCount: _filteredCategories.length,
+      itemBuilder: (context, index) {
+        final category = _filteredCategories[index];
+        return ListTile(
+          title: Text(category['id']),
+          onTap: () {
+            Get.to(() => PopularSelectionScreen(id: category['id']),
+                transition: Transition.rightToLeft);
+            _searchController.clear();
+          },
+        );
+      },
+    );
+  }
+
+  Widget _buildPopularSearches() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              'Popular searches',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Get.to(() => const SeeAllCategoriesScreen(),
+                    transition: Transition.rightToLeft);
+              },
+              child: const Text('See all'),
+            ),
+          ],
+        ),
+        const SizedBox(height: 20),
+        SizedBox(
+          height: 130,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: _categories.length,
+            itemBuilder: (context, index) {
+              final data = _categories[index];
+              return CategoryCard(
+                catText: data["id"],
+                imageUrl: data['imageUrl'],
+              );
+            },
+          ),
+        ),
+        const SizedBox(height: 30),
+        Container(
+          width: double.infinity,
+          height: 200,
+          color: Colors.grey.shade300,
+          child: const Center(child: Text('Feature Area')),
+        ),
+        const SizedBox(height: 20),
+        Container(
+          width: double.infinity,
+          height: 200,
+          color: Colors.grey.shade300,
+          child: const Center(child: Text('Feature Area')),
+        ),
+        const SizedBox(height: 20),
+        Container(
+          width: double.infinity,
+          height: 200,
+          color: Colors.grey.shade300,
+          child: const Center(child: Text('Feature Area')),
+        ),
+        const SizedBox(height: 20),
+      ],
     );
   }
 }
