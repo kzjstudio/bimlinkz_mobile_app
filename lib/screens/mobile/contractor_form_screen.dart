@@ -293,13 +293,14 @@ class _ContractorFormState extends State<ContractorForm> {
                 .collection('users')
                 .doc(AuthController().auth.currentUser!.uid)
                 .update({
-              'First name': firstName.text,
-              'last name': lastName.text,
-              'phone number': telNumber.text,
-              'skill': selectedSkill,
-              'experiance': yearsExperience.text,
+              'First_Name': firstName.text,
+              'Last_Name': lastName.text,
+              'Phone_Number': telNumber.text,
+              'Skill': selectedSkill,
+              'Years_Experience': yearsExperience.text,
               'imageUrl': _uploadUrl.value,
-              'iscontractor': true,
+              'is_Contractor': true,
+              'Became_Contractor_Date': DateTime.now()
             }).then((_) {
               firstName.clear();
               lastName.clear();
@@ -309,7 +310,6 @@ class _ContractorFormState extends State<ContractorForm> {
               Get.defaultDialog(
                   contentPadding: const EdgeInsets.all(25),
                   onConfirm: () {
-                    print(_uploadUrl);
                     isLoading.value = false;
                     Get.offAll(() => const LandingScreen());
                   },

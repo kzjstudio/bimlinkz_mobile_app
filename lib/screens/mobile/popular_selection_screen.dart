@@ -11,7 +11,7 @@ class PopularSelectionScreen extends StatelessWidget {
     List<Map<String, dynamic>> dataList = [];
     var data = await FirebaseFirestore.instance
         .collection('users')
-        .where('skill', isEqualTo: id)
+        .where('Skill', isEqualTo: id)
         .get();
     for (var element in data.docs) {
       dataList.add(element.data());
@@ -81,20 +81,20 @@ class PopularSelectionScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                '${contractor["First name"]} ${contractor["last name"]}',
+                                '${contractor["First_Name"]} ${contractor["Last_Name"]}',
                                 style: const TextStyle(
                                     fontWeight: FontWeight.bold, fontSize: 18),
                               ),
                               Text(
-                                contractor["skill"],
-                                style: TextStyle(color: Colors.grey),
+                                contractor["Skill"],
+                                style: const TextStyle(color: Colors.grey),
                               ),
                               Text(
-                                'Experience: ${contractor["experiance"]} years',
-                                style: TextStyle(color: Colors.green),
+                                'Experience: ${contractor["Years_Experience"]} years',
+                                style: const TextStyle(color: Colors.green),
                               ),
-                              Text('Email: ${contractor["email"]}'),
-                              Text('Phone: ${contractor["phone number"]}'),
+                              Text('Email: ${contractor["Email"]}'),
+                              Text('Phone: ${contractor["Phone_Number"]}'),
                             ],
                           ),
                         ),

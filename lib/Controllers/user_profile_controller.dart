@@ -13,7 +13,7 @@ class UserProfileController extends GetxController {
   String? phoneNumber;
   String? address;
   var imageUrl = "".obs;
-  var name = ''.obs;
+  var userName = ''.obs;
   List<String> skills = [];
   var isLoaded = false.obs;
   var isContractor = false.obs;
@@ -30,9 +30,9 @@ class UserProfileController extends GetxController {
   getUser() {
     final docref = db.collection('users').doc(auth.currentUser?.uid);
     docref.snapshots().listen((event) {
-      name.value = event['name'];
-      email.value = event['email'];
-      isContractor.value = event['iscontractor'];
+      userName.value = event['User_Name'];
+      email.value = event['Email'];
+      isContractor.value = event['is_Contractor'];
       isLoaded.value = true;
       imageUrl.value = event['imageUrl'];
     });

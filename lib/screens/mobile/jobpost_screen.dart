@@ -180,7 +180,7 @@ class _PostJobPageState extends State<PostJobPage> {
                       'jobCategory': _selectedCategory,
                       'date': DateTime.now(),
                       'userId': AuthController.instance.auth.currentUser!.uid,
-                      'userName': UserProfileController.instance.name.value,
+                      'userName': UserProfileController.instance.userName.value,
                     };
                     try {
                       await db.collection('posted jobs').add(jobData);

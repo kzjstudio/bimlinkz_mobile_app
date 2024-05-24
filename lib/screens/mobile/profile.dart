@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:bimlinkz_mobile_app/Controllers/user_profile_controller.dart';
 import 'package:get/get.dart';
 
-
 class UserProfilePage extends StatefulWidget {
   const UserProfilePage({super.key});
 
@@ -80,7 +79,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
         ),
         const SizedBox(height: 10),
         Text(
-          usercontroller.name.value,
+          usercontroller.userName.value,
           style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,

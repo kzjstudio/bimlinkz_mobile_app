@@ -48,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
     DateTime fourWeeksAgo = DateTime.now().subtract(const Duration(days: 28));
     var collection = await FirebaseFirestore.instance
         .collection('users')
-        .where('became_contractor_date', isGreaterThanOrEqualTo: fourWeeksAgo)
+        .where('Became_Contractor_Date', isGreaterThanOrEqualTo: fourWeeksAgo)
         .get();
     var recentContractors = collection.docs.map((doc) => doc.data()).toList();
     return recentContractors;
@@ -85,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                    'Welcome back ${UserProfileController.instance.name.value}!'),
+                    'Welcome back ${UserProfileController.instance.userName.value}!'),
               ],
             ),
           ),
@@ -282,7 +282,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           Row(
                             children: [
                               Text(
-                                contractor['First name'] ?? '',
+                                contractor['First_Name'] ?? '',
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16,
@@ -290,7 +290,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                               const SizedBox(width: 5),
                               Text(
-                                contractor['last name'] ?? '',
+                                contractor['Last_Name'] ?? '',
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16,
@@ -300,7 +300,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            '${contractor['experiance']} years as a ${contractor['skill']}' ??
+                            '${contractor['Years_Experience']} years as a ${contractor['Skill']}' ??
                                 '',
                             style: const TextStyle(fontSize: 14),
                           ),

@@ -75,10 +75,11 @@ class AuthController extends GetxController {
 
   void addUserToFireStore(String userId, String userName, String email) {
     db.collection("users").doc(userId).set({
-      'name': userName,
+      'User_Name': userName,
       'id': userId,
-      'email': email,
-      'datejoined': Timestamp.now(),
+      'Email': email,
+      'Date_Joined': Timestamp.now(),
+      'is_Contractor': false,
     });
   }
 }
