@@ -1,5 +1,6 @@
 import 'package:bimlinkz_mobile_app/Controllers/auth_controller.dart';
 import 'package:bimlinkz_mobile_app/Controllers/user_profile_controller.dart';
+import 'package:bimlinkz_mobile_app/screens/mobile/contractor_details_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/jobpost_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/see_all_categories_screen.dart';
 import 'package:bimlinkz_mobile_app/widgets/category_card.dart';
@@ -243,69 +244,76 @@ class _HomeScreenState extends State<HomeScreen> {
               itemCount: recentContractors.length,
               itemBuilder: (context, index) {
                 final contractor = recentContractors[index];
-                return Card(
-                  color: const Color.fromARGB(255, 239, 239, 239),
-                  margin: const EdgeInsets.all(8.0),
-                  child: SizedBox(
-                    width: 150,
-                    child: Padding(
-                      padding: const EdgeInsets.all(0.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: ClipRRect(
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(10),
-                                topRight: Radius.circular(10),
-                              ),
-                              child: Image.network(
-                                contractor['imageUrl'] ?? '',
-                                fit: BoxFit.cover,
-                                width: double.infinity,
-                                height: 150,
-                                errorBuilder: (context, error, stackTrace) {
-                                  return Container(
-                                    color: Colors.grey,
-                                    child: const Center(
-                                      child: Icon(
-                                        Icons.error,
-                                        color: Colors.red,
+                return InkWell(
+                  onTap: () {
+                    Get.to(
+                      transition: Transition.rightToLeft,
+                        () => ContractorDetailScreen(contractor: contractor));
+                  },
+                  child: Card(
+                    color: const Color.fromARGB(255, 239, 239, 239),
+                    margin: const EdgeInsets.all(8.0),
+                    child: SizedBox(
+                      width: 150,
+                      child: Padding(
+                        padding: const EdgeInsets.all(0.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: ClipRRect(
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10),
+                                ),
+                                child: Image.network(
+                                  contractor['imageUrl'] ?? '',
+                                  fit: BoxFit.cover,
+                                  width: double.infinity,
+                                  height: 150,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return Container(
+                                      color: Colors.grey,
+                                      child: const Center(
+                                        child: Icon(
+                                          Icons.error,
+                                          color: Colors.red,
+                                        ),
                                       ),
-                                    ),
-                                  );
-                                },
+                                    );
+                                  },
+                                ),
                               ),
                             ),
-                          ),
-                          const SizedBox(height: 8),
-                          Row(
-                            children: [
-                              Text(
-                                contractor['First_Name'] ?? '',
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
+                            const SizedBox(height: 8),
+                            Row(
+                              children: [
+                                Text(
+                                  contractor['First_Name'] ?? '',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(width: 5),
-                              Text(
-                                contractor['Last_Name'] ?? '',
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
+                                const SizedBox(width: 5),
+                                Text(
+                                  contractor['Last_Name'] ?? '',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            '${contractor['Years_Experience']} years as a ${contractor['Skill']}' ??
-                                '',
-                            style: const TextStyle(fontSize: 14),
-                          ),
-                          const SizedBox(height: 8),
-                        ],
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              '${contractor['Years_Experience']} years as a ${contractor['Skill']}' ??
+                                  '',
+                              style: const TextStyle(fontSize: 14),
+                            ),
+                            const SizedBox(height: 8),
+                          ],
+                        ),
                       ),
                     ),
                   ),

@@ -9,21 +9,22 @@ class AuthController extends GetxController {
   static AuthController instance = Get.find();
   FirebaseAuth auth = FirebaseAuth.instance;
   final db = FirebaseFirestore.instance;
-  late Rx<User?> _user;
+  late Rx<User?> user;
   var isLoggedIn = false.obs;
   var userName = ''.obs;
-  var isLoaded = false.obs;
+  var isLoading = false.obs;
 
   @override
   void onReady() {
     super.onReady();
-    _user = Rx<User?>(auth.currentUser);
-    _user.bindStream(auth.userChanges());
-    ever(_user, _initialScreen);
+    user = Rx<User?>(auth.currentUser);
+    user.bindStream(auth.userChanges());
+    ever(user, _initialScreen);
   }
 
   _initialScreen(User? user) {
     if (user == null) {
+      UserProfileController.instance.resetuser();
       Get.offAll(() => const LoginScreen());
       isLoggedIn.value = false;
     } else {
@@ -37,6 +38,7 @@ class AuthController extends GetxController {
     String password,
     String userName,
   ) async {
+    isLoading.value = true;
     try {
       await auth
           .createUserWithEmailAndPassword(email: email, password: password)
@@ -46,6 +48,7 @@ class AuthController extends GetxController {
         addUserToFireStore(userId.toString(), userName, email);
         UserProfileController.instance.getUser();
       });
+      isLoading.value = false;
     } catch (e) {
       printError();
       Get.snackbar("Error creating account", e.toString(),
@@ -54,9 +57,11 @@ class AuthController extends GetxController {
   }
 
   signIn(String email, String password) async {
+    isLoading.value = true;
     try {
       await auth.signInWithEmailAndPassword(email: email, password: password);
       UserProfileController.instance.getUser();
+      isLoading.value = false;
     } catch (e) {
       printError();
       Get.snackbar("Sign in failed", "Wrong email or password",

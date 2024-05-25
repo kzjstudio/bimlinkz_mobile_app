@@ -1,5 +1,6 @@
 import 'package:bimlinkz_mobile_app/Controllers/auth_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class SignUpPage extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
@@ -89,24 +90,26 @@ class SignUpPage extends StatelessWidget {
                       },
                     ),
                     const SizedBox(height: 40),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        minimumSize:
-                            const Size(double.infinity, 50), // set minimum size
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          AuthController.instance.createUser(
-                              _emailController.text,
-                              _passwordController.text,
-                              _nameController.text);
-                        }
-                      },
-                      child: const Text('Sign Up'),
-                    ),
+                    Obx(() => ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            minimumSize: const Size(
+                                double.infinity, 50), // set minimum size
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          onPressed: AuthController.instance.isLoading.isFalse
+                              ? () {
+                                  if (_formKey.currentState!.validate()) {
+                                    AuthController.instance.createUser(
+                                        _emailController.text,
+                                        _passwordController.text,
+                                        _nameController.text);
+                                  }
+                                }
+                              : null,
+                          child: const Text('Sign Up'),
+                        )),
                   ],
                 ),
               ),
