@@ -22,7 +22,7 @@ class _LandingScreenState extends State<LandingScreen> {
 
   final screens = [
     const HomeScreen(),
-    const MessagesScreen(),
+    MessagesScreen(),
     const JobScreen(),
     AccountScreen(),
   ];
