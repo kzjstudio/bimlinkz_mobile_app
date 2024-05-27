@@ -69,7 +69,7 @@ class _ChatScreenState extends State<ChatScreen> {
       'participants': [currentUserId, widget.contractorId],
       'participant_names': {
         'sender':
-            '${UserProfileController.instance.firstName} ${UserProfileController.instance.lastName}',
+            '${UserProfileController.instance.firstName.value} ${UserProfileController.instance.lastName.value}',
         'receiver': '${widget.contractorFirstName} ${widget.contractorLastName}'
       },
       'last_message': message,
