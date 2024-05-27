@@ -1,8 +1,8 @@
 import 'package:bimlinkz_mobile_app/Controllers/auth_controller.dart';
-import 'package:bimlinkz_mobile_app/screens/mobile/chat_Screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'chat_screen.dart';
 
 class MessagesScreen extends StatefulWidget {
   @override
@@ -15,14 +15,15 @@ class _MessagesScreenState extends State<MessagesScreen> {
 
   Future<void> getChats() async {
     try {
+      final currentUserId = AuthController.instance.auth.currentUser!.uid;
       final chats = await FirebaseFirestore.instance
           .collection('Chats')
-          .where('participants',
-              arrayContains: AuthController.instance.auth.currentUser!.uid)
+          .where('participants', arrayContains: currentUserId)
           .get();
       final data = chats.docs.map((doc) => doc.data()).toList();
-      data.sort((a, b) =>
-          (b['createdAt'] as Timestamp).compareTo(a['createdAt'] as Timestamp));
+
+      data.sort((a, b) => (b['last_message_timestamp'] as Timestamp)
+          .compareTo(a['last_message_timestamp'] as Timestamp));
 
       setState(() {
         chatsList = data;
@@ -58,9 +59,8 @@ class _MessagesScreenState extends State<MessagesScreen> {
                 final chat = chatsList[index];
                 final otherUserId = chat['participants'].firstWhere((id) =>
                     id != AuthController.instance.auth.currentUser!.uid);
-                final otherUserName = chat['reciever_Name'];
-                final lastMessage = chat['message'];
-                final recieverLastName = chat['reciever_LastName'];
+                final otherUserName = chat['participant_names'][otherUserId];
+                final lastMessage = chat['last_message'];
 
                 return FutureBuilder<DocumentSnapshot>(
                   future: FirebaseFirestore.instance
@@ -93,17 +93,14 @@ class _MessagesScreenState extends State<MessagesScreen> {
                           onBackgroundImageError: (_, __) =>
                               const Icon(Icons.error),
                         ),
-                        title: Text(
-                          ' $otherUserName $recieverLastName',
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
+                        title: Text(otherUserName),
                         subtitle: Text(lastMessage),
                         onTap: () {
                           Get.to(
                             () => ChatScreen(
-                              contractorFirstName: otherUserName,
-                              contractorLastName: otherUserId,
-                              contractorId: ,
+                              contractorFirstName: userData['First_Name'],
+                              contractorLastName: userData['Last_Name'],
+                              contractorId: otherUserId,
                             ),
                             transition: Transition.rightToLeft,
                           );

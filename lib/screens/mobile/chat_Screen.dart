@@ -1,3 +1,4 @@
+import 'package:bimlinkz_mobile_app/Controllers/user_profile_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:bimlinkz_mobile_app/Controllers/auth_controller.dart';
@@ -62,6 +63,18 @@ class _ChatScreenState extends State<ChatScreen> {
         .doc(chatId)
         .collection('messages')
         .add(messageData);
+
+    // Update the chat document with the last message info
+    await FirebaseFirestore.instance.collection('Chats').doc(chatId).set({
+      'participants': [currentUserId, widget.contractorId],
+      'participant_names': {
+        'sender':
+            '${UserProfileController.instance.firstName} ${UserProfileController.instance.lastName}',
+        'receiver': '${widget.contractorFirstName} ${widget.contractorLastName}'
+      },
+      'last_message': message,
+      'last_message_timestamp': FieldValue.serverTimestamp(),
+    });
 
     _messageController.clear();
   }

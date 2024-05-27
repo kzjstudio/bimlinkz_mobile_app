@@ -1,8 +1,10 @@
 import 'package:bimlinkz_mobile_app/Controllers/global.dart';
+import 'package:bimlinkz_mobile_app/models/push_notifications.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/landing_screen.dart';
 import 'package:bimlinkz_mobile_app/theme.dart';
 import 'package:bimlinkz_mobile_app/Controllers/theme_controller.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -11,6 +13,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 void main() async {
   SystemChrome.restoreSystemUIOverlays();
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp(
           name: 'Bimlinkz',
           options: const FirebaseOptions(
@@ -20,6 +23,19 @@ void main() async {
               projectId: 'bimixx-2eab2'))
       .then((value) {
     Global.init();
+    PushNotificationService().initialize();
+  });
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    print('Got a message whilst in the foreground!');
+    print('Message data: ${message.data}');
+
+    if (message.notification != null) {
+      print('Message also contained a notification: ${message.notification}');
+    }
+  });
+  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+    print('A new onMessageOpenedApp event was published!');
+    // Navigate to the chat screen or handle the notification click action
   });
 
   runApp(MyApp());

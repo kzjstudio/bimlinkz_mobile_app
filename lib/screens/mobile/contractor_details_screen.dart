@@ -95,7 +95,8 @@ class ContractorDetailScreen extends StatelessWidget {
         onPressed: () {
           Get.to(() => ChatScreen(
               contractorFirstName: contractor['First_Name'],
-              contractorLastName: contractor['Last_Name']));
+              contractorLastName: contractor['Last_Name'],
+              contractorId: contractor['id']));
         },
         child: const Icon(Icons.chat),
       ),
