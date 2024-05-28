@@ -43,7 +43,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
               final chat = chatsList[index];
               final otherUserId =
                   chat['participants'].firstWhere((id) => id != currentUserId);
-              final otherUserName = chat['participant_names']['receiver'];
+              final otherUserName = chat['participant_names'][otherUserId];
               final lastMessage = chat['last_message'];
               return FutureBuilder<DocumentSnapshot>(
                 future: FirebaseFirestore.instance
@@ -76,7 +76,10 @@ class _MessagesScreenState extends State<MessagesScreen> {
                         onBackgroundImageError: (_, __) =>
                             const Icon(Icons.error),
                       ),
-                      title: Text(otherUserName),
+                      title: Text(
+                        otherUserName,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
                       subtitle: Text(lastMessage),
                       onTap: () {
                         Get.to(

@@ -247,7 +247,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 return InkWell(
                   onTap: () {
                     Get.to(
-                      transition: Transition.rightToLeft,
+                        transition: Transition.rightToLeft,
                         () => ContractorDetailScreen(contractor: contractor));
                   },
                   child: Card(
@@ -286,30 +286,36 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             const SizedBox(height: 8),
-                            Row(
-                              children: [
-                                Text(
-                                  contractor['First_Name'] ?? '',
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
+                            Padding(
+                              padding: const EdgeInsets.only(left: 8.0),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    contractor['First_Name'] ?? '',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                    ),
                                   ),
-                                ),
-                                const SizedBox(width: 5),
-                                Text(
-                                  contractor['Last_Name'] ?? '',
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
+                                  const SizedBox(width: 5),
+                                  Text(
+                                    contractor['Last_Name'] ?? '',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                             const SizedBox(height: 8),
-                            Text(
-                              '${contractor['Years_Experience']} years as a ${contractor['Skill']}' ??
-                                  '',
-                              style: const TextStyle(fontSize: 14),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 8.0),
+                              child: Text(
+                                '${contractor['Years_Experience']} years as a ${contractor['Skill']}' ??
+                                    '',
+                                style: const TextStyle(fontSize: 14),
+                              ),
                             ),
                             const SizedBox(height: 8),
                           ],

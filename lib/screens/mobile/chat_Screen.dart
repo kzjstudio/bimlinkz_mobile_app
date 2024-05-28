@@ -1,18 +1,20 @@
 import 'package:bimlinkz_mobile_app/Controllers/user_profile_controller.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:bimlinkz_mobile_app/Controllers/auth_controller.dart';
 
 class ChatScreen extends StatefulWidget {
   final String contractorFirstName;
   final String contractorLastName;
   final String contractorId;
+  final String? chatId;
 
   const ChatScreen({
     Key? key,
     required this.contractorFirstName,
     required this.contractorLastName,
     required this.contractorId,
+    this.chatId,
   }) : super(key: key);
 
   @override
@@ -28,7 +30,7 @@ class _ChatScreenState extends State<ChatScreen> {
     super.initState();
     _chatStream = FirebaseFirestore.instance
         .collection('Chats')
-        .doc(_getChatId())
+        .doc(widget.chatId ?? _getChatId())
         .collection('messages')
         .orderBy('timestamp', descending: true)
         .snapshots();
@@ -47,7 +49,7 @@ class _ChatScreenState extends State<ChatScreen> {
       return;
     }
 
-    final chatId = _getChatId();
+    final chatId = widget.chatId ?? _getChatId();
     final message = _messageController.text.trim();
     final currentUserId = AuthController.instance.auth.currentUser!.uid;
 
@@ -64,13 +66,13 @@ class _ChatScreenState extends State<ChatScreen> {
         .collection('messages')
         .add(messageData);
 
-    // Update the chat document with the last message info
     await FirebaseFirestore.instance.collection('Chats').doc(chatId).set({
       'participants': [currentUserId, widget.contractorId],
       'participant_names': {
-        'sender':
+        currentUserId:
             '${UserProfileController.instance.firstName.value} ${UserProfileController.instance.lastName.value}',
-        'receiver': '${widget.contractorFirstName} ${widget.contractorLastName}'
+        widget.contractorId:
+            '${widget.contractorFirstName} ${widget.contractorLastName}'
       },
       'last_message': message,
       'last_message_timestamp': FieldValue.serverTimestamp(),
