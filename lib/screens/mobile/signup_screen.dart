@@ -5,7 +5,8 @@ import 'package:get/get.dart';
 class SignUpPage extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
 
-  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _firstNameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
 
   final TextEditingController _emailController = TextEditingController();
 
@@ -45,14 +46,28 @@ class SignUpPage extends StatelessWidget {
 
                     const SizedBox(height: 20),
                     TextFormField(
-                      controller: _nameController,
+                      controller: _firstNameController,
                       decoration: const InputDecoration(
-                        labelText: 'User name',
+                        labelText: 'First name',
                         border: OutlineInputBorder(),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter a user name';
+                          return 'Please enter your first name';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 20),
+                    TextFormField(
+                      controller: _lastNameController,
+                      decoration: const InputDecoration(
+                        labelText: 'last name',
+                        border: OutlineInputBorder(),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your last name';
                         }
                         return null;
                       },
@@ -104,7 +119,8 @@ class SignUpPage extends StatelessWidget {
                                     AuthController.instance.createUser(
                                         _emailController.text,
                                         _passwordController.text,
-                                        _nameController.text);
+                                        _firstNameController.text,
+                                        _lastNameController.text);
                                   }
                                 }
                               : null,

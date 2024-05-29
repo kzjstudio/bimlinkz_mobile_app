@@ -4,6 +4,7 @@ import 'package:bimlinkz_mobile_app/screens/mobile/loginScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:username_generator/username_generator.dart';
 
 class AuthController extends GetxController {
   static AuthController instance = Get.find();
@@ -11,8 +12,8 @@ class AuthController extends GetxController {
   final db = FirebaseFirestore.instance;
   late Rx<User?> user;
   var isLoggedIn = false.obs;
-  var userName = ''.obs;
   var isLoading = false.obs;
+  var generator = UsernameGenerator();
 
   @override
   void onReady() {
@@ -36,7 +37,8 @@ class AuthController extends GetxController {
   void createUser(
     String email,
     String password,
-    String userName,
+    String firstName,
+    String lastName,
   ) async {
     isLoading.value = true;
     try {
@@ -45,7 +47,22 @@ class AuthController extends GetxController {
           .then((result) {
         var userId = result.user?.uid;
 
-        addUserToFireStore(userId.toString(), userName, email);
+        String genName = generator
+            .generateForName(firstName, lastName: lastName, adjectives: [
+          'creative',
+          'Dynamic',
+          'Energetic',
+          'Brilliant',
+          'Innovative',
+          'Efficient',
+          'Reliable',
+          'Ambitious',
+          'Skillful',
+          'Trustworth'
+        ]);
+
+        addUserToFireStore(
+            userId.toString(), firstName, lastName, email, genName);
         UserProfileController.instance.getUser();
       });
       isLoading.value = false;
@@ -78,9 +95,12 @@ class AuthController extends GetxController {
     }
   }
 
-  void addUserToFireStore(String userId, String userName, String email) {
+  void addUserToFireStore(String userId, String firstName, String lastName,
+      String email, genUserName) {
     db.collection("users").doc(userId).set({
-      'User_Name': userName,
+      'User_Name': genUserName,
+      'First_Name': firstName,
+      'Last_Name': lastName,
       'id': userId,
       'Email': email,
       'Date_Joined': Timestamp.now(),

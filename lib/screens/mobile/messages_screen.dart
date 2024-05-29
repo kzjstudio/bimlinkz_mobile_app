@@ -1,16 +1,26 @@
-import 'package:bimlinkz_mobile_app/Controllers/auth_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:bimlinkz_mobile_app/Controllers/auth_controller.dart';
 import 'package:get/get.dart';
 import 'chat_screen.dart';
 
 class MessagesScreen extends StatefulWidget {
+  final VoidCallback onMessagesViewed;
+
+  MessagesScreen({required this.onMessagesViewed});
+
   @override
   State<MessagesScreen> createState() => _MessagesScreenState();
 }
 
 class _MessagesScreenState extends State<MessagesScreen> {
   final String currentUserId = AuthController.instance.auth.currentUser!.uid;
+
+  @override
+  void initState() {
+    super.initState();
+    widget.onMessagesViewed();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,14 +61,14 @@ class _MessagesScreenState extends State<MessagesScreen> {
                     .doc(otherUserId)
                     .get(),
                 builder: (context, userSnapshot) {
-                  if (userSnapshot.connectionState == ConnectionState.waiting) {
+                  if (!userSnapshot.hasData) {
                     return const ListTile(
                       leading: CircleAvatar(
                         backgroundColor: Colors.grey,
                       ),
                       title: Text('Loading...'),
                     );
-                  } else if (userSnapshot.hasError || !userSnapshot.hasData) {
+                  } else if (userSnapshot.hasError) {
                     return const ListTile(
                       leading: CircleAvatar(
                         backgroundColor: Colors.grey,

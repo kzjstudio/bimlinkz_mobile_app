@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:badges/badges.dart' as badges;
+import 'dart:async';
+import 'package:flutter/scheduler.dart';
 
 class LandingScreen extends StatefulWidget {
   const LandingScreen({super.key});
@@ -17,31 +19,29 @@ class LandingScreen extends StatefulWidget {
 class _LandingScreenState extends State<LandingScreen> {
   int _selectedIndex = 0;
   int unreadMessagesCount = 0;
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-      if (index == 1) {
-        // User navigated to the Messages screen, reset the unread messages count
-        setState(() {
-          unreadMessagesCount = 0;
-        });
-        // Mark messages as read in the database
-        _markMessagesAsRead();
-      }
-    });
-  }
-
-  final screens = [
-    const HomeScreen(),
-    MessagesScreen(),
-    const JobScreen(),
-    AccountScreen(),
-  ];
+  late StreamSubscription<QuerySnapshot> _subscription;
+  late List<Widget> screens;
 
   @override
   void initState() {
     super.initState();
+    screens = [
+      const HomeScreen(),
+      MessagesScreen(
+        onMessagesViewed: () {
+          // Schedule the setState call to avoid calling it during build
+          SchedulerBinding.instance.addPostFrameCallback((_) {
+            if (mounted) {
+              setState(() {
+                unreadMessagesCount = 0;
+              });
+            }
+          });
+        },
+      ),
+      const JobScreen(),
+      AccountScreen(),
+    ];
     _checkForUnreadMessages();
   }
 
@@ -49,25 +49,31 @@ class _LandingScreenState extends State<LandingScreen> {
     final currentUserId = FirebaseAuth.instance.currentUser?.uid;
     if (currentUserId == null) return;
 
-    FirebaseFirestore.instance
+    _subscription = FirebaseFirestore.instance
         .collection('Chats')
         .where('participants', arrayContains: currentUserId)
         .snapshots()
         .listen((snapshot) {
       int unreadCount = 0;
+      final List<Future<void>> futures = [];
       for (var doc in snapshot.docs) {
         var messages = doc.reference.collection('messages');
-        messages
+        var future = messages
             .where('receiverId', isEqualTo: currentUserId)
             .where('isRead', isEqualTo: false)
-            .snapshots()
-            .listen((messagesSnapshot) {
+            .get()
+            .then((messagesSnapshot) {
           unreadCount += messagesSnapshot.docs.length;
+        });
+        futures.add(future);
+      }
+      Future.wait(futures).then((_) {
+        if (mounted) {
           setState(() {
             unreadMessagesCount = unreadCount;
           });
-        });
-      }
+        }
+      });
     });
   }
 
@@ -94,6 +100,29 @@ class _LandingScreenState extends State<LandingScreen> {
   }
 
   @override
+  void dispose() {
+    _subscription.cancel();
+    super.dispose();
+  }
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+    if (index == 1) {
+      // Reset unread messages count and mark as read
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          setState(() {
+            unreadMessagesCount = 0;
+          });
+        }
+      });
+      _markMessagesAsRead();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
@@ -109,7 +138,6 @@ class _LandingScreenState extends State<LandingScreen> {
               label: 'Messages',
               icon: unreadMessagesCount > 0
                   ? badges.Badge(
-                      showBadge: unreadMessagesCount == 0 ? false : true,
                       badgeContent: Text(
                         unreadMessagesCount.toString(),
                         style:

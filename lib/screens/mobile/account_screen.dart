@@ -62,7 +62,7 @@ class AccountScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    c.userName.value,
+                    UserProfileController.instance.userName.value,
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   Text(
