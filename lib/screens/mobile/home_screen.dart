@@ -130,7 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             : _buildPopularSearches(),
                         const SizedBox(height: 30),
                         const Text(
-                          'Contrectors who Recently joined',
+                          'Contractors who Recently joined',
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
