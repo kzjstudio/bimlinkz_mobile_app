@@ -54,6 +54,7 @@ class _ChatScreenState extends State<ChatScreen> {
     final currentUserId = AuthController.instance.auth.currentUser!.uid;
 
     final messageData = {
+      'isRead': false,
       'senderId': currentUserId,
       'receiverId': widget.contractorId,
       'message': message,
