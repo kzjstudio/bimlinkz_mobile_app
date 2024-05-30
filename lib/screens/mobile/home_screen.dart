@@ -85,8 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
             title: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                    'Welcome back ${UserProfileController.instance.userName.value}!'),
+                Text('Hi ${UserProfileController.instance.userName.value}!'),
               ],
             ),
           ),

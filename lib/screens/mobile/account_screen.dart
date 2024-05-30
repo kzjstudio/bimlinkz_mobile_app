@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bimlinkz_mobile_app/Controllers/auth_controller.dart';
 import 'package:bimlinkz_mobile_app/Controllers/user_profile_controller.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/about_us_screen.dart';
@@ -9,13 +11,78 @@ import 'package:bimlinkz_mobile_app/screens/mobile/preferences.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/profile.dart';
 import 'package:bimlinkz_mobile_app/theme.dart';
 import 'package:bimlinkz_mobile_app/widgets/list_button.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 
-class AccountScreen extends StatelessWidget {
+class AccountScreen extends StatefulWidget {
+  AccountScreen({super.key});
+
+  @override
+  State<AccountScreen> createState() => _AccountScreenState();
+}
+
+class _AccountScreenState extends State<AccountScreen> {
   final AuthController c = Get.find();
 
-  AccountScreen({super.key});
+  File? _image;
+  final ImagePicker _picker = ImagePicker();
+  var _isUploading = false.obs;
+  var _uploadUrl = ''.obs;
+
+  Future<void> _pickImage() async {
+    final source = await showDialog<ImageSource>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Select Image Source'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context, ImageSource.camera),
+            child: const Text('Camera'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, ImageSource.gallery),
+            child: const Text('Gallery'),
+          ),
+        ],
+      ),
+    );
+
+    if (source != null) {
+      final pickedFile = await _picker.pickImage(source: source);
+      if (pickedFile != null) {
+        setState(() {
+          _image = File(pickedFile.path);
+          _uploadImage();
+        });
+      }
+    }
+  }
+
+  Future<void> _uploadImage() async {
+    if (_image == null) return;
+    _isUploading.value = true;
+
+    try {
+      final storageRef = FirebaseStorage.instance.ref();
+      final imagesRef = storageRef.child(
+          "user images/ ${AuthController.instance.auth.currentUser!.uid}/ ${DateTime.now().toIso8601String()}.jpg");
+
+      await imagesRef.putFile(_image!);
+      await imagesRef.getDownloadURL().then((url) => _uploadUrl.value = url);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Upload successful!')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Upload failed: $e')),
+      );
+    } finally {
+      _isUploading.value = false;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,22 +103,27 @@ class AccountScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                child: CircleAvatar(
-                  radius: 40,
-                  backgroundColor: AppColors.primary,
-                  child: ClipOval(
-                    child: UserProfileController.instance.imageUrl.isNotEmpty
-                        ? Image.network(
-                            UserProfileController.instance.imageUrl.value,
-                            width: 88,
-                            height: 88,
-                            fit: BoxFit.cover,
-                          )
-                        : Icon(
-                            Icons.person,
-                            size: 40,
-                            color: Colors.grey[400],
-                          ),
+                child: GestureDetector(
+                  onTap: () {
+                    _pickImage();
+                  },
+                  child: CircleAvatar(
+                    radius: 40,
+                    backgroundColor: AppColors.primary,
+                    child: ClipOval(
+                      child: UserProfileController.instance.imageUrl.isNotEmpty
+                          ? Image.network(
+                              UserProfileController.instance.imageUrl.value,
+                              width: 88,
+                              height: 88,
+                              fit: BoxFit.cover,
+                            )
+                          : Icon(
+                              Icons.person,
+                              size: 40,
+                              color: Colors.grey[400],
+                            ),
+                    ),
                   ),
                 ),
               ),

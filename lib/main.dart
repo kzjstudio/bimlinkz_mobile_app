@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:bimlinkz_mobile_app/Controllers/global.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/chat_screen.dart';
 import 'package:bimlinkz_mobile_app/services/push_notifications.dart';
@@ -35,11 +37,40 @@ void main() async {
   const InitializationSettings initializationSettings =
       InitializationSettings(android: initializationSettingsAndroid);
 
-  await flutterLocalNotificationsPlugin.initialize(initializationSettings,
-      onDidReceiveNotificationResponse: onDidReceiveNotificationResponse);
+  await flutterLocalNotificationsPlugin.initialize(
+    initializationSettings,
+    onDidReceiveNotificationResponse:
+        (NotificationResponse notificationResponse) async {
+      final String? payload = notificationResponse.payload;
+      if (payload != null) {
+        Map<String, dynamic> data = jsonDecode(payload);
+        Get.to(() => ChatScreen(
+              contractorFirstName: data['contractorFirstName'],
+              contractorLastName: data['contractorLastName'],
+              contractorId: data['contractorId'],
+            ));
+      }
+    },
+  );
+
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    print('Got a message whilst in the foreground!');
-    showNotification(message);
+    RemoteNotification? notification = message.notification;
+    AndroidNotification? android = message.notification?.android;
+    if (notification != null && android != null) {
+      flutterLocalNotificationsPlugin.show(
+        notification.hashCode,
+        notification.title,
+        notification.body,
+        const NotificationDetails(
+          android: AndroidNotificationDetails(
+            'your_channel_id',
+            'your_channel_name',
+            icon: '@mipmap/ic_launcher',
+          ),
+        ),
+        payload: jsonEncode(message.data),
+      );
+    }
   });
 
   runApp(MyApp());

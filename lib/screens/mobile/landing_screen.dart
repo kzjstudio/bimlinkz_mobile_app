@@ -8,6 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:badges/badges.dart' as badges;
 import 'dart:async';
 import 'package:flutter/scheduler.dart';
+import 'package:get/get.dart';
 
 class LandingScreen extends StatefulWidget {
   const LandingScreen({super.key});
