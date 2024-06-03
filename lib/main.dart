@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:bimlinkz_mobile_app/Controllers/global.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/chat_screen.dart';
+import 'package:bimlinkz_mobile_app/Controllers/data_controller.dart';
 import 'package:bimlinkz_mobile_app/services/push_notifications.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/landing_screen.dart';
 import 'package:bimlinkz_mobile_app/theme.dart';
@@ -117,9 +118,10 @@ class MyApp extends StatelessWidget {
   final ThemeController themeController = Get.put(ThemeController());
   final Future<SharedPreferences> prefs = SharedPreferences.getInstance();
 
-  MyApp({super.key}); // Initialize the controller
+  // Initialize the controller
   @override
   Widget build(BuildContext context) {
+    Get.put(DataController());
     return GetMaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Bimlinkz',

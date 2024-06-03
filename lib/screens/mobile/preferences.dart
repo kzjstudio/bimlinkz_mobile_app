@@ -19,7 +19,7 @@ class _PreferencesPageState extends State<PreferencesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Preferences'),
+        title: const Text('Appearance'),
       ),
       body: ListView(
         children: [
@@ -27,7 +27,7 @@ class _PreferencesPageState extends State<PreferencesPage> {
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: Text(
-              'Theme and Language',
+              'Theme',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
           ),
@@ -41,43 +41,43 @@ class _PreferencesPageState extends State<PreferencesPage> {
               },
             ),
           ),
-          ListTile(
-            title: const Text('Language'),
-            subtitle: const Text('Select your language'),
-            trailing: DropdownButton<String>(
-              value: language,
-              onChanged: (String? newValue) {
-                setState(() {
-                  language = newValue!;
-                });
-              },
-              items: <String>['English', 'Spanish', 'French']
-                  .map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-            ),
-          ),
-          const Divider(), // Visual separator
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-            child: Text(
-              'App Settings',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-          ),
-          SwitchListTile(
-            title: const Text('Reminders'),
-            subtitle: const Text('Turn reminders on or off'),
-            value: isRemindersOn,
-            onChanged: (bool value) {
-              setState(() {
-                isRemindersOn = value;
-              });
-            },
-          ),
+          // ListTile(
+          //   title: const Text('Language'),
+          //   subtitle: const Text('Select your language'),
+          //   trailing: DropdownButton<String>(
+          //     value: language,
+          //     onChanged: (String? newValue) {
+          //       setState(() {
+          //         language = newValue!;
+          //       });
+          //     },
+          //     items: <String>['English', 'Spanish', 'French']
+          //         .map<DropdownMenuItem<String>>((String value) {
+          //       return DropdownMenuItem<String>(
+          //         value: value,
+          //         child: Text(value),
+          //       );
+          //     }).toList(),
+          //   ),
+          // ),
+          // const Divider(), // Visual separator
+          // const Padding(
+          //   padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+          //   child: Text(
+          //     'App Settings',
+          //     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          //   ),
+          // ),
+          // SwitchListTile(
+          //   title: const Text('Reminders'),
+          //   subtitle: const Text('Turn reminders on or off'),
+          //   value: isRemindersOn,
+          //   onChanged: (bool value) {
+          //     setState(() {
+          //       isRemindersOn = value;
+          //     });
+          //   },
+          // ),
           const SizedBox(height: 20), // Adds space at the bottom of the list
         ],
       ),

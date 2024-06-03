@@ -1,6 +1,7 @@
 import 'package:bimlinkz_mobile_app/Controllers/auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:flutter_signin_button/flutter_signin_button.dart';
 
 class SignUpPage extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
@@ -126,6 +127,19 @@ class SignUpPage extends StatelessWidget {
                               : null,
                           child: const Text('Sign Up'),
                         )),
+                    const SizedBox(height: 8),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: SignInButton(
+                        shape: const RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10))),
+                        Buttons.Google,
+                        onPressed: () {
+                          AuthController.instance.signInWithGoogle();
+                        },
+                      ),
+                    )
                   ],
                 ),
               ),

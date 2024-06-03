@@ -6,7 +6,7 @@ import 'package:bimlinkz_mobile_app/screens/mobile/about_us_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/contact_us_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/contractor_form_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/contractor_screen.dart';
-import 'package:bimlinkz_mobile_app/screens/mobile/notifications.dart';
+
 import 'package:bimlinkz_mobile_app/screens/mobile/preferences.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/profile.dart';
 import 'package:bimlinkz_mobile_app/theme.dart';
@@ -134,22 +134,19 @@ class _AccountScreenState extends State<AccountScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    UserProfileController.instance.userName.value,
+                    'Hi ${UserProfileController.instance.userName.value}',
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  Text(
-                    'Hi ${UserProfileController.instance.userName}!',
-                    style: const TextStyle(fontSize: 15),
-                  ),
-                  OutlinedButton(
-                      style: ButtonStyle(
-                          shape: WidgetStateProperty.all(RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5)))),
-                      onPressed: () {
-                        Get.to(() => const UserProfilePage(),
-                            transition: Transition.leftToRightWithFade);
-                      },
-                      child: const Text('EDIT PROFILE')),
+
+                  // OutlinedButton(
+                  //     style: ButtonStyle(
+                  //         shape: WidgetStateProperty.all(RoundedRectangleBorder(
+                  //             borderRadius: BorderRadius.circular(5)))),
+                  //     onPressed: () {
+                  //       Get.to(() => const UserProfilePage(),
+                  //           transition: Transition.leftToRightWithFade);
+                  //     },
+                  //     child: const Text('EDIT PROFILE')),
                 ],
               )
             ],
@@ -197,38 +194,26 @@ class _AccountScreenState extends State<AccountScreen> {
                   thickness: .2,
                   color: Theme.of(context).colorScheme.shadow,
                 ),
-                ListButton(
-                    tapped: () {
-                      Get.to(() => ContractorsPage(),
-                          transition: Transition.rightToLeftWithFade);
-                    },
-                    icon: Icons.work_history_outlined,
-                    title: 'Contractors',
-                    subTitle: "Person's you have worked with before "),
-                Divider(
-                  thickness: .2,
-                  color: Theme.of(context).colorScheme.shadow,
-                ),
+                // ListButton(
+                //     tapped: () {
+                //       Get.to(() => ContractorsPage(),
+                //           transition: Transition.rightToLeftWithFade);
+                //     },
+                //     icon: Icons.work_history_outlined,
+                //     title: 'Contractors',
+                //     subTitle: "Person's you have worked with before "),
+                // Divider(
+                //   thickness: .2,
+                //   color: Theme.of(context).colorScheme.shadow,
+                // ),
                 ListButton(
                     tapped: () {
                       Get.to(() => const PreferencesPage(),
                           transition: Transition.rightToLeftWithFade);
                     },
                     icon: Icons.settings_outlined,
-                    title: 'Preferences',
-                    subTitle: 'Theme, Settings'),
-                Divider(
-                  thickness: .2,
-                  color: Theme.of(context).colorScheme.shadow,
-                ),
-                ListButton(
-                    tapped: () {
-                      Get.to(() => const NotificationSettingsPage(),
-                          transition: Transition.rightToLeftWithFade);
-                    },
-                    icon: Icons.notifications_none,
-                    title: 'Notifications',
-                    subTitle: 'Ringtone, Message, Notifications'),
+                    title: 'Appearance',
+                    subTitle: 'Theme settings'),
                 Divider(
                   thickness: .2,
                   color: Theme.of(context).colorScheme.shadow,

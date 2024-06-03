@@ -4,6 +4,7 @@ import 'package:bimlinkz_mobile_app/screens/mobile/loginScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:username_generator/username_generator.dart';
 
 class AuthController extends GetxController {
@@ -31,6 +32,25 @@ class AuthController extends GetxController {
     } else {
       Get.offAll(() => const LandingScreen());
       isLoggedIn.value = true;
+    }
+  }
+
+  Future<dynamic> signInWithGoogle() async {
+    try {
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+      final GoogleSignInAuthentication? googleAuth =
+          await googleUser?.authentication;
+
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
+      UserProfileController.instance.getUser();
+      return await FirebaseAuth.instance.signInWithCredential(credential);
+    } on Exception catch (e) {
+      // TODO
+      print('exception->$e');
     }
   }
 
