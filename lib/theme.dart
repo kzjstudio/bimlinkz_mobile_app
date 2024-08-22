@@ -5,7 +5,7 @@ class AppColors {
   static const Color secondary =
       Color(0xff037C8C); // Complementary secondary color
   static const Color lightBackground =
-      Color(0xffF1F1F1); // Light theme background
+      Color.fromARGB(255, 255, 255, 255); // Light theme background
   static const Color lightSurface = Color(0xffffffff); // Light theme surface
   static const Color darkBackground =
       Color(0xff303030); // Dark theme background
@@ -42,7 +42,7 @@ final ThemeData lightTheme = ThemeData(
 
       onError: AppColors.onError,
     ),
-    scaffoldBackgroundColor: AppColors.lightBackground,
+    scaffoldBackgroundColor: const Color.fromARGB(255, 255, 255, 255),
     appBarTheme: const AppBarTheme(
       backgroundColor: AppColors.lightBackground,
       iconTheme: IconThemeData(color: AppColors.darkBackground),

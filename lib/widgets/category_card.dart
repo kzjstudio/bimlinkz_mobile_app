@@ -33,7 +33,7 @@ class _CategoryCardState extends State<CategoryCard> {
         height: 130,
         margin: const EdgeInsets.all(8), // Add some margin around the card
         decoration: BoxDecoration(
-          color: Color.fromARGB(255, 239, 239, 239), // Card background color
+          color: const Color(0xff5664F5), // Card background color
           borderRadius: BorderRadius.circular(10),
           boxShadow: [
             BoxShadow(
@@ -67,7 +67,7 @@ class _CategoryCardState extends State<CategoryCard> {
                 style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.darkBackground),
+                    color: Colors.white),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),

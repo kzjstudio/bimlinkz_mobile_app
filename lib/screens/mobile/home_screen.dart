@@ -2,6 +2,7 @@ import 'package:bimlinkz_mobile_app/Controllers/auth_controller.dart';
 import 'package:bimlinkz_mobile_app/Controllers/data_controller.dart';
 import 'package:bimlinkz_mobile_app/Controllers/user_profile_controller.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/contractor_details_screen.dart';
+import 'package:bimlinkz_mobile_app/screens/mobile/featured_contractors.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/jobpost_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/see_all_categories_screen.dart';
 import 'package:bimlinkz_mobile_app/widgets/category_card.dart';
@@ -80,7 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       TextField(
                         controller: _searchController,
                         decoration: InputDecoration(
-                          hintText: 'Search...',
+                          hintText: 'Search the type of work you want done',
                           suffixIcon: IconButton(
                             icon: const Icon(Icons.clear),
                             onPressed: () {
@@ -89,8 +90,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           prefixIcon: const Icon(Icons.search),
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide.none,
+                            borderRadius: BorderRadius.circular(24),
+                            borderSide: const BorderSide(color: Colors.black),
                           ),
                           filled: true,
                         ),
@@ -161,9 +162,9 @@ class _HomeScreenState extends State<HomeScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Text(
-              'Popular searches',
+              'Featured Trades',
               style: TextStyle(
-                fontSize: 18,
+                fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
             ),

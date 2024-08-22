@@ -40,6 +40,20 @@ class DataController extends GetxController {
     var fetchedRecentContractors =
         collection.docs.map((doc) => doc.data()).toList();
 
+    if (fetchedRecentContractors.isEmpty) {
+      var getUsers = await FirebaseFirestore.instance.collection('users').get();
+      var users = getUsers.docs.map((doc) => doc.data()).toList();
+
+      await Future.wait(users.map((contractor) {
+        return precacheImage(
+          NetworkImage(contractor['imageUrl']),
+          context,
+        );
+      }));
+
+      recentContractors.value = users;
+    }
+
     // Cache all contractor images
     await Future.wait(fetchedRecentContractors.map((contractor) {
       return precacheImage(
