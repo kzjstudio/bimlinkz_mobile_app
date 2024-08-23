@@ -2,7 +2,6 @@ import 'package:bimlinkz_mobile_app/Controllers/auth_controller.dart';
 import 'package:bimlinkz_mobile_app/Controllers/data_controller.dart';
 import 'package:bimlinkz_mobile_app/Controllers/user_profile_controller.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/contractor_details_screen.dart';
-import 'package:bimlinkz_mobile_app/screens/mobile/featured_contractors.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/jobpost_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/see_all_categories_screen.dart';
 import 'package:bimlinkz_mobile_app/widgets/category_card.dart';
@@ -99,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       const SizedBox(height: 20),
                       _searchController.text.isNotEmpty
                           ? _buildSuggestions()
-                          : _buildPopularSearches(),
+                          : _featuredTradesScection(),
                       const SizedBox(height: 30),
                       const Text(
                         'Contractors who Recently joined',
@@ -111,7 +110,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       const SizedBox(
                         height: 10,
                       ),
-                      _buildFeaturedArea(),
+                      _recommendedTradesPersons(),
                     ],
                   ),
                 ),
@@ -154,7 +153,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildPopularSearches() {
+  Widget _featuredTradesScection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -196,91 +195,112 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildFeaturedArea() {
+  Widget _recommendedTradesPersons() {
     return SizedBox(
-      height: 200,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
+      height: 400, // Adjust the height to fit two rows
+      child: GridView.builder(
+        padding: const EdgeInsets.all(8.0),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3, // Three items across
+          mainAxisSpacing: 10.0, // Spacing between rows
+          crossAxisSpacing: 10.0, // Spacing between columns
+          childAspectRatio:
+              0.6, // Adjust the aspect ratio to provide more height
+        ),
         itemCount: dataController.recentContractors.length,
         itemBuilder: (context, index) {
           final contractor = dataController.recentContractors[index];
           return InkWell(
             onTap: () {
               Get.to(
-                  transition: Transition.rightToLeft,
-                  () => ContractorDetailScreen(contractor: contractor));
+                transition: Transition.rightToLeft,
+                () => ContractorDetailScreen(contractor: contractor),
+              );
             },
             child: Card(
-              color: const Color.fromARGB(255, 239, 239, 239),
-              margin: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: 150,
-                child: Padding(
-                  padding: const EdgeInsets.all(0.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: ClipRRect(
-                          borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(10),
-                            topRight: Radius.circular(10),
-                          ),
-                          child: Image.network(
-                            contractor['imageUrl'] ?? '',
-                            fit: BoxFit.cover,
-                            width: double.infinity,
-                            height: 150,
-                            errorBuilder: (context, error, stackTrace) {
-                              return Container(
-                                color: Colors.grey,
-                                child: const Center(
-                                  child: Icon(
-                                    Icons.error,
-                                    color: Colors.red,
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        ),
+              elevation: 0,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    width: 88,
+                    height: 121,
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(10),
+                        topRight: Radius.circular(10),
                       ),
-                      const SizedBox(height: 8),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8.0),
-                        child: Row(
-                          children: [
-                            Text(
-                              contractor['First_Name'] ?? '',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
+                      child: Image.network(
+                        contractor['imageUrl'] ?? '',
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Container(
+                            color: Colors.grey,
+                            child: const Center(
+                              child: Icon(
+                                Icons.error,
+                                color: Colors.red,
                               ),
                             ),
-                            const SizedBox(width: 5),
-                            Text(
-                              contractor['Last_Name'] ?? '',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                              ),
-                            ),
-                          ],
-                        ),
+                          );
+                        },
                       ),
-                      const SizedBox(height: 8),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8.0),
-                        child: Text(
-                          '${contractor['Years_Experience']} years as a ${contractor['Skill']}' ??
-                              '',
-                          style: const TextStyle(fontSize: 14),
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                    ],
+                    ),
                   ),
-                ),
+                  const SizedBox(height: 2),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Row(
+                      children: [
+                        Flexible(
+                          child: Text(
+                            contractor['First_Name'] ?? '',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                            softWrap: true,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        const SizedBox(width: 2),
+                        Flexible(
+                          child: Text(
+                            contractor['Last_Name'] ?? '',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                            softWrap: true,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Text(
+                      ' ${contractor['Skill']}' ?? '',
+                      style: const TextStyle(fontSize: 14),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IconButton(
+                            onPressed: (() {}), icon: Icon(Icons.message)),
+                        IconButton(
+                          onPressed: (() {}),
+                          icon: Icon(Icons.bookmark),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
           );
