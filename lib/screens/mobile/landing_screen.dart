@@ -133,7 +133,7 @@ class _LandingScreenState extends State<LandingScreen> {
           items: [
             const BottomNavigationBarItem(
               label: "Home",
-              icon: Icon(Icons.home_outlined),
+              icon: Icon(Icons.home),
             ),
             BottomNavigationBarItem(
               label: 'Messages',
@@ -146,16 +146,16 @@ class _LandingScreenState extends State<LandingScreen> {
                       ),
                       child: const Icon(Icons.mail_outline_outlined),
                     )
-                  : const Icon(Icons.mail_outline_outlined),
+                  : const Icon(Icons.mail),
             ),
             const BottomNavigationBarItem(
               label: 'Jobs',
-              icon: Icon(Icons.task_outlined),
+              icon: Icon(Icons.task),
             ),
             const BottomNavigationBarItem(
               label: 'Account',
               icon: Icon(
-                Icons.account_circle_outlined,
+                Icons.person,
               ),
             )
           ],

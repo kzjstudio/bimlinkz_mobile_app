@@ -63,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
             title: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Hi ${UserProfileController.instance.userName.value}!'),
+                Text('Find trades men for your needs'),
               ],
             ),
           ),
@@ -103,7 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       const Text(
                         'Contractors who Recently joined',
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 22,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -163,7 +163,7 @@ class _HomeScreenState extends State<HomeScreen> {
             const Text(
               'Featured Trades',
               style: TextStyle(
-                fontSize: 24,
+                fontSize: 22,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -202,7 +202,7 @@ class _HomeScreenState extends State<HomeScreen> {
         padding: const EdgeInsets.all(8.0),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 3, // Three items across
-          mainAxisSpacing: 10.0, // Spacing between rows
+          mainAxisSpacing: 50.0, // Spacing between rows
           crossAxisSpacing: 10.0, // Spacing between columns
           childAspectRatio:
               0.6, // Adjust the aspect ratio to provide more height
@@ -226,9 +226,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     width: 88,
                     height: 121,
                     child: ClipRRect(
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(10),
-                        topRight: Radius.circular(10),
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(10),
                       ),
                       child: Image.network(
                         contractor['imageUrl'] ?? '',
@@ -283,11 +282,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: Text(
                       ' ${contractor['Skill']}' ?? '',
-                      style: const TextStyle(fontSize: 14),
+                      style: const TextStyle(fontSize: 10),
                     ),
                   ),
                   const SizedBox(height: 8),
                   Expanded(
+                    // This makes sure the buttons take the remaining space
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
