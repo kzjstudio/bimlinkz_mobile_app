@@ -34,24 +34,27 @@ class _LoginScreenState extends State<LoginScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Center(
-                          child: Image.asset(
-                            'images/logotrans.png',
-                            width: 200,
-                            height: 200,
+                          child: Column(
+                            children: [
+                              Image.asset(
+                                'images/logotrans.png',
+                                width: 200,
+                                height: 200,
+                              ),
+                              const Text(
+                                'Welcome back!',
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                        const SizedBox(height: 30),
-                        const Text(
-                          'Welcome',
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(height: 10),
+                        const SizedBox(height: 20),
                         Card(
-                          color: Color(0xffffF0F1FF),
-                          elevation: 20,
+                          color: const Color(0xffffF0F1FF),
+                          elevation: 10,
                           child: Padding(
                             padding: const EdgeInsets.all(20.0),
                             child: Column(
@@ -123,30 +126,31 @@ class _LoginScreenState extends State<LoginScreen> {
                                   alignment: Alignment.centerLeft,
                                   child: TextButton(
                                     onPressed: () {},
-                                    child: const Text('Forgot Password?'),
-                                  ),
-                                ),
-                                const SizedBox(height: 20),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    const Text('Don’t have an account?'),
-                                    TextButton(
-                                      onPressed: () {
-                                        Get.to(() => SignUpPage(),
-                                            duration: const Duration(
-                                                milliseconds: 500),
-                                            transition:
-                                                Transition.rightToLeftWithFade);
-                                      },
-                                      child: const Text('Sign up'),
+                                    child: const Text(
+                                      'Forgot Password?',
+                                      style:
+                                          TextStyle(color: Color(0xff5664F5)),
                                     ),
-                                  ],
+                                  ),
                                 ),
                               ],
                             ),
                           ),
-                        )
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text('Don’t have an account?'),
+                            TextButton(
+                              onPressed: () {
+                                Get.to(() => SignUpPage(),
+                                    duration: const Duration(milliseconds: 500),
+                                    transition: Transition.rightToLeftWithFade);
+                              },
+                              child: const Text('Create Account'),
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                   ),
