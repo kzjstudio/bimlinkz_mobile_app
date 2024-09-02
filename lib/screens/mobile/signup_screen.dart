@@ -37,96 +37,119 @@ class SignUpPage extends StatelessWidget {
                       width: 200,
                       height: 200,
                     ), // Ensure you have an image asset named 'logo.png' in your assets folder
-                    const SizedBox(height: 10),
+
                     const Text(
                       'Welcome to Bimlinks',
                       style:
                           TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     ),
-                    const SizedBox(height: 40),
+                    const SizedBox(height: 10),
 
-                    const SizedBox(height: 20),
-                    TextFormField(
-                      controller: _firstNameController,
-                      decoration: const InputDecoration(
-                        labelText: 'First name',
-                        border: OutlineInputBorder(),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your first name';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 20),
-                    TextFormField(
-                      controller: _lastNameController,
-                      decoration: const InputDecoration(
-                        labelText: 'last name',
-                        border: OutlineInputBorder(),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your last name';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 20),
-                    TextFormField(
-                        controller: _emailController,
-                        decoration: const InputDecoration(
-                          labelText: 'email',
-                          border: OutlineInputBorder(),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter your email';
-                          } else if (!value.contains('@')) {
-                            return 'Please enter a valid email address';
-                          }
-                          return null;
-                        }),
-                    const SizedBox(height: 20),
-                    TextFormField(
-                      controller: _passwordController,
-                      obscureText: true,
-                      decoration: const InputDecoration(
-                        labelText: 'Password',
-                        border: OutlineInputBorder(),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your password';
-                        } else if (value.length < 6) {
-                          return 'Password must be at least 6 characters long';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 40),
-                    Obx(() => ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            minimumSize: const Size(
-                                double.infinity, 50), // set minimum size
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
+                    Card(
+                      elevation: 10,
+                      color: const Color(0xffffF0F1FF),
+                      child: Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: Column(children: [
+                          TextFormField(
+                            controller: _firstNameController,
+                            decoration: const InputDecoration(
+                              labelText: 'First name',
+                              border: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10))),
                             ),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter your first name';
+                              }
+                              return null;
+                            },
                           ),
-                          onPressed: AuthController.instance.isLoading.isFalse
-                              ? () {
-                                  if (_formKey.currentState!.validate()) {
-                                    AuthController.instance.createUser(
-                                        _emailController.text,
-                                        _passwordController.text,
-                                        _firstNameController.text,
-                                        _lastNameController.text);
-                                  }
+                          const SizedBox(height: 20),
+                          TextFormField(
+                            controller: _lastNameController,
+                            decoration: const InputDecoration(
+                              labelText: 'Last name',
+                              border: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10))),
+                            ),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter your last name';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 20),
+                          TextFormField(
+                              controller: _emailController,
+                              decoration: const InputDecoration(
+                                labelText: 'Email',
+                                border: OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10))),
+                              ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter your email';
+                                } else if (!value.contains('@')) {
+                                  return 'Please enter a valid email address';
                                 }
-                              : null,
-                          child: const Text('Sign Up'),
-                        )),
+                                return null;
+                              }),
+                          const SizedBox(height: 20),
+                          TextFormField(
+                            controller: _passwordController,
+                            obscureText: true,
+                            decoration: const InputDecoration(
+                              labelText: 'Password',
+                              border: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10))),
+                            ),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter your password';
+                              } else if (value.length < 6) {
+                                return 'Password must be at least 6 characters long';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 40),
+                          Obx(() => ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xff5664F5),
+                                  minimumSize: const Size(
+                                      double.infinity, 50), // set minimum size
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                                onPressed: AuthController
+                                        .instance.isLoading.isFalse
+                                    ? () {
+                                        if (_formKey.currentState!.validate()) {
+                                          AuthController.instance.createUser(
+                                              _emailController.text,
+                                              _passwordController.text,
+                                              _firstNameController.text,
+                                              _lastNameController.text);
+                                        }
+                                      }
+                                    : null,
+                                child: const Text(
+                                  'Sign Up',
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 24),
+                                ),
+                              )),
+                        ]),
+                      ),
+                    ),
+
                     const SizedBox(height: 8),
                     ClipRRect(
                       borderRadius: BorderRadius.circular(10),

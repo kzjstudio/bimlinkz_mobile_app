@@ -42,7 +42,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
             return const Center(child: Text('Error loading chats'));
           }
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-            return const Center(child: Text('No messages yet.'));
+            return const Center(child: Text('No messages.'));
           }
 
           final chatsList = snapshot.data!.docs;
