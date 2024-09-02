@@ -5,10 +5,7 @@ import 'package:bimlinkz_mobile_app/Controllers/user_profile_controller.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/about_us_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/contact_us_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/contractor_form_screen.dart';
-import 'package:bimlinkz_mobile_app/screens/mobile/contractor_screen.dart';
-
 import 'package:bimlinkz_mobile_app/screens/mobile/preferences.dart';
-import 'package:bimlinkz_mobile_app/screens/mobile/profile.dart';
 import 'package:bimlinkz_mobile_app/theme.dart';
 import 'package:bimlinkz_mobile_app/widgets/list_button.dart';
 import 'package:firebase_storage/firebase_storage.dart';
