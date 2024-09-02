@@ -1,13 +1,13 @@
 import 'package:bimlinkz_mobile_app/Controllers/auth_controller.dart';
-import 'package:bimlinkz_mobile_app/Controllers/data_controller.dart';
 import 'package:bimlinkz_mobile_app/Controllers/user_profile_controller.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/contractor_details_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/jobpost_screen.dart';
+import 'package:bimlinkz_mobile_app/screens/mobile/popular_selection_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/see_all_categories_screen.dart';
 import 'package:bimlinkz_mobile_app/widgets/category_card.dart';
-import 'package:bimlinkz_mobile_app/screens/mobile/popular_selection_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:bimlinkz_mobile_app/Controllers/data_controller.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -31,7 +31,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _initializeData() async {
-    await dataController.fetchAndCacheData(context);
+    // No need to await this, let the UI render while fetching
+    dataController.fetchAndCacheData(context);
   }
 
   void _onSearchChanged() {
@@ -98,7 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       const SizedBox(height: 20),
                       _searchController.text.isNotEmpty
                           ? _buildSuggestions()
-                          : _featuredTradesScection(),
+                          : _featuredTradesSection(),
                       const SizedBox(height: 30),
                       const Text(
                         'Contractors who Recently joined',
@@ -153,7 +154,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _featuredTradesScection() {
+  Widget _featuredTradesSection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -196,16 +197,16 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _recommendedTradesPersons() {
-    return SizedBox(
-      height: 400, // Adjust the height to fit two rows
+    return Container(
+      height: 400, // Adjust height to ensure two items per row fit well
       child: GridView.builder(
-        padding: const EdgeInsets.all(8.0),
+        scrollDirection: Axis.horizontal, // Horizontal scrolling
+        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3, // Three items across
-          mainAxisSpacing: 50.0, // Spacing between rows
-          crossAxisSpacing: 10.0, // Spacing between columns
-          childAspectRatio:
-              0.6, // Adjust the aspect ratio to provide more height
+          crossAxisCount: 2, // Two items per row
+          mainAxisSpacing: 10.0, // Spacing between items vertically
+          crossAxisSpacing: 10.0, // Spacing between items horizontally
+          childAspectRatio: 0.75, // Adjust aspect ratio for better layout
         ),
         itemCount: dataController.recentContractors.length,
         itemBuilder: (context, index) {
@@ -218,20 +219,22 @@ class _HomeScreenState extends State<HomeScreen> {
               );
             },
             child: Card(
-              elevation: 0,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    width: 88,
-                    height: 121,
-                    child: ClipRRect(
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(10),
-                      ),
+              elevation: 4,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
                       child: Image.network(
                         contractor['imageUrl'] ?? '',
                         fit: BoxFit.cover,
+                        height: 150,
+                        width: double.infinity,
                         errorBuilder: (context, error, stackTrace) {
                           return Container(
                             color: Colors.grey,
@@ -243,64 +246,52 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           );
                         },
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return Center(
+                            child: CircularProgressIndicator(
+                              value: loadingProgress.expectedTotalBytes != null
+                                  ? loadingProgress.cumulativeBytesLoaded /
+                                      loadingProgress.expectedTotalBytes!
+                                  : null,
+                            ),
+                          );
+                        },
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 2),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Row(
-                      children: [
-                        Flexible(
-                          child: Text(
-                            contractor['First_Name'] ?? '',
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                            ),
-                            softWrap: true,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                        const SizedBox(width: 2),
-                        Flexible(
-                          child: Text(
-                            contractor['Last_Name'] ?? '',
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                            ),
-                            softWrap: true,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      ],
+                    const SizedBox(height: 10),
+                    Text(
+                      '${contractor['First_Name'] ?? ''} ${contractor['Last_Name'] ?? ''}',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                      softWrap: true,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                  ),
-                  const SizedBox(height: 2),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Text(
-                      ' ${contractor['Skill']}' ?? '',
-                      style: const TextStyle(fontSize: 10),
+                    const SizedBox(height: 4),
+                    Text(
+                      contractor['Skill'] ?? '',
+                      style: const TextStyle(fontSize: 12),
+                      softWrap: true,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  Expanded(
-                    // This makes sure the buttons take the remaining space
-                    child: Row(
+                    const Spacer(),
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         IconButton(
-                            onPressed: (() {}), icon: Icon(Icons.message)),
+                          onPressed: () {},
+                          icon: const Icon(Icons.message),
+                        ),
                         IconButton(
-                          onPressed: (() {}),
-                          icon: Icon(Icons.bookmark),
+                          onPressed: () {},
+                          icon: const Icon(Icons.bookmark),
                         ),
                       ],
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           );

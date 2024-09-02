@@ -6,11 +6,8 @@ class CategoryCard extends StatefulWidget {
   final String catText;
   final String imageUrl;
 
-  const CategoryCard({
-    super.key,
-    required this.catText,
-    required this.imageUrl,
-  });
+  const CategoryCard(
+      {super.key, required this.catText, required this.imageUrl, required});
 
   @override
   State<CategoryCard> createState() => _CategoryCardState();
