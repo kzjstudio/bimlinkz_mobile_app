@@ -20,7 +20,7 @@ class LandingScreen extends StatefulWidget {
 class _LandingScreenState extends State<LandingScreen> {
   int _selectedIndex = 0;
   int unreadMessagesCount = 0;
-  late StreamSubscription<QuerySnapshot> _subscription;
+  StreamSubscription<QuerySnapshot>? _subscription;
   late List<Widget> screens;
 
   @override
@@ -78,6 +78,12 @@ class _LandingScreenState extends State<LandingScreen> {
     });
   }
 
+  @override
+  void dispose() {
+    _subscription?.cancel();
+    super.dispose();
+  }
+
   Future<void> _markMessagesAsRead() async {
     final currentUserId = FirebaseAuth.instance.currentUser?.uid;
     if (currentUserId == null) return;
@@ -98,12 +104,6 @@ class _LandingScreenState extends State<LandingScreen> {
         await message.reference.update({'isRead': true});
       }
     }
-  }
-
-  @override
-  void dispose() {
-    _subscription.cancel();
-    super.dispose();
   }
 
   void _onItemTapped(int index) {

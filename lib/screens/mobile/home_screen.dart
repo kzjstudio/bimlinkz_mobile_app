@@ -61,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: SafeArea(
         child: Scaffold(
           appBar: AppBar(
-            title: Column(
+            title: const Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text('Find trades men for your needs'),
@@ -197,105 +197,114 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _recommendedTradesPersons() {
-    return Container(
-      height: 400, // Adjust height to ensure two items per row fit well
-      child: GridView.builder(
-        scrollDirection: Axis.horizontal, // Horizontal scrolling
-        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2, // Two items per row
-          mainAxisSpacing: 10.0, // Spacing between items vertically
-          crossAxisSpacing: 10.0, // Spacing between items horizontally
-          childAspectRatio: 0.75, // Adjust aspect ratio for better layout
-        ),
-        itemCount: dataController.recentContractors.length,
-        itemBuilder: (context, index) {
-          final contractor = dataController.recentContractors[index];
-          return InkWell(
-            onTap: () {
-              Get.to(
-                transition: Transition.rightToLeft,
-                () => ContractorDetailScreen(contractor: contractor),
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Wrap(
+          spacing: 20.0, // Horizontal spacing between items
+          runSpacing: 2.0, // Vertical spacing between items
+          children: List.generate(
+            dataController.recentContractors.length,
+            (index) {
+              final contractor = dataController.recentContractors[index];
+              return InkWell(
+                onTap: () {
+                  Get.to(
+                    transition: Transition.rightToLeft,
+                    () => ContractorDetailScreen(contractor: contractor),
+                  );
+                },
+                child: Container(
+                  width: MediaQuery.of(context).size.width / 2 -
+                      36, // 2 items per row
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    elevation: 0,
+                    child: Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image.network(
+                              contractor['imageUrl'] ?? '',
+                              fit: BoxFit.cover,
+                              height: 120, // Adjust height based on design
+                              width: double.infinity,
+                              errorBuilder: (context, error, stackTrace) {
+                                return Container(
+                                  height: 120,
+                                  color: Colors.grey,
+                                  child: const Center(
+                                    child: Icon(
+                                      Icons.error,
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                );
+                              },
+                              loadingBuilder:
+                                  (context, child, loadingProgress) {
+                                if (loadingProgress == null) return child;
+                                return Center(
+                                  child: CircularProgressIndicator(
+                                    value: loadingProgress.expectedTotalBytes !=
+                                            null
+                                        ? loadingProgress
+                                                .cumulativeBytesLoaded /
+                                            loadingProgress.expectedTotalBytes!
+                                        : null,
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            '${contractor['First_Name'] ?? ''} ${contractor['Last_Name'] ?? ''}',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                            softWrap: true,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            contractor['Skill'] ?? '',
+                            style: const TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey,
+                            ),
+                            softWrap: true,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(height: 4),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              IconButton(
+                                onPressed: () {},
+                                icon: const Icon(Icons.message),
+                              ),
+                              IconButton(
+                                onPressed: () {},
+                                icon: const Icon(Icons.bookmark),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
               );
             },
-            child: Card(
-              elevation: 4,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: Image.network(
-                        contractor['imageUrl'] ?? '',
-                        fit: BoxFit.cover,
-                        height: 150,
-                        width: double.infinity,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Container(
-                            color: Colors.grey,
-                            child: const Center(
-                              child: Icon(
-                                Icons.error,
-                                color: Colors.red,
-                              ),
-                            ),
-                          );
-                        },
-                        loadingBuilder: (context, child, loadingProgress) {
-                          if (loadingProgress == null) return child;
-                          return Center(
-                            child: CircularProgressIndicator(
-                              value: loadingProgress.expectedTotalBytes != null
-                                  ? loadingProgress.cumulativeBytesLoaded /
-                                      loadingProgress.expectedTotalBytes!
-                                  : null,
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      '${contractor['First_Name'] ?? ''} ${contractor['Last_Name'] ?? ''}',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                      softWrap: true,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      contractor['Skill'] ?? '',
-                      style: const TextStyle(fontSize: 12),
-                      softWrap: true,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const Spacer(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        IconButton(
-                          onPressed: () {},
-                          icon: const Icon(Icons.message),
-                        ),
-                        IconButton(
-                          onPressed: () {},
-                          icon: const Icon(Icons.bookmark),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          );
-        },
+          ),
+        ),
       ),
     );
   }
