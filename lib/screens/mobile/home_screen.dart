@@ -214,7 +214,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     () => ContractorDetailScreen(contractor: contractor),
                   );
                 },
-                child: Container(
+                child: SizedBox(
                   width: MediaQuery.of(context).size.width / 2 -
                       36, // 2 items per row
                   child: Card(

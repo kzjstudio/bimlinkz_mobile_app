@@ -37,8 +37,11 @@ class DataController extends GetxController {
   }
 
   Future<void> _fetchRecentContractors(BuildContext context) async {
-    var collection =
-        await FirebaseFirestore.instance.collection('users').limit(6).get();
+    var collection = await FirebaseFirestore.instance
+        .collection('users')
+        .where('is_Contractor', isEqualTo: true)
+        .limit(6)
+        .get();
     var fetchedRecentContractors =
         collection.docs.map((doc) => doc.data()).toList();
 
