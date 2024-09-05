@@ -2,13 +2,13 @@ import 'package:bimlinkz_mobile_app/screens/mobile/account_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/home_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/messages_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/jobs_screen.dart';
+import 'package:bimlinkz_mobile_app/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:badges/badges.dart' as badges;
 import 'dart:async';
 import 'package:flutter/scheduler.dart';
-import 'package:get/get.dart';
 
 class LandingScreen extends StatefulWidget {
   const LandingScreen({super.key});
@@ -129,11 +129,15 @@ class _LandingScreenState extends State<LandingScreen> {
       child: Scaffold(
         body: screens[_selectedIndex],
         bottomNavigationBar: BottomNavigationBar(
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
           elevation: 15,
           items: [
             const BottomNavigationBarItem(
               label: "Home",
-              icon: Icon(Icons.home),
+              icon: Icon(
+                Icons.home,
+              ),
             ),
             BottomNavigationBarItem(
               label: 'Messages',

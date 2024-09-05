@@ -61,7 +61,7 @@ final ThemeData lightTheme = ThemeData(
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         type: BottomNavigationBarType.fixed,
         backgroundColor: AppColors.lightBackground,
-        unselectedIconTheme: IconThemeData(color: AppColors.unselectedIcon),
+        unselectedIconTheme: IconThemeData(color: AppColors.buttonText),
         selectedIconTheme: IconThemeData(color: AppColors.primary)),
     dividerTheme: const DividerThemeData(color: AppColors.divider));
 
