@@ -5,7 +5,9 @@ import 'package:bimlinkz_mobile_app/Controllers/user_profile_controller.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/about_us_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/contact_us_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/contractor_form_screen.dart';
+import 'package:bimlinkz_mobile_app/screens/mobile/jobpost_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/preferences.dart';
+import 'package:bimlinkz_mobile_app/screens/mobile/profile.dart';
 import 'package:bimlinkz_mobile_app/theme.dart';
 import 'package:bimlinkz_mobile_app/widgets/list_button.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -134,16 +136,15 @@ class _AccountScreenState extends State<AccountScreen> {
                     'Hi ${UserProfileController.instance.userName.value}',
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
-
-                  // OutlinedButton(
-                  //     style: ButtonStyle(
-                  //         shape: WidgetStateProperty.all(RoundedRectangleBorder(
-                  //             borderRadius: BorderRadius.circular(5)))),
-                  //     onPressed: () {
-                  //       Get.to(() => const UserProfilePage(),
-                  //           transition: Transition.leftToRightWithFade);
-                  //     },
-                  //     child: const Text('EDIT PROFILE')),
+                  OutlinedButton(
+                      style: ButtonStyle(
+                          shape: WidgetStateProperty.all(RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5)))),
+                      onPressed: () {
+                        Get.to(() => const PostJobPage(),
+                            transition: Transition.leftToRightWithFade);
+                      },
+                      child: const Text('POST A JOB')),
                 ],
               )
             ],

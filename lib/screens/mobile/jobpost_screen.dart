@@ -1,9 +1,11 @@
 import 'package:bimlinkz_mobile_app/Controllers/auth_controller.dart';
 import 'package:bimlinkz_mobile_app/Controllers/user_profile_controller.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/landing_screen.dart';
+import 'package:bimlinkz_mobile_app/theme.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 
 class PostJobPage extends StatefulWidget {
@@ -14,9 +16,11 @@ class PostJobPage extends StatefulWidget {
 }
 
 class _PostJobPageState extends State<PostJobPage> {
+  var logger = Logger();
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
+  var readytoPost = false.obs;
 
   final db = FirebaseFirestore.instance;
   SfRangeValues _values = SfRangeValues(0.floor(), 100.floor());
@@ -58,6 +62,48 @@ class _PostJobPageState extends State<PostJobPage> {
     });
   }
 
+  void showJobToBePosted() {
+    Get.defaultDialog(
+        content: Column(
+      children: [
+        Text(_titleController.text),
+        SizedBox(
+          height: 10,
+        ),
+        Text(_descriptionController.text),
+      ],
+    ));
+  }
+
+  void postJob() async {
+    if (_formKey.currentState!.validate()) {
+      final jobData = {
+        'title': _titleController.text,
+        'description': _descriptionController.text,
+        'parish': selectedParish,
+        'lowerBudget': _values.start.toString(),
+        'upperBudget': _values.end.toString(),
+        'jobCategory': _selectedCategory,
+        'date': DateTime.now(),
+        'userId': AuthController.instance.auth.currentUser!.uid,
+        'userName': UserProfileController.instance.userName.value,
+      };
+      try {
+        await db.collection('posted jobs').add(jobData);
+        Get.showSnackbar(const GetSnackBar(
+          title: 'Job Posted successfully',
+          message: 'Job posted successfully',
+          duration: Duration(seconds: 2),
+        ));
+        _titleController.clear();
+        _descriptionController.clear();
+        Get.off(() => const LandingScreen());
+      } catch (e) {
+        logger.e(e.toString());
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,6 +120,10 @@ class _PostJobPageState extends State<PostJobPage> {
                 style: TextStyle(fontSize: 20),
               ),
               const SizedBox(height: 20),
+              const Text(
+                'Title',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
               TextFormField(
                 controller: _titleController,
                 decoration: const InputDecoration(
@@ -86,11 +136,14 @@ class _PostJobPageState extends State<PostJobPage> {
               const SizedBox(
                 height: 20,
               ),
+              const Text(
+                'Description',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
               TextFormField(
                 controller: _descriptionController,
                 decoration: const InputDecoration(
-                    labelText:
-                        'Job Description: EG. a breif description of the job.',
+                    labelText: 'EG. a breif description of the job.',
                     border: OutlineInputBorder()),
                 maxLines: 3,
                 validator: (value) => value!.isEmpty
@@ -99,6 +152,10 @@ class _PostJobPageState extends State<PostJobPage> {
               ),
               const SizedBox(
                 height: 20,
+              ),
+              const Text(
+                'Category',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               DropdownButtonFormField<String>(
                 value: _selectedCategory,
@@ -120,6 +177,10 @@ class _PostJobPageState extends State<PostJobPage> {
               ),
               const SizedBox(
                 height: 20,
+              ),
+              const Text(
+                'Location',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               DropdownButtonFormField<String>(
                 value: selectedParish,
@@ -169,35 +230,20 @@ class _PostJobPageState extends State<PostJobPage> {
 
               // Additional fields...
               ElevatedButton(
+                style: const ButtonStyle(
+                    backgroundColor:
+                        WidgetStatePropertyAll<Color>(AppColors.primary),
+                    foregroundColor: WidgetStatePropertyAll<Color>(
+                        AppColors.lightBackground)),
                 onPressed: () async {
-                  if (_formKey.currentState!.validate()) {
-                    final jobData = {
-                      'title': _titleController.text,
-                      'description': _descriptionController.text,
-                      'parish': selectedParish,
-                      'lowerBudget': _values.start.toString(),
-                      'upperBudget': _values.end.toString(),
-                      'jobCategory': _selectedCategory,
-                      'date': DateTime.now(),
-                      'userId': AuthController.instance.auth.currentUser!.uid,
-                      'userName': UserProfileController.instance.userName.value,
-                    };
-                    try {
-                      await db.collection('posted jobs').add(jobData);
-                      Get.showSnackbar(const GetSnackBar(
-                        title: 'Job Posted successfully',
-                        message: 'Job posted successfully',
-                        duration: Duration(seconds: 2),
-                      ));
-                      _titleController.clear();
-                      _descriptionController.clear();
-                      Get.off(() => const LandingScreen());
-                    } catch (e) {
-                      print(e.toString());
-                    }
+                  if (readytoPost.isFalse) {
+                    showJobToBePosted();
                   }
                 },
-                child: const Text('Post Job'),
+                child: const Text(
+                  'Post Job',
+                  style: TextStyle(fontSize: 20),
+                ),
               ),
             ],
           ),
