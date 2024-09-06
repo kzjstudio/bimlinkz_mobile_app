@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 
+enum Post { yourJobs, allJobs }
+
 class JobScreen extends StatefulWidget {
   const JobScreen({super.key});
 
@@ -27,27 +29,33 @@ class _JobScreenState extends State<JobScreen>
     super.dispose();
   }
 
+  Post selectedpostType = Post.yourJobs;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Job Listings'),
-        bottom: TabBar(
-          controller: _tabController,
-          tabs: const [
-            Tab(text: 'Your Jobs'),
-            Tab(text: 'All Jobs'),
+        appBar: AppBar(
+          actions: [
+            SegmentedButton<Post>(
+              segments: const <ButtonSegment<Post>>[
+                ButtonSegment<Post>(
+                    value: Post.yourJobs, label: Text('Your Jobs')),
+                ButtonSegment(value: Post.allJobs, label: Text('All Jobs'))
+              ],
+              selected: <Post>{selectedpostType},
+              onSelectionChanged: (Set<Post> newSelection) {
+                setState(() {
+                  selectedpostType = newSelection.first;
+                  print(selectedpostType.toString());
+                });
+              },
+            )
           ],
+          title: const Text('Job Listings'),
         ),
-      ),
-      body: TabBarView(
-        controller: _tabController,
-        children: const [
-          JobList(tab: 'yours'),
-          JobList(tab: 'all'),
-        ],
-      ),
-    );
+        body: JobList(
+          tab: selectedpostType.toString(),
+        ));
   }
 }
 
@@ -91,96 +99,103 @@ class _JobListState extends State<JobList> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: _isLoadingCategories
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text('Filter by Job Type'),
+          _isLoadingCategories
               ? const Center(child: CircularProgressIndicator())
-              : DropdownButton<String>(
-                  value: _selectedCategory,
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      _selectedCategory = newValue!;
-                    });
-                  },
-                  items:
-                      _categories.map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                ),
-        ),
-        Expanded(
-          child: StreamBuilder<QuerySnapshot>(
-            stream: _getJobStream(),
-            builder: (context, snapshot) {
-              if (snapshot.hasError) {
-                return Text('Error: ${snapshot.error}');
-              }
-              switch (snapshot.connectionState) {
-                case ConnectionState.waiting:
-                  return const Center(child: CircularProgressIndicator());
-                default:
-                  return ListView(
-                    children:
-                        snapshot.data!.docs.map((DocumentSnapshot document) {
-                      Job job = Job.fromFirestore(document);
-                      return Card(
-                        elevation: 2,
-                        margin: const EdgeInsets.symmetric(
-                            horizontal: 5, vertical: 5),
-                        child: ListTile(
-                          title: Text(
-                            job.title,
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 20),
-                          ),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                job.description,
-                                style: const TextStyle(fontSize: 18),
-                              ),
-                              Text('in the ${job.parish} area'),
-                            ],
-                          ),
-                          trailing: Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Text('Looking for ${job.jobCategory}'),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              const Text('In the range of'),
-                              Text(
-                                  '\$${job.lowerBudget} to \$${job.upperBudget}')
-                            ],
-                          ),
-                          onTap: () {
-                            Get.to(() => JobDetailScreen(job: job),
-                                transition: Transition.rightToLeft,
-                                duration: const Duration(milliseconds: 200));
-                          },
-                        ),
+              : DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                    borderRadius: const BorderRadius.all(Radius.circular(8)),
+                    iconSize: 24,
+                    isExpanded: true,
+                    value: _selectedCategory,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        _selectedCategory = newValue!;
+                      });
+                    },
+                    items: _categories
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
                       );
                     }).toList(),
-                  );
-              }
-            },
+                  ),
+                ),
+          Expanded(
+            child: StreamBuilder<QuerySnapshot>(
+              stream: _getJobStream(),
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                }
+                switch (snapshot.connectionState) {
+                  case ConnectionState.waiting:
+                    return const Center(child: CircularProgressIndicator());
+                  default:
+                    return ListView(
+                      children:
+                          snapshot.data!.docs.map((DocumentSnapshot document) {
+                        Job job = Job.fromFirestore(document);
+                        return Card(
+                          elevation: 2,
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 0, vertical: 5),
+                          child: ListTile(
+                            title: Text(
+                              job.title,
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 20),
+                            ),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  job.description,
+                                  style: const TextStyle(fontSize: 18),
+                                ),
+                                Text('in the ${job.parish} area'),
+                              ],
+                            ),
+                            trailing: Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Text('Looking for ${job.jobCategory}'),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                const Text('In the range of'),
+                                Text(
+                                    '\$${job.lowerBudget} to \$${job.upperBudget}')
+                              ],
+                            ),
+                            onTap: () {
+                              Get.to(() => JobDetailScreen(job: job),
+                                  transition: Transition.rightToLeft,
+                                  duration: const Duration(milliseconds: 200));
+                            },
+                          ),
+                        );
+                      }).toList(),
+                    );
+                }
+              },
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
   Stream<QuerySnapshot> _getJobStream() {
     CollectionReference jobs =
         FirebaseFirestore.instance.collection('posted jobs');
-    if (widget.tab == 'yours') {
+    if (widget.tab == 'Post.yourJobs') {
       if (_selectedCategory == 'All') {
         return jobs
             .where('userId',

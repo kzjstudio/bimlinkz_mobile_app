@@ -118,14 +118,6 @@ class _HomeScreenState extends State<HomeScreen> {
               );
             }
           }),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              Get.to(() => const PostJobPage(),
-                  transition: Transition.downToUp,
-                  duration: const Duration(milliseconds: 200));
-            },
-            child: const Icon(Icons.post_add_outlined),
-          ),
         ),
       ),
     );

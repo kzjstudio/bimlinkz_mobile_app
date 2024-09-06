@@ -31,16 +31,16 @@ class _PostJobPageState extends State<PostJobPage> {
   String? _selectedCategory;
   final List<String> _parishes = [
     'Christ Church',
-    'Saint Andrew',
-    'Saint George',
-    'Saint James',
-    'Saint John',
-    'Saint Joseph',
-    'Saint Lucy',
-    'Saint Michael',
-    'Saint Peter',
-    'Saint Philip',
-    'Saint Thomas'
+    'St Andrew',
+    'St George',
+    'St James',
+    'St John',
+    'St Joseph',
+    'St Lucy',
+    'St Michael',
+    'St Peter',
+    'St Philip',
+    'St Thomas'
   ];
   String? selectedParish;
 
@@ -64,15 +64,44 @@ class _PostJobPageState extends State<PostJobPage> {
 
   void showJobToBePosted() {
     Get.defaultDialog(
+        backgroundColor: AppColors.secondary,
+        buttonColor: AppColors.primary,
+        onConfirm: () {
+          postJob();
+        },
+        title: _titleController.text,
         content: Column(
-      children: [
-        Text(_titleController.text),
-        SizedBox(
-          height: 10,
-        ),
-        Text(_descriptionController.text),
-      ],
-    ));
+          children: [
+            Text(_descriptionController.text),
+            const SizedBox(
+              height: 5,
+            ),
+            const Divider(),
+            const SizedBox(
+              height: 5,
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(
+                  height: 10,
+                ),
+                const Text(
+                  'Job Details',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Text('Budget: \$${_values.start} to \$${_values.end} dollars'),
+                const SizedBox(
+                  height: 5,
+                ),
+                Text('Location: in the $selectedParish area ')
+              ],
+            )
+          ],
+        ));
   }
 
   void postJob() async {
