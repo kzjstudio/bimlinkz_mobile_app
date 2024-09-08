@@ -30,6 +30,7 @@ class AppColors {
 
 // Update Theme Data with enhanced button styles
 final ThemeData lightTheme = ThemeData(
+    fontFamily: 'Lexend',
     colorScheme: const ColorScheme.light(
       primary: AppColors.primary,
       secondary: AppColors.secondary,
@@ -37,8 +38,8 @@ final ThemeData lightTheme = ThemeData(
       error: AppColors.error,
       onPrimary: AppColors.onPrimary,
       onSecondary: AppColors.onSecondary,
-      onSurface:
-          AppColors.buttonText, // Use for better visibility on light theme
+      onSurface: AppColors.buttonText,
+      // Use for better visibility on light theme
 
       onError: AppColors.onError,
     ),

@@ -180,16 +180,19 @@ class _JobListState extends State<JobList> {
                                         fontWeight: FontWeight.bold,
                                         fontSize: 20),
                                   ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
                                   Text(
                                     job.description,
                                     style: const TextStyle(fontSize: 18),
                                   ),
                                   const SizedBox(
-                                    height: 5,
+                                    height: 10,
                                   ),
                                   Text('In the ${job.parish} area.'),
                                   const SizedBox(
-                                    height: 5,
+                                    height: 2,
                                   ),
                                   Text(
                                     "Posted on ${job.formattedDate}.",
@@ -197,9 +200,19 @@ class _JobListState extends State<JobList> {
                                         TextStyle(fontWeight: FontWeight.bold),
                                   ), // Display formatted date
 
-                                  ElevatedButton(
-                                      onPressed: () {},
-                                      child: Text('View Details'))
+                                  SizedBox(
+                                    width: double.infinity,
+                                    child: ElevatedButton(
+                                        style: const ButtonStyle(
+                                            foregroundColor:
+                                                WidgetStatePropertyAll(
+                                                    AppColors.lightBackground),
+                                            backgroundColor:
+                                                WidgetStatePropertyAll(
+                                                    AppColors.primary)),
+                                        onPressed: () {},
+                                        child: Text('View Details')),
+                                  )
                                 ],
                               ),
                             ),
