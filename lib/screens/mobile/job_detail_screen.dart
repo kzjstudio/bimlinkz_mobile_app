@@ -1,4 +1,5 @@
-import 'package:bimlinkz_mobile_app/screens/mobile/jobs_screen.dart';
+import 'package:bimlinkz_mobile_app/models/jobs.dart';
+
 import 'package:flutter/material.dart';
 
 class JobDetailScreen extends StatelessWidget {

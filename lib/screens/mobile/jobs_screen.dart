@@ -1,8 +1,9 @@
 import 'package:bimlinkz_mobile_app/Controllers/auth_controller.dart';
-import 'package:bimlinkz_mobile_app/screens/mobile/job_detail_screen.dart';
+import 'package:bimlinkz_mobile_app/models/jobs.dart';
+import 'package:bimlinkz_mobile_app/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:get/get.dart';
+import 'package:flutter/widgets.dart';
 
 enum Post { yourJobs, allJobs }
 
@@ -36,19 +37,26 @@ class _JobScreenState extends State<JobScreen>
     return Scaffold(
         appBar: AppBar(
           actions: [
-            SegmentedButton<Post>(
-              segments: const <ButtonSegment<Post>>[
-                ButtonSegment<Post>(
-                    value: Post.yourJobs, label: Text('Your Jobs')),
-                ButtonSegment(value: Post.allJobs, label: Text('All Jobs'))
-              ],
-              selected: <Post>{selectedpostType},
-              onSelectionChanged: (Set<Post> newSelection) {
-                setState(() {
-                  selectedpostType = newSelection.first;
-                  print(selectedpostType.toString());
-                });
-              },
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: SegmentedButton(
+                style: SegmentedButton.styleFrom(
+                  selectedBackgroundColor:
+                      AppColors.primary, // Ensure this is a valid Color
+                ),
+                segments: const <ButtonSegment<Post>>[
+                  ButtonSegment<Post>(
+                      value: Post.yourJobs, label: Text('Your Jobs')),
+                  ButtonSegment(value: Post.allJobs, label: Text('All Jobs')),
+                ],
+                selected: <Post>{selectedpostType},
+                onSelectionChanged: (Set<Post> newSelection) {
+                  setState(() {
+                    selectedpostType = newSelection.first;
+                    print(selectedpostType.toString());
+                  });
+                },
+              ),
             )
           ],
           title: const Text('Job Listings'),
@@ -104,27 +112,39 @@ class _JobListState extends State<JobList> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Filter by Job Type'),
+          const Text(
+            'Filter by Job Type',
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+          ),
           _isLoadingCategories
               ? const Center(child: CircularProgressIndicator())
               : DropdownButtonHideUnderline(
-                  child: DropdownButton<String>(
-                    borderRadius: const BorderRadius.all(Radius.circular(8)),
-                    iconSize: 24,
-                    isExpanded: true,
-                    value: _selectedCategory,
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        _selectedCategory = newValue!;
-                      });
-                    },
-                    items: _categories
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: DropdownButton<String>(
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(8)),
+                        iconSize: 24,
+                        isExpanded: true,
+                        value: _selectedCategory,
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            _selectedCategory = newValue!;
+                          });
+                        },
+                        items: _categories
+                            .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                      ),
+                    ),
                   ),
                 ),
           Expanded(
@@ -142,43 +162,47 @@ class _JobListState extends State<JobList> {
                       children:
                           snapshot.data!.docs.map((DocumentSnapshot document) {
                         Job job = Job.fromFirestore(document);
-                        return Card(
-                          elevation: 2,
-                          margin: const EdgeInsets.symmetric(
-                              horizontal: 0, vertical: 5),
-                          child: ListTile(
-                            title: Text(
-                              job.title,
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 20),
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10.0),
+                          child: Card(
+                            color: AppColors.secondary,
+                            elevation: 2,
+                            margin: const EdgeInsets.symmetric(
+                                horizontal: 0, vertical: 5),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    job.title,
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20),
+                                  ),
+                                  Text(
+                                    job.description,
+                                    style: const TextStyle(fontSize: 18),
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text('In the ${job.parish} area.'),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    "Posted on ${job.formattedDate}.",
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ), // Display formatted date
+
+                                  ElevatedButton(
+                                      onPressed: () {},
+                                      child: Text('View Details'))
+                                ],
+                              ),
                             ),
-                            subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  job.description,
-                                  style: const TextStyle(fontSize: 18),
-                                ),
-                                Text('in the ${job.parish} area'),
-                              ],
-                            ),
-                            trailing: Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Text('Looking for ${job.jobCategory}'),
-                                const SizedBox(
-                                  height: 5,
-                                ),
-                                const Text('In the range of'),
-                                Text(
-                                    '\$${job.lowerBudget} to \$${job.upperBudget}')
-                              ],
-                            ),
-                            onTap: () {
-                              Get.to(() => JobDetailScreen(job: job),
-                                  transition: Transition.rightToLeft,
-                                  duration: const Duration(milliseconds: 200));
-                            },
                           ),
                         );
                       }).toList(),
@@ -186,7 +210,7 @@ class _JobListState extends State<JobList> {
                 }
               },
             ),
-          ),
+          )
         ],
       ),
     );
@@ -195,50 +219,32 @@ class _JobListState extends State<JobList> {
   Stream<QuerySnapshot> _getJobStream() {
     CollectionReference jobs =
         FirebaseFirestore.instance.collection('posted jobs');
-    if (widget.tab == 'Post.yourJobs') {
-      if (_selectedCategory == 'All') {
-        return jobs
-            .where('userId',
-                isEqualTo: AuthController.instance.auth.currentUser!.uid)
-            .snapshots();
+    try {
+      if (widget.tab == 'Post.yourJobs') {
+        if (_selectedCategory == 'All') {
+          return jobs
+              .where('userId',
+                  isEqualTo: AuthController.instance.auth.currentUser!.uid)
+              .snapshots();
+        } else {
+          return jobs
+              .where('userId',
+                  isEqualTo: AuthController.instance.auth.currentUser!.uid)
+              .where('jobCategory', isEqualTo: _selectedCategory)
+              .snapshots();
+        }
       } else {
-        return jobs
-            .where('userId',
-                isEqualTo: AuthController.instance.auth.currentUser!.uid)
-            .where('jobCategory', isEqualTo: _selectedCategory)
-            .snapshots();
+        if (_selectedCategory == 'All') {
+          return jobs.snapshots();
+        } else {
+          return jobs
+              .where('jobCategory', isEqualTo: _selectedCategory)
+              .snapshots();
+        }
       }
-    } else {
-      if (_selectedCategory == 'All') {
-        return jobs.snapshots();
-      } else {
-        return jobs
-            .where('jobCategory', isEqualTo: _selectedCategory)
-            .snapshots();
-      }
+    } catch (e) {
+      print("Error fetching job stream: $e");
+      return const Stream.empty(); // Return an empty stream on error
     }
-  }
-}
-
-class Job {
-  final String title;
-  final String description;
-  final String parish;
-  final String jobCategory;
-  final String lowerBudget;
-  final String upperBudget;
-
-  Job(this.title, this.description, this.parish, this.jobCategory,
-      this.lowerBudget, this.upperBudget);
-
-  factory Job.fromFirestore(DocumentSnapshot doc) {
-    Map data = doc.data() as Map;
-    return Job(
-        data['title'] ?? '',
-        data['description'] ?? '',
-        data['parish'] ?? '',
-        data['jobCategory'] ?? '',
-        data['lowerBudget'] ?? '',
-        data['upperBudget'] ?? '');
   }
 }
