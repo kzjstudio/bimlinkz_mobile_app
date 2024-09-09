@@ -7,7 +7,6 @@ import 'package:bimlinkz_mobile_app/screens/mobile/contact_us_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/contractor_form_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/jobpost_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/preferences.dart';
-import 'package:bimlinkz_mobile_app/screens/mobile/profile.dart';
 import 'package:bimlinkz_mobile_app/theme.dart';
 import 'package:bimlinkz_mobile_app/widgets/list_button.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -27,8 +26,8 @@ class _AccountScreenState extends State<AccountScreen> {
 
   File? _image;
   final ImagePicker _picker = ImagePicker();
-  var _isUploading = false.obs;
-  var _uploadUrl = ''.obs;
+  final _isUploading = false.obs;
+  final _uploadUrl = ''.obs;
 
   Future<void> _pickImage() async {
     final source = await showDialog<ImageSource>(

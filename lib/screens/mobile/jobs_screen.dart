@@ -1,9 +1,11 @@
 import 'package:bimlinkz_mobile_app/Controllers/auth_controller.dart';
 import 'package:bimlinkz_mobile_app/models/jobs.dart';
+import 'package:bimlinkz_mobile_app/screens/mobile/job_detail_screen.dart';
 import 'package:bimlinkz_mobile_app/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 
 enum Post { yourJobs, allJobs }
 
@@ -17,6 +19,7 @@ class JobScreen extends StatefulWidget {
 class _JobScreenState extends State<JobScreen>
     with SingleTickerProviderStateMixin {
   TabController? _tabController;
+  var logger = Logger();
 
   @override
   void initState() {
@@ -40,6 +43,7 @@ class _JobScreenState extends State<JobScreen>
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: SegmentedButton(
+                showSelectedIcon: false,
                 style: SegmentedButton.styleFrom(
                   selectedBackgroundColor:
                       AppColors.primary, // Ensure this is a valid Color
@@ -53,7 +57,6 @@ class _JobScreenState extends State<JobScreen>
                 onSelectionChanged: (Set<Post> newSelection) {
                   setState(() {
                     selectedpostType = newSelection.first;
-                    print(selectedpostType.toString());
                   });
                 },
               ),
@@ -78,8 +81,9 @@ class JobList extends StatefulWidget {
 
 class _JobListState extends State<JobList> {
   String _selectedCategory = 'All';
-  List<String> _categories = ['All'];
+  final List<String> _categories = ['All'];
   bool _isLoadingCategories = true;
+  var logger = Logger();
 
   @override
   void initState() {
@@ -98,7 +102,7 @@ class _JobListState extends State<JobList> {
         _isLoadingCategories = false;
       });
     } catch (e) {
-      print('Error fetching categories: $e');
+      logger.e('Error fetching categories: $e');
       setState(() {
         _isLoadingCategories = false;
       });
@@ -196,8 +200,8 @@ class _JobListState extends State<JobList> {
                                   ),
                                   Text(
                                     "Posted on ${job.formattedDate}.",
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold),
                                   ), // Display formatted date
 
                                   SizedBox(
@@ -210,8 +214,13 @@ class _JobListState extends State<JobList> {
                                             backgroundColor:
                                                 WidgetStatePropertyAll(
                                                     AppColors.primary)),
-                                        onPressed: () {},
-                                        child: Text('View Details')),
+                                        onPressed: () {
+                                          Get.to(
+                                              () => JobDetailScreen(job: job),
+                                              transition:
+                                                  Transition.rightToLeft);
+                                        },
+                                        child: const Text('View Details')),
                                   )
                                 ],
                               ),
