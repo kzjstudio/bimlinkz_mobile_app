@@ -46,7 +46,6 @@ class _PostJobPageState extends State<PostJobPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     getJobCategories();
     super.initState();
   }

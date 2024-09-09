@@ -67,6 +67,7 @@ final ThemeData lightTheme = ThemeData(
     dividerTheme: const DividerThemeData(color: AppColors.divider));
 
 final ThemeData darkTheme = ThemeData(
+  fontFamily: 'Lexend',
   colorScheme: const ColorScheme.dark(
     primary: AppColors.primary,
     secondary: AppColors.secondary,
