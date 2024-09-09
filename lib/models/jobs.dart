@@ -9,19 +9,31 @@ class Job {
   final String jobCategory;
   final String lowerBudget;
   final String upperBudget;
+  final String userName;
 
-  Job(this.title, this.description, this.parish, this.jobCategory, this.date,
-      this.lowerBudget, this.upperBudget);
+  Job(
+    this.title,
+    this.description,
+    this.parish,
+    this.jobCategory,
+    this.date,
+    this.lowerBudget,
+    this.upperBudget,
+    this.userName,
+  );
 
   // Factory constructor to create a Job from Firestore document
   factory Job.fromFirestore(DocumentSnapshot doc) {
-    Map data = doc.data() as Map;
+    Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
     return Job(
         data['title'] ?? '',
         data['description'] ?? '',
         data['parish'] ?? '',
         data['jobCategory'] ?? '',
-        data['date'] ?? Timestamp.now(), // Ensure a valid Timestamp is set
+        data['date'] is Timestamp
+            ? data['date']
+            : Timestamp.now(), // Ensure a valid Timestamp is set
+        data['userName'] ?? '',
         data['lowerBudget'] ?? '',
         data['upperBudget'] ?? '');
   }

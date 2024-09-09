@@ -32,9 +32,9 @@ class JobDetailScreen extends StatelessWidget {
             const SizedBox(
               height: 10,
             ),
-            const Row(
+            Row(
               children: [
-                Text('Posted by:'),
+                Text('Posted by: ${job.userName}'),
               ],
             ),
             const SizedBox(height: 10),
