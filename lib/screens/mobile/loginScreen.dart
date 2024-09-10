@@ -37,7 +37,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: Column(
                             children: [
                               Image.asset(
-                                'images/logotrans.png',
+                                'Assets/images/logotrans.png',
                                 width: 200,
                                 height: 200,
                               ),
@@ -109,13 +109,17 @@ class _LoginScreenState extends State<LoginScreen> {
                                       borderRadius: BorderRadius.circular(10),
                                     ),
                                   ),
-                                  onPressed: () {
-                                    if (_formKey.currentState!.validate()) {
-                                      AuthController.instance.signIn(
-                                          emailController.text,
-                                          passwordController.text);
-                                    }
-                                  },
+                                  onPressed:
+                                      AuthController.instance.isLoading.isFalse
+                                          ? () {
+                                              if (_formKey.currentState!
+                                                  .validate()) {
+                                                AuthController.instance.signIn(
+                                                    emailController.text,
+                                                    passwordController.text);
+                                              }
+                                            }
+                                          : () {},
                                   child: const Text(
                                     'Login',
                                     style: TextStyle(
