@@ -26,16 +26,17 @@ class Job {
   factory Job.fromFirestore(DocumentSnapshot doc) {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
     return Job(
-        data['title'] ?? '',
-        data['description'] ?? '',
-        data['parish'] ?? '',
-        data['jobCategory'] ?? '',
-        data['date'] is Timestamp
-            ? data['date']
-            : Timestamp.now(), // Ensure a valid Timestamp is set
-        data['userName'] ?? '',
-        data['lowerBudget'] ?? '',
-        data['upperBudget'] ?? '');
+      data['title'] ?? '',
+      data['description'] ?? '',
+      data['parish'] ?? '',
+      data['jobCategory'] ?? '',
+      data['date'] is Timestamp
+          ? data['date']
+          : Timestamp.now(), // Ensure a valid Timestamp is set
+      data['lowerBudget'] ?? '',
+      data['upperBudget'] ?? '',
+      data['userName'] ?? '',
+    );
   }
 
   // Format the timestamp to a human-readable string

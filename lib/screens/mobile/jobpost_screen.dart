@@ -1,8 +1,10 @@
 import 'package:bimlinkz_mobile_app/Controllers/auth_controller.dart';
 import 'package:bimlinkz_mobile_app/Controllers/user_profile_controller.dart';
+import 'package:bimlinkz_mobile_app/screens/mobile/home_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/landing_screen.dart';
 import 'package:bimlinkz_mobile_app/theme.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
@@ -115,6 +117,8 @@ class _PostJobPageState extends State<PostJobPage> {
         'date': DateTime.now(),
         'userId': AuthController.instance.auth.currentUser!.uid,
         'userName': UserProfileController.instance.userName.value,
+        'firstName': 'Shamar',
+        'lastName': 'Marshall',
       };
       try {
         await db.collection('posted jobs').add(jobData);

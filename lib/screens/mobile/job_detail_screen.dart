@@ -16,7 +16,12 @@ class JobDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Job Details')),
+      appBar: AppBar(
+        title: const Text('Job Details'),
+        actions: [
+          IconButton(onPressed: () {}, icon: const Icon(Icons.bookmark))
+        ],
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -34,10 +39,13 @@ class JobDetailScreen extends StatelessWidget {
             ),
             Row(
               children: [
-                Text('Posted by: ${job.userName}'),
+                Text(
+                  'Posted by: ${job.userName}',
+                  style: const TextStyle(fontSize: 18),
+                ),
               ],
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 15),
             Card(
                 color: AppColors.secondary,
                 child: Padding(
