@@ -40,7 +40,7 @@ class JobDetailScreen extends StatelessWidget {
             Row(
               children: [
                 Text(
-                  'Posted by: ${job.userName}',
+                  'Posted by: ${job.firstName}" " ${job.lastName} ',
                   style: const TextStyle(fontSize: 18),
                 ),
               ],
