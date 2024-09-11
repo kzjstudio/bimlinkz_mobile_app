@@ -51,8 +51,8 @@ class _MessagesScreenState extends State<MessagesScreen> {
             itemCount: chatsList.length,
             itemBuilder: (context, index) {
               final chat = chatsList[index];
-              final otherUserId =
-                  chat['participants'].firstWhere((id) => id != currentUserId);
+              final otherUserId = chat['participants']
+                  .firstWhere((id) => id != currentUserId, orElse: () => null);
               final otherUserName = chat['participant_names'][otherUserId];
               final lastMessage = chat['last_message'];
               return FutureBuilder<DocumentSnapshot>(

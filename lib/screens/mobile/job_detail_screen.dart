@@ -1,7 +1,12 @@
+import 'dart:ffi';
+
+import 'package:bimlinkz_mobile_app/Controllers/auth_controller.dart';
 import 'package:bimlinkz_mobile_app/models/jobs.dart';
+import 'package:bimlinkz_mobile_app/screens/mobile/chat_Screen.dart';
 import 'package:bimlinkz_mobile_app/theme.dart';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class JobDetailScreen extends StatelessWidget {
   final Job job;
@@ -15,6 +20,7 @@ class JobDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var jobId = job.userId.obs;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Job Details'),
@@ -61,14 +67,24 @@ class JobDetailScreen extends StatelessWidget {
             Text('Contractor Type: ${job.jobCategory}',
                 style: TextStyle(fontSize: 16, color: Colors.grey[700])),
             const SizedBox(height: 30),
-            ElevatedButton(
-              style: const ButtonStyle(
-                  foregroundColor:
-                      WidgetStatePropertyAll(AppColors.lightBackground),
-                  backgroundColor: WidgetStatePropertyAll(AppColors.primary)),
-              onPressed: () => sendMessage(job),
-              child: const Text(
-                'Send Message',
+            Obx(
+              () => ElevatedButton(
+                style: const ButtonStyle(
+                    foregroundColor:
+                        WidgetStatePropertyAll(AppColors.lightBackground),
+                    backgroundColor: WidgetStatePropertyAll(AppColors.primary)),
+                onPressed:
+                    jobId.value == AuthController.instance.auth.currentUser!.uid
+                        ? null
+                        : () => Get.to(
+                              () => ChatScreen(
+                                  contractorFirstName: job.firstName,
+                                  contractorLastName: job.lastName,
+                                  contractorId: job.userId),
+                            ),
+                child: const Text(
+                  'Send Message',
+                ),
               ),
             ),
           ],

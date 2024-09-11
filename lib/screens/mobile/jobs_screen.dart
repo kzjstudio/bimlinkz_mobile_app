@@ -185,7 +185,7 @@ class _JobListState extends State<JobList> {
                                         fontSize: 20),
                                   ),
                                   Text("Posted by: ${job.firstName}"
-                                      "${job.lastName} "),
+                                      " ${job.lastName} "),
                                   const SizedBox(
                                     height: 10,
                                   ),

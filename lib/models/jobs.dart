@@ -11,14 +11,23 @@ class Job {
   final String upperBudget;
   final String firstName;
   final String lastName;
+  final String userId;
 
-  Job(this.title, this.description, this.parish, this.jobCategory, this.date,
-      this.lowerBudget, this.upperBudget, this.firstName, this.lastName);
+  Job(
+      this.title,
+      this.description,
+      this.parish,
+      this.jobCategory,
+      this.date,
+      this.lowerBudget,
+      this.upperBudget,
+      this.firstName,
+      this.lastName,
+      this.userId);
 
   // Factory constructor to create a Job from Firestore document
   factory Job.fromFirestore(DocumentSnapshot doc) {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-    print(data);
     return Job(
       data['title'] ?? '',
       data['description'] ?? '',
@@ -29,8 +38,9 @@ class Job {
           : Timestamp.now(), // Ensure a valid Timestamp is set
       data['lowerBudget'] ?? '',
       data['upperBudget'] ?? '',
-      data['First_Name'] ?? '',
-      data['Last_Name'] ?? '',
+      data['firstName'] ?? '', // Adjust field names based on Firestore
+      data['lastName'] ?? '',
+      data['userId'] ?? '',
     );
   }
 
