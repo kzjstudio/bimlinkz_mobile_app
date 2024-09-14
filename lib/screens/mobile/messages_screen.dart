@@ -55,6 +55,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
                   .firstWhere((id) => id != currentUserId, orElse: () => null);
               final otherUserName = chat['participant_names'][otherUserId];
               final lastMessage = chat['last_message'];
+
               return FutureBuilder<DocumentSnapshot>(
                 future: FirebaseFirestore.instance
                     .collection('users')
@@ -77,8 +78,21 @@ class _MessagesScreenState extends State<MessagesScreen> {
                       title: Text('Error loading user info'),
                     );
                   } else {
+                    // Check if data is null
                     final userData =
-                        userSnapshot.data!.data() as Map<String, dynamic>;
+                        userSnapshot.data?.data() as Map<String, dynamic>?;
+
+                    // Handle case where user data is null
+                    if (userData == null) {
+                      return const ListTile(
+                        leading: CircleAvatar(
+                          backgroundColor: Colors.grey,
+                        ),
+                        title: Text('User not found'),
+                        subtitle: Text('No information available'),
+                      );
+                    }
+
                     return ListTile(
                       leading: CircleAvatar(
                         backgroundImage:
@@ -87,15 +101,16 @@ class _MessagesScreenState extends State<MessagesScreen> {
                             const Icon(Icons.error),
                       ),
                       title: Text(
-                        otherUserName,
+                        otherUserName ?? 'Unknown user',
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                       subtitle: Text(lastMessage),
                       onTap: () {
                         Get.to(
                           () => ChatScreen(
-                            contractorFirstName: userData['First_Name'],
-                            contractorLastName: userData['Last_Name'],
+                            contractorFirstName:
+                                userData['First_Name'] ?? 'Unknown',
+                            contractorLastName: userData['Last_Name'] ?? '',
                             contractorId: otherUserId,
                           ),
                           transition: Transition.rightToLeft,

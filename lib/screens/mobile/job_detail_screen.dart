@@ -1,10 +1,7 @@
-import 'dart:ffi';
-
 import 'package:bimlinkz_mobile_app/Controllers/auth_controller.dart';
 import 'package:bimlinkz_mobile_app/models/jobs.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/chat_Screen.dart';
 import 'package:bimlinkz_mobile_app/theme.dart';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -46,7 +43,7 @@ class JobDetailScreen extends StatelessWidget {
             Row(
               children: [
                 Text(
-                  'Posted by: ${job.firstName}" " ${job.lastName} ',
+                  'Posted by: ${job.firstName} ${job.lastName} ',
                   style: const TextStyle(fontSize: 18),
                 ),
               ],
