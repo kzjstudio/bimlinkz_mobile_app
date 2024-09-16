@@ -55,7 +55,6 @@ class _MessagesScreenState extends State<MessagesScreen> {
                   .firstWhere((id) => id != currentUserId, orElse: () => null);
               final otherUserName = chat['participant_names'][otherUserId];
               final lastMessage = chat['last_message'];
-
               return FutureBuilder<DocumentSnapshot>(
                 future: FirebaseFirestore.instance
                     .collection('users')
@@ -92,7 +91,8 @@ class _MessagesScreenState extends State<MessagesScreen> {
                         subtitle: Text('No information available'),
                       );
                     }
-
+                    DateTime date =
+                        DateTime.parse(chat['last_message_timestamp']);
                     return ListTile(
                       leading: CircleAvatar(
                         backgroundImage:
@@ -105,6 +105,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                       subtitle: Text(lastMessage),
+                      trailing: Text(date.toString()),
                       onTap: () {
                         Get.to(
                           () => ChatScreen(
