@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:bimlinkz_mobile_app/Controllers/auth_controller.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'chat_screen.dart';
 
 class MessagesScreen extends StatefulWidget {
@@ -91,8 +92,9 @@ class _MessagesScreenState extends State<MessagesScreen> {
                         subtitle: Text('No information available'),
                       );
                     }
-                    DateTime date =
-                        DateTime.parse(chat['last_message_timestamp']);
+                    DateTime date = chat['last_message_timestamp'].toDate();
+                    var formattedDate = DateFormat('MM/ d/ y').format(date);
+
                     return ListTile(
                       leading: CircleAvatar(
                         backgroundImage:
@@ -105,7 +107,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                       subtitle: Text(lastMessage),
-                      trailing: Text(date.toString()),
+                      trailing: Text(formattedDate),
                       onTap: () {
                         Get.to(
                           () => ChatScreen(

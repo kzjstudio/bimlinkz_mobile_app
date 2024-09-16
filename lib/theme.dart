@@ -70,17 +70,18 @@ final ThemeData darkTheme = ThemeData(
   fontFamily: 'Lexend',
   colorScheme: const ColorScheme.dark(
     primary: AppColors.primary,
-    secondary: AppColors.secondary,
+    secondary: AppColors.darkSurface,
     surface: AppColors.darkSurface,
 
     error: AppColors.error,
     onPrimary: AppColors.onPrimary,
-    onSecondary: AppColors.onSecondary,
+    onSecondary: AppColors.darkSurface,
     onSurface:
         AppColors.buttonDarkText, // Use for better visibility on dark theme
 
     onError: AppColors.onError,
   ),
+  cardColor: AppColors.darkSurface,
   scaffoldBackgroundColor: AppColors.darkBackground,
   appBarTheme: const AppBarTheme(
     backgroundColor: AppColors.darkBackground,
