@@ -1,7 +1,7 @@
 import 'package:bimlinkz_mobile_app/screens/mobile/account_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/home_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/messages_screen.dart';
-import 'package:bimlinkz_mobile_app/screens/mobile/jobs_screen.dart';
+import 'package:bimlinkz_mobile_app/screens/mobile/job_listing_screen.dart';
 import 'package:bimlinkz_mobile_app/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

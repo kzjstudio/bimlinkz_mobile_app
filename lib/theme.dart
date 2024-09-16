@@ -74,14 +74,16 @@ final ThemeData darkTheme = ThemeData(
     surface: AppColors.darkSurface,
 
     error: AppColors.error,
-    onPrimary: AppColors.onPrimary,
+    onPrimary: AppColors.darkSurface,
     onSecondary: AppColors.darkSurface,
     onSurface:
         AppColors.buttonDarkText, // Use for better visibility on dark theme
 
     onError: AppColors.onError,
   ),
+  segmentedButtonTheme: SegmentedButtonThemeData(),
   cardColor: AppColors.darkSurface,
+  cardTheme: const CardTheme(color: AppColors.darkSurface),
   scaffoldBackgroundColor: AppColors.darkBackground,
   appBarTheme: const AppBarTheme(
     backgroundColor: AppColors.darkBackground,

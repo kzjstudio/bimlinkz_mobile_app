@@ -1,6 +1,45 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
+const nodemailer = require("nodemailer");
 admin.initializeApp();
+
+const transporter = nodemailer.createTransport({
+    service: "gmail",  // or your SMTP service
+    auth: {
+      user: "kzjstudiosinc@gmail.com",
+      pass: "nzci doti gacq yjwc",
+    },
+  });
+
+  exports.sendContactUsEmail = functions.firestore
+    .document("contactUs/{contactId}")
+    .onCreate((snap, context) => {
+        const contactData = snap.data();
+
+        // Compose the email
+        const mailOptions = {
+            from: contactData.email,
+            to: "admin@yourdomain.com",  // Admin's email
+            subject: `New Contact Us Message from ${contactData.name}`,
+            text: `You have received a new message from ${contactData.name}:
+            
+            Name: ${contactData.name}
+            Email: ${contactData.email}
+            Message: ${contactData.message}
+            
+            Please reply to: ${contactData.email}`,
+        };
+
+        // Send the email
+        return transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                console.error("Error sending email:", error);
+            } else {
+                console.log("Email sent successfully:", info.response);
+            }
+        });
+    });
+
 
 exports.sendNotificationOnMessage = functions.firestore
     .document('Chats/{chatId}/messages/{messageId}')

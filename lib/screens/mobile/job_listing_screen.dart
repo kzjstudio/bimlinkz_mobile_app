@@ -169,7 +169,6 @@ class _JobListState extends State<JobList> {
                         return Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10.0),
                           child: Card(
-                            color: AppColors.secondary,
                             elevation: 2,
                             margin: const EdgeInsets.symmetric(
                                 horizontal: 0, vertical: 5),

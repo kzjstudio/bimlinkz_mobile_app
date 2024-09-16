@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -14,13 +15,17 @@ class _ContactUsPageState extends State<ContactUsPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController messageController = TextEditingController();
 
-  final String _name = '';
-  final String _email = '';
-  final String _message = '';
-
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
-      // Handle form submission here
+      FirebaseFirestore db = FirebaseFirestore.instance;
+
+      final form = <String, String>{
+        'name': nameController.text,
+        'email': emailController.text,
+        'message': messageController.text,
+      };
+
+      db.collection('Contact froms').doc().set(form);
 
       Get.defaultDialog(
         title: 'Submission Successful',
