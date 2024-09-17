@@ -19,6 +19,7 @@ class UserProfileController extends GetxController {
   List<String> skills = [];
   var isLoaded = false.obs;
   var isContractor = false.obs;
+  var isConfirmed = false.obs;
 
   final db = FirebaseFirestore.instance;
   final FirebaseAuth auth = FirebaseAuth.instance;
@@ -45,6 +46,7 @@ class UserProfileController extends GetxController {
       isContractor.value = event['is_Contractor'];
       isLoaded.value = true;
       imageUrl.value = event['imageUrl'];
+      isConfirmed.value = event['isConfirmed'];
     });
     (e) {
       isLoaded.value = false;

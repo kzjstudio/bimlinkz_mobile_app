@@ -74,7 +74,7 @@ final ThemeData darkTheme = ThemeData(
     surface: AppColors.darkSurface,
 
     error: AppColors.error,
-    onPrimary: AppColors.darkSurface,
+    onPrimary: AppColors.primary,
     onSecondary: AppColors.darkSurface,
     onSurface:
         AppColors.buttonDarkText, // Use for better visibility on dark theme

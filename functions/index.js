@@ -4,6 +4,7 @@ const nodemailer = require("nodemailer");
 
 admin.initializeApp();
 
+TODO: 'fix this '
 // Use your Gmail credentials with an App Password (generated in your Google account)
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -75,7 +76,7 @@ exports.sendNotificationOnMessage = functions.firestore
         };
 
         // Send notification
-        await admin.messaging().sendToDevice(deviceToken, payload);
+        await admin.messaging.sendToDevice(deviceToken, payload);
         console.log("Notification sent successfully");
       }
     } catch (error) {

@@ -1,3 +1,4 @@
+import 'package:bimlinkz_mobile_app/theme.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -138,14 +139,17 @@ class _ContactUsPageState extends State<ContactUsPage> {
                 ElevatedButton(
                   onPressed: _submitForm,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).primaryColor,
+                    backgroundColor: AppColors.primary,
                     foregroundColor: Color(Colors.white.value),
                     padding: const EdgeInsets.symmetric(vertical: 12),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  child: const Text('Submit'),
+                  child: const Text(
+                    'Submit',
+                    style: TextStyle(fontSize: 18),
+                  ),
                 ),
               ],
             ),

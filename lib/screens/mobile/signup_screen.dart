@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:bimlinkz_mobile_app/Controllers/auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,6 +16,12 @@ class SignUpPage extends StatelessWidget {
   final TextEditingController _passwordController = TextEditingController();
 
   SignUpPage({super.key});
+
+  String _generateConfirmationCode() {
+    var rng = Random();
+    return (rng.nextInt(900000) + 100000)
+        .toString(); // Generates a number between 100000 and 999999
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -132,11 +140,14 @@ class SignUpPage extends StatelessWidget {
                                         .instance.isLoading.isFalse
                                     ? () {
                                         if (_formKey.currentState!.validate()) {
+                                          String confirmationCode =
+                                              _generateConfirmationCode();
                                           AuthController.instance.createUser(
                                               _emailController.text,
                                               _passwordController.text,
                                               _firstNameController.text,
-                                              _lastNameController.text);
+                                              _lastNameController.text,
+                                              confirmationCode);
                                         }
                                       }
                                     : null,
