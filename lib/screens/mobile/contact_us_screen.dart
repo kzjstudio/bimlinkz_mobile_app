@@ -25,7 +25,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
         'message': messageController.text,
       };
 
-      db.collection('Contact froms').doc().set(form);
+      db.collection('ContactUs').doc().set(form);
 
       Get.defaultDialog(
         title: 'Submission Successful',
