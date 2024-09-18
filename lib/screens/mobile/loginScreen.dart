@@ -53,7 +53,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         const SizedBox(height: 20),
                         Card(
-                          color: const Color(0xffffF0F1FF),
                           elevation: 10,
                           child: Padding(
                             padding: const EdgeInsets.all(20.0),

@@ -4,7 +4,7 @@ const nodemailer = require("nodemailer");
 
 admin.initializeApp();
 
-TODO: 'fix this '
+TODO: 'fix this to allow firebase to hole the password and email instead of hard coding '
 // Use your Gmail credentials with an App Password (generated in your Google account)
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -13,6 +13,8 @@ const transporter = nodemailer.createTransport({
     pass: "nzci doti gacq yjwc",  // Use the app password generated from Gmail
   },
 });
+
+TODO: 'Also need to ad the send confirmation email'
 
 exports.sendContactUsEmail = functions.firestore
   .document("contactUs/{contactId}")

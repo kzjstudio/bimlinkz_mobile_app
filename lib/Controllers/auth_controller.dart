@@ -45,7 +45,6 @@ class AuthController extends GetxController {
           Get.offAll(() => EmailConfirmationScreen(email: user.email!));
         }
       } else {
-        // If the user does not exist in Firestore, sign out and show the login screen
         signOut();
       }
     }

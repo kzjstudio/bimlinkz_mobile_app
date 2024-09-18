@@ -5,6 +5,7 @@ import 'package:bimlinkz_mobile_app/Controllers/user_profile_controller.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/about_us_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/contact_us_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/contractor_form_screen.dart';
+import 'package:bimlinkz_mobile_app/screens/mobile/contractor_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/jobpost_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/preferences.dart';
 import 'package:bimlinkz_mobile_app/theme.dart';
@@ -160,6 +161,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   () => UserProfileController.instance.isContractor.isFalse
                       ? ListTile(
                           onTap: () {
+                            //TODO: need to add a way for users to edit their contractor profile
                             Get.to(() => ContractorForm(),
                                 transition: Transition.rightToLeftWithFade);
                           },
@@ -170,9 +172,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                 color: AppColors.primary,
                                 size: 30,
                               ),
-                              SizedBox(
-                                  width:
-                                      8), // Space between the icon and the text
+                              SizedBox(width: 8),
                               Text(
                                 'Become a Contractor',
                                 style: TextStyle(
@@ -187,22 +187,20 @@ class _AccountScreenState extends State<AccountScreen> {
                 const SizedBox(
                   height: 10,
                 ),
-                Divider(
+                const Divider(
                   thickness: .2,
-                  color: Theme.of(context).colorScheme.shadow,
                 ),
-                // ListButton(
-                //     tapped: () {
-                //       Get.to(() => ContractorsPage(),
-                //           transition: Transition.rightToLeftWithFade);
-                //     },
-                //     icon: Icons.work_history_outlined,
-                //     title: 'Contractors',
-                //     subTitle: "Person's you have worked with before "),
-                // Divider(
-                //   thickness: .2,
-                //   color: Theme.of(context).colorScheme.shadow,
-                // ),
+                ListButton(
+                    tapped: () {
+                      Get.to(() => ContractorsPage(),
+                          transition: Transition.rightToLeftWithFade);
+                    },
+                    icon: Icons.work_history_outlined,
+                    title: 'Contractors',
+                    subTitle: "Person's you have worked with before or saved "),
+                const Divider(
+                  thickness: .2,
+                ),
                 ListButton(
                     tapped: () {
                       Get.to(() => const PreferencesPage(),
@@ -211,9 +209,8 @@ class _AccountScreenState extends State<AccountScreen> {
                     icon: Icons.settings_outlined,
                     title: 'Appearance',
                     subTitle: 'Theme settings'),
-                Divider(
+                const Divider(
                   thickness: .2,
-                  color: Theme.of(context).colorScheme.shadow,
                 ),
                 ListButton(
                     tapped: () {
@@ -223,9 +220,8 @@ class _AccountScreenState extends State<AccountScreen> {
                     icon: Icons.help_outline_outlined,
                     title: 'Help',
                     subTitle: 'Contact Us'),
-                Divider(
+                const Divider(
                   thickness: .2,
-                  color: Theme.of(context).colorScheme.shadow,
                 ),
                 ListButton(
                     tapped: () {
@@ -235,9 +231,8 @@ class _AccountScreenState extends State<AccountScreen> {
                     icon: Icons.info_outline,
                     title: 'About',
                     subTitle: 'About the application'),
-                Divider(
+                const Divider(
                   thickness: .2,
-                  color: Theme.of(context).colorScheme.shadow,
                 ),
                 GestureDetector(
                   onTap: () {
