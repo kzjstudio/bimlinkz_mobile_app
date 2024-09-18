@@ -23,16 +23,31 @@ class AuthController extends GetxController {
     ever(user, _initialScreen);
   }
 
-  _initialScreen(User? user) {
+  _initialScreen(User? user) async {
     if (user == null) {
       UserProfileController.instance.resetuser();
       Get.offAll(() => const LoginScreen());
       isLoggedIn.value = false;
-    } else if (UserProfileController.instance.isConfirmed.isFalse) {
-      Get.to(() => const EmailConfirmationScreen());
     } else {
-      Get.offAll(() => const LandingScreen());
-      isLoggedIn.value = true;
+      // Fetch the user from Firestore
+      DocumentSnapshot userSnapshot =
+          await db.collection("users").doc(user.uid).get();
+
+      if (userSnapshot.exists) {
+        bool isConfirmed = userSnapshot['isConfirmed'];
+
+        if (isConfirmed) {
+          // If the user is confirmed, go to the Landing Screen
+          Get.offAll(() => const LandingScreen());
+          isLoggedIn.value = true;
+        } else {
+          // If the user is not confirmed, go to the Email Confirmation Screen
+          Get.offAll(() => EmailConfirmationScreen(email: user.email!));
+        }
+      } else {
+        // If the user does not exist in Firestore, sign out and show the login screen
+        signOut();
+      }
     }
   }
 
@@ -93,13 +108,19 @@ class AuthController extends GetxController {
   signOut() {
     try {
       auth.signOut();
+      UserProfileController.instance.resetuser();
     } catch (e) {
       e.printError();
     }
   }
 
-  void addUserToFireStore(String userId, String firstName, String lastName,
-      String email, confirmationCode) {
+  void addUserToFireStore(
+    String userId,
+    String firstName,
+    String lastName,
+    String email,
+    confirmationCode,
+  ) {
     db.collection("users").doc(userId).set({
       'First_Name': firstName,
       'Last_Name': lastName,
@@ -107,7 +128,8 @@ class AuthController extends GetxController {
       'Email': email,
       'Date_Joined': Timestamp.now(),
       'is_Contractor': false,
-      'confirmationCode': confirmationCode
+      'confirmationCode': confirmationCode,
+      'isConfirmed': false
     });
   }
 }

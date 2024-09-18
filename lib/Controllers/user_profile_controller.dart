@@ -52,5 +52,6 @@ class UserProfileController extends GetxController {
       isLoaded.value = false;
       print(e);
     };
+    print('got user info');
   }
 }

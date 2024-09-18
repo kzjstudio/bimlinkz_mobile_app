@@ -132,7 +132,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Hi ${UserProfileController.instance.userName.value}',
+                    'Hi ${UserProfileController.instance.firstName.value}',
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   OutlinedButton(

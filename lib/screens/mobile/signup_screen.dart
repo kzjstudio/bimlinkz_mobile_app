@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:bimlinkz_mobile_app/Controllers/auth_controller.dart';
+import 'package:bimlinkz_mobile_app/screens/mobile/email_comfirmation_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
@@ -10,9 +11,7 @@ class SignUpPage extends StatelessWidget {
 
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
-
   final TextEditingController _emailController = TextEditingController();
-
   final TextEditingController _passwordController = TextEditingController();
 
   SignUpPage({super.key});
@@ -148,6 +147,9 @@ class SignUpPage extends StatelessWidget {
                                               _firstNameController.text,
                                               _lastNameController.text,
                                               confirmationCode);
+
+                                          Get.to(() => EmailConfirmationScreen(
+                                              email: _emailController.text));
                                         }
                                       }
                                     : null,
