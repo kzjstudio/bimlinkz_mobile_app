@@ -75,16 +75,22 @@ class AuthController extends GetxController {
     try {
       await auth
           .createUserWithEmailAndPassword(email: email, password: password)
-          .then((result) {
+          .then((result) async {
         var userId = result.user?.uid;
 
-        addUserToFireStore(
+        // Add user to Firestore and wait for it to complete
+        await addUserToFireStore(
             userId.toString(), firstName, lastName, email, confirmationCode);
-        UserProfileController.instance.getUser();
+
+        // Fetch and initialize user profile data
+        await UserProfileController.instance.getUser();
+
+        // Redirect to the Email Confirmation Screen after the Firestore document is created
+        Get.to(() => EmailConfirmationScreen(email: email));
       });
       isLoading.value = false;
     } catch (e) {
-      printError();
+      isLoading.value = false; // Stop loading state
       Get.snackbar("Error creating account", e.toString(),
           snackPosition: SnackPosition.BOTTOM);
     }
@@ -113,14 +119,14 @@ class AuthController extends GetxController {
     }
   }
 
-  void addUserToFireStore(
+  Future<void> addUserToFireStore(
     String userId,
     String firstName,
     String lastName,
     String email,
-    confirmationCode,
-  ) {
-    db.collection("users").doc(userId).set({
+    String confirmationCode,
+  ) async {
+    await db.collection("users").doc(userId).set({
       'First_Name': firstName,
       'Last_Name': lastName,
       'id': userId,
@@ -128,7 +134,7 @@ class AuthController extends GetxController {
       'Date_Joined': Timestamp.now(),
       'is_Contractor': false,
       'confirmationCode': confirmationCode,
-      'isConfirmed': false
+      'isConfirmed': false,
     });
   }
 }

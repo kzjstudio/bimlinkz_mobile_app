@@ -1,3 +1,4 @@
+import 'package:bimlinkz_mobile_app/Controllers/auth_controller.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/landing_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -18,34 +19,39 @@ class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
   final FirebaseFirestore db = FirebaseFirestore.instance;
 
   void _verifyCode() async {
-    // Fetch user data from Firestore
-    var query = await db
-        .collection('users')
-        .where('Email', isEqualTo: widget.email)
-        .limit(1)
-        .get();
+    print('Pressed');
+    // Get the current user ID from FirebaseAuth
+    var currentUserId = AuthController.instance.auth.currentUser?.uid;
 
-    if (query.docs.isNotEmpty) {
-      var userDoc = query.docs.first;
-      var storedCode = userDoc['confirmationCode'];
+    if (currentUserId != null) {
+      // Directly query the Firestore document using the userId
+      var userDoc = await db.collection('users').doc(currentUserId).get();
 
-      if (storedCode == _codeController.text) {
-        // If the code matches, mark the email as confirmed in Firestore
-        await db
-            .collection('users')
-            .doc(userDoc.id)
-            .update({'isConfirmed': true});
+      if (userDoc.exists) {
+        var storedCode = userDoc['confirmationCode'];
 
-        Get.snackbar("Success", "Your email has been confirmed.");
+        // Check if the input code matches the stored confirmation code
+        if (storedCode == _codeController.text) {
+          // If the code matches, mark the email as confirmed
+          await db
+              .collection('users')
+              .doc(currentUserId)
+              .update({'isConfirmed': true});
 
-        // Redirect to the landing page
-        Get.offAll(() => const LandingScreen());
+          Get.snackbar("Success", "Your email has been confirmed.");
+
+          // Redirect to the landing page
+          Get.offAll(() => const LandingScreen());
+        } else {
+          Get.snackbar("Error", "Invalid confirmation code.",
+              snackPosition: SnackPosition.BOTTOM);
+        }
       } else {
-        Get.snackbar("Error", "Invalid confirmation code.",
+        Get.snackbar("Error", "User document not found.",
             snackPosition: SnackPosition.BOTTOM);
       }
     } else {
-      Get.snackbar("Error", "User not found.",
+      Get.snackbar("Error", "User not authenticated.",
           snackPosition: SnackPosition.BOTTOM);
     }
   }
@@ -70,7 +76,9 @@ class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: _verifyCode,
+              onPressed: () {
+                _verifyCode();
+              },
               child: const Text("Verify Code"),
             ),
           ],

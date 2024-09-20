@@ -14,7 +14,36 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-TODO: 'Also need to ad the send confirmation email'
+
+exports.sendConfirmationEmail = functions.firestore
+    .document('users/{userId}')
+    .onCreate((snap, context) => {
+        const userData = snap.data();
+        const mailOptions = {
+            from: 'kzjstudiosinc@gmail.com',
+            to: userData.Email,
+            subject: 'Confirm your Email',
+            text: `Hello ${userData.First_Name},
+
+            Welcome to Bimlinkz!
+
+            Please use the following confirmation code to verify your email:
+
+            Confirmation Code: ${userData.confirmationCode}
+
+            Thank you for signing up!`,
+        };
+
+        // Send email
+        return transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                console.error('Error sending confirmation email:', error);
+            } else {
+                console.log('Confirmation email sent:', info.response);
+            }
+        });
+    });
+
 
 exports.sendContactUsEmail = functions.firestore
   .document("contactUs/{contactId}")
