@@ -3,6 +3,7 @@ import 'package:bimlinkz_mobile_app/screens/mobile/home_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/messages_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/job_listing_screen.dart';
 import 'package:bimlinkz_mobile_app/theme.dart';
+import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -127,7 +128,9 @@ class _LandingScreenState extends State<LandingScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: screens[_selectedIndex],
+        body: DoubleBackToCloseApp(
+            snackBar: const SnackBar(content: Text('Press again to exsit')),
+            child: screens[_selectedIndex]),
         bottomNavigationBar: BottomNavigationBar(
           showSelectedLabels: false,
           showUnselectedLabels: false,
