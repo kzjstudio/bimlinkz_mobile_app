@@ -116,7 +116,7 @@ class _PostJobPageState extends State<PostJobPage> {
         'jobCategory': _selectedCategory,
         'date': DateTime.now(),
         'userId': AuthController.instance.auth.currentUser!.uid,
-        'userName': UserProfileController.instance.userName.value,
+        'userName': UserProfileController.instance.firstName.value,
         'firstName': UserProfileController.instance.firstName,
         'lastName': UserProfileController.instance.lastName,
       };

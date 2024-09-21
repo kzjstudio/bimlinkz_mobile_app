@@ -13,7 +13,6 @@ class UserProfileController extends GetxController {
   String? phoneNumber;
   String? address;
   var imageUrl = "".obs;
-  var userName = ''.obs;
   var firstName = ''.obs;
   var lastName = ''.obs;
   List<String> skills = [];
@@ -31,7 +30,7 @@ class UserProfileController extends GetxController {
   }
 
   resetuser() {
-    userName.value = '';
+    firstName.value = '';
     email.value = '';
     imageUrl.value = '';
   }
@@ -39,7 +38,6 @@ class UserProfileController extends GetxController {
   getUser() {
     final docref = db.collection('users').doc(auth.currentUser?.uid);
     docref.snapshots().listen((event) {
-      userName.value = event['User_Name'];
       firstName.value = event['First_Name'];
       lastName.value = event["Last_Name"];
       email.value = event['Email'];

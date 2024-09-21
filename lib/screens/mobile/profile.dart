@@ -79,7 +79,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
         ),
         const SizedBox(height: 10),
         Text(
-          usercontroller.userName.value,
+          usercontroller.firstName.value,
           style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,

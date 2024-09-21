@@ -1,13 +1,11 @@
 import 'package:bimlinkz_mobile_app/Controllers/auth_controller.dart';
 import 'package:bimlinkz_mobile_app/Controllers/user_profile_controller.dart';
-import 'package:bimlinkz_mobile_app/screens/mobile/contractor_details_screen.dart';
-import 'package:bimlinkz_mobile_app/screens/mobile/jobpost_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/popular_selection_screen.dart';
-import 'package:bimlinkz_mobile_app/screens/mobile/see_all_categories_screen.dart';
-import 'package:bimlinkz_mobile_app/widgets/category_card.dart';
+import 'package:bimlinkz_mobile_app/widgets/home%20screen/featured_trades_section.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:bimlinkz_mobile_app/Controllers/data_controller.dart';
+import '../../widgets/home screen/freelancers_who_recently_joined.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -99,19 +97,31 @@ class _HomeScreenState extends State<HomeScreen> {
                       const SizedBox(height: 20),
                       _searchController.text.isNotEmpty
                           ? _buildSuggestions()
-                          : _featuredTradesSection(),
+                          : FeaturedTradesSection(),
                       const SizedBox(height: 30),
-                      const Text(
-                        'Contractors who Recently joined',
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            'Recently joined',
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              // Get.to(() => const SeeAllCategoriesScreen(),
+                              //     transition: Transition.rightToLeft);
+                            },
+                            child: const Text('See all'),
+                          ),
+                        ],
                       ),
                       const SizedBox(
                         height: 10,
                       ),
-                      _recommendedTradesPersons(),
+                      FreelancersWhoRecentlyJoined(),
                     ],
                   ),
                 ),
@@ -143,161 +153,6 @@ class _HomeScreenState extends State<HomeScreen> {
           },
         );
       },
-    );
-  }
-
-  Widget _featuredTradesSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text(
-              'Featured Trades',
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            TextButton(
-              onPressed: () {
-                Get.to(() => const SeeAllCategoriesScreen(),
-                    transition: Transition.rightToLeft);
-              },
-              child: const Text('See all'),
-            ),
-          ],
-        ),
-        const SizedBox(height: 10),
-        SizedBox(
-          height: 130,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: dataController.categories.length,
-            itemBuilder: (context, index) {
-              final data = dataController.categories[index];
-              return CategoryCard(
-                catText: data["id"],
-                imageUrl: data['imageUrl'],
-              );
-            },
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _recommendedTradesPersons() {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Wrap(
-          spacing: 20.0, // Horizontal spacing between items
-          runSpacing: 2.0, // Vertical spacing between items
-          children: List.generate(
-            dataController.recentContractors.length,
-            (index) {
-              final contractor = dataController.recentContractors[index];
-              return InkWell(
-                onTap: () {
-                  Get.to(
-                    transition: Transition.rightToLeft,
-                    () => ContractorDetailScreen(contractor: contractor),
-                  );
-                },
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width / 2 -
-                      36, // 2 items per row
-                  child: Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    elevation: 0,
-                    child: Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Image.network(
-                              contractor['imageUrl'] ?? '',
-                              fit: BoxFit.cover,
-                              height: 120, // Adjust height based on design
-                              width: double.infinity,
-                              errorBuilder: (context, error, stackTrace) {
-                                return Container(
-                                  height: 120,
-                                  color: Colors.grey,
-                                  child: const Center(
-                                    child: Icon(
-                                      Icons.error,
-                                      color: Colors.red,
-                                    ),
-                                  ),
-                                );
-                              },
-                              loadingBuilder:
-                                  (context, child, loadingProgress) {
-                                if (loadingProgress == null) return child;
-                                return Center(
-                                  child: CircularProgressIndicator(
-                                    value: loadingProgress.expectedTotalBytes !=
-                                            null
-                                        ? loadingProgress
-                                                .cumulativeBytesLoaded /
-                                            loadingProgress.expectedTotalBytes!
-                                        : null,
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          Text(
-                            '${contractor['First_Name'] ?? ''} ${contractor['Last_Name'] ?? ''}',
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                            ),
-                            softWrap: true,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            contractor['Skill'] ?? '',
-                            style: const TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey,
-                            ),
-                            softWrap: true,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          const SizedBox(height: 4),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              IconButton(
-                                onPressed: () {},
-                                icon: const Icon(Icons.message),
-                              ),
-                              IconButton(
-                                onPressed: () {},
-                                icon: const Icon(Icons.bookmark),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
-      ),
     );
   }
 }

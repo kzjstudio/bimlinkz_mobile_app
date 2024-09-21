@@ -40,7 +40,7 @@ class DataController extends GetxController {
     var collection = await FirebaseFirestore.instance
         .collection('users')
         .where('is_Contractor', isEqualTo: true)
-        .limit(6)
+        .limit(3)
         .get();
     var fetchedRecentContractors =
         collection.docs.map((doc) => doc.data()).toList();

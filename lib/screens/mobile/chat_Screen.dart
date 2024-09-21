@@ -71,7 +71,7 @@ class _ChatScreenState extends State<ChatScreen> {
       'participants': [currentUserId, widget.contractorId],
       'participant_names': {
         currentUserId: UserProfileController.instance.firstName.value.isEmpty
-            ? UserProfileController.instance.userName.value
+            ? UserProfileController.instance.firstName.value
             : '${UserProfileController.instance.firstName.value} ${UserProfileController.instance.lastName.value}',
         widget.contractorId:
             '${widget.contractorFirstName} ${widget.contractorLastName}'
