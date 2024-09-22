@@ -5,7 +5,7 @@ import 'package:bimlinkz_mobile_app/Controllers/user_profile_controller.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/about_us_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/contact_us_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/contractor_form_screen.dart';
-import 'package:bimlinkz_mobile_app/screens/mobile/contractor_screen.dart';
+import 'package:bimlinkz_mobile_app/screens/mobile/saved_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/jobpost_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/preferences.dart';
 import 'package:bimlinkz_mobile_app/theme.dart';
@@ -192,12 +192,12 @@ class _AccountScreenState extends State<AccountScreen> {
                 ),
                 ListButton(
                     tapped: () {
-                      Get.to(() => ContractorsPage(),
+                      Get.to(() => SavedPage(),
                           transition: Transition.rightToLeftWithFade);
                     },
                     icon: Icons.work_history_outlined,
-                    title: 'Contractors',
-                    subTitle: "Person's you have worked with before or saved "),
+                    title: 'Saved',
+                    subTitle: "Freelancers & jobs you saved"),
                 const Divider(
                   thickness: .2,
                 ),

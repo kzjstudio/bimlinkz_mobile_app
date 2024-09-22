@@ -13,6 +13,7 @@ class UserProfileController extends GetxController {
   String? phoneNumber;
   String? address;
   var imageUrl = "".obs;
+  var userName = ''.obs;
   var firstName = ''.obs;
   var lastName = ''.obs;
   List<String> skills = [];
@@ -30,26 +31,37 @@ class UserProfileController extends GetxController {
   }
 
   resetuser() {
-    firstName.value = '';
+    userName.value = '';
     email.value = '';
     imageUrl.value = '';
   }
 
   getUser() {
-    final docref = db.collection('users').doc(auth.currentUser?.uid);
-    docref.snapshots().listen((event) {
-      firstName.value = event['First_Name'];
-      lastName.value = event["Last_Name"];
-      email.value = event['Email'];
-      isContractor.value = event['is_Contractor'];
-      isLoaded.value = true;
-      imageUrl.value = event['imageUrl'];
-      isConfirmed.value = event['isConfirmed'];
-    });
-    (e) {
+    final docRef = db.collection('users').doc(auth.currentUser?.uid);
+
+    docRef.snapshots().listen((event) {
+      // Safely access the fields using `containsKey()`
+      var data = event.data() as Map<String, dynamic>?;
+
+      if (data != null) {
+        userName.value = data.containsKey('User_Name') ? data['User_Name'] : '';
+        firstName.value =
+            data.containsKey('First_Name') ? data['First_Name'] : '';
+        lastName.value = data.containsKey('Last_Name') ? data['Last_Name'] : '';
+        email.value = data.containsKey('Email') ? data['Email'] : '';
+        isContractor.value =
+            data.containsKey('is_Contractor') ? data['is_Contractor'] : false;
+        imageUrl.value = data.containsKey('imageUrl')
+            ? data['imageUrl']
+            : ''; // Safely access imageUrl
+        isConfirmed.value =
+            data.containsKey('isConfirmed') ? data['isConfirmed'] : false;
+
+        isLoaded.value = true;
+      }
+    }, onError: (e) {
       isLoaded.value = false;
       print(e);
-    };
-    print('got user info');
+    });
   }
 }

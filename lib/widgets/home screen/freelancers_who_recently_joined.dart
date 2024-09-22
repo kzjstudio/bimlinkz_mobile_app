@@ -1,10 +1,52 @@
+import 'package:bimlinkz_mobile_app/Controllers/auth_controller.dart';
 import 'package:bimlinkz_mobile_app/Controllers/data_controller.dart';
+import 'package:bimlinkz_mobile_app/models/contractors.dart';
+import 'package:bimlinkz_mobile_app/screens/mobile/chat_screen.dart';
 import 'package:bimlinkz_mobile_app/screens/mobile/contractor_details_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class FreelancersWhoRecentlyJoined extends StatelessWidget {
   final DataController dataController = Get.find();
+
+  void saveFreeLancer(Map<String, dynamic> contractor) async {
+    try {
+      final userId = AuthController.instance.auth.currentUser!.uid;
+      if (userId == null) {
+        Get.snackbar('Error', 'You must be logged in to save a freelancer');
+        return;
+      }
+      final userDocRef = FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .collection('savedContractors')
+          .doc(contractor['id']);
+
+      final userSnapShot = await userDocRef.get();
+      List<dynamic> savedContractors =
+          userSnapShot.data()?['savedContractors'] ?? [];
+
+      bool alreadySaved = savedContractors
+          .any((saved) => saved['contractorId'] == contractor['id']);
+      if (alreadySaved) {
+        Get.snackbar(
+            "Already Saved", "You have already saved this contractor.");
+        return;
+      }
+      await userDocRef.set({
+        'contractorId': contractor['id'], // Store contractor's unique ID
+        'name':
+            '${contractor['First_Name']} ${contractor['Last_Name']}', // Store contractor's name
+        'Skill': contractor['Skill'] // Store contractor's skill (optional)
+      });
+
+      Get.snackbar("Success", "Contractor saved to your profile.");
+    } catch (e) {
+      print("Error saving contractor: $e");
+      Get.snackbar("Error", "Failed to save contractor. Please try again.");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -102,20 +144,19 @@ class FreelancersWhoRecentlyJoined extends StatelessWidget {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  ElevatedButton.icon(
-                                    onPressed: () {
-                                      // Handle message action
-                                    },
-                                    icon: const Icon(Icons.message),
-                                    label: const Text('Message'),
-                                    style: ElevatedButton.styleFrom(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 10),
-                                    ),
-                                  ),
+                                  IconButton(
+                                      onPressed: () {
+                                        Get.to(() => ChatScreen(
+                                            contractorFirstName:
+                                                contractor['First_Name'],
+                                            contractorLastName:
+                                                contractor["Last_Name"],
+                                            contractorId: contractor['id']));
+                                      },
+                                      icon: Icon(Icons.message)),
                                   IconButton(
                                     onPressed: () {
-                                      // Handle bookmark action
+                                      saveFreeLancer(contractor);
                                     },
                                     icon: const Icon(Icons.bookmark),
                                   ),
