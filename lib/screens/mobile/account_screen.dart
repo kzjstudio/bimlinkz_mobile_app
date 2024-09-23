@@ -132,6 +132,7 @@ class _AccountScreenState extends State<AccountScreen> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // TODO 'make the users name start with capital'
                   Text(
                     'Hi ${UserProfileController.instance.firstName.value}',
                     style: const TextStyle(fontWeight: FontWeight.bold),

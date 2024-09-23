@@ -40,7 +40,8 @@ class DataController extends GetxController {
     var collection = await FirebaseFirestore.instance
         .collection('users')
         .where('is_Contractor', isEqualTo: true)
-        .limit(3)
+        .orderBy('Became_Contractor_Date', descending: true)
+        .limit(4)
         .get();
     var fetchedRecentContractors =
         collection.docs.map((doc) => doc.data()).toList();
