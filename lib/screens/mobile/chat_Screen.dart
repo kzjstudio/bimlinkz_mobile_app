@@ -50,7 +50,7 @@ class _ChatScreenState extends State<ChatScreen> {
     final currentUserId = AuthController.instance.auth.currentUser!.uid;
 
     await FirebaseFirestore.instance.collection('Chats').doc(chatId).update({
-      'unreadCount.$currentUserId': 0,
+      'unread_Count.$currentUserId': 0,
     });
   }
 
@@ -70,7 +70,7 @@ class _ChatScreenState extends State<ChatScreen> {
       'message': message,
       'timestamp': FieldValue.serverTimestamp(),
     };
-
+    //send message to subcollection
     await FirebaseFirestore.instance
         .collection('Chats')
         .doc(chatId)

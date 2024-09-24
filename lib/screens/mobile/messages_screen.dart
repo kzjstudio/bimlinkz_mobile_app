@@ -69,9 +69,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
               final lastMessage = chatData['last_message'] ?? 'No message';
 
               // Safely check and fetch unread_counts
-              final unreadCount = chatData['unread_counts'] != null
-                  ? chatData['unread_counts'][currentUserId] ?? 0
-                  : 0;
+              final unreadCount = chatData['unread_counts.$currentUserId'] ?? 0;
 
               return FutureBuilder<DocumentSnapshot>(
                 future: FirebaseFirestore.instance
@@ -126,7 +124,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
                               right: 0,
                               child: Container(
                                 padding: const EdgeInsets.all(6),
-                                decoration: BoxDecoration(
+                                decoration: const BoxDecoration(
                                   color: Colors.red,
                                   shape: BoxShape.circle,
                                 ),
