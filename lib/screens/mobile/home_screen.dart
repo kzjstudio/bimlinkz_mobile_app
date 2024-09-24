@@ -66,68 +66,71 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
           ),
-          body: Obx(() {
-            if (dataController.dataFetched.isFalse) {
-              return const Center(child: CircularProgressIndicator());
-            } else {
-              return SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TextField(
-                        controller: _searchController,
-                        decoration: InputDecoration(
-                          hintText: 'Search the type of work you want done',
-                          suffixIcon: IconButton(
-                            icon: const Icon(Icons.clear),
-                            onPressed: () {
-                              _searchController.clear();
-                            },
-                          ),
-                          prefixIcon: const Icon(Icons.search),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(24),
-                            borderSide: const BorderSide(color: Colors.black),
-                          ),
-                          filled: true,
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      _searchController.text.isNotEmpty
-                          ? _buildSuggestions()
-                          : FeaturedTradesSection(),
-                      const SizedBox(height: 30),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            'Recently joined',
-                            style: TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold,
+          body: RefreshIndicator(
+            onRefresh: _initializeData,
+            child: Obx(() {
+              if (dataController.dataFetched.isFalse) {
+                return const Center(child: CircularProgressIndicator());
+              } else {
+                return SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TextField(
+                          controller: _searchController,
+                          decoration: InputDecoration(
+                            hintText: 'Search the type of work you want done',
+                            suffixIcon: IconButton(
+                              icon: const Icon(Icons.clear),
+                              onPressed: () {
+                                _searchController.clear();
+                              },
                             ),
+                            prefixIcon: const Icon(Icons.search),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(24),
+                              borderSide: const BorderSide(color: Colors.black),
+                            ),
+                            filled: true,
                           ),
-                          TextButton(
-                            onPressed: () {
-                              // Get.to(() => const SeeAllCategoriesScreen(),
-                              //     transition: Transition.rightToLeft);
-                            },
-                            child: const Text('See all'),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      FreelancersWhoRecentlyJoined(),
-                    ],
+                        ),
+                        const SizedBox(height: 20),
+                        _searchController.text.isNotEmpty
+                            ? _buildSuggestions()
+                            : FeaturedTradesSection(),
+                        const SizedBox(height: 30),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              'Recently joined',
+                              style: TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                // Get.to(() => const SeeAllCategoriesScreen(),
+                                //     transition: Transition.rightToLeft);
+                              },
+                              child: const Text('See all'),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        FreelancersWhoRecentlyJoined(),
+                      ],
+                    ),
                   ),
-                ),
-              );
-            }
-          }),
+                );
+              }
+            }),
+          ),
         ),
       ),
     );

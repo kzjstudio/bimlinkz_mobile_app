@@ -154,9 +154,10 @@ class _ContractorFormState extends State<ContractorForm> {
                 const SizedBox(height: 20),
                 _buildTextField('First Name', 'first Name', firstName),
                 _buildTextField('Last Name', 'Last Name', lastName),
-                _buildTextField('Phone', 'phone', telNumber,
+                _buildTextField('Phone Number', 'phone Number', telNumber,
                     keyboardType: TextInputType.phone),
-                _buildDropdown('Skill or trade', selectedSkill, jobCategories),
+                _buildDropdown(
+                    'Skill or Profession', selectedSkill, jobCategories),
                 _buildTextField(
                     'Years of Experience', 'experience', yearsExperience,
                     keyboardType: TextInputType.number),
@@ -172,6 +173,7 @@ class _ContractorFormState extends State<ContractorForm> {
                       },
                     ),
                     Expanded(
+                      //TODO need to include a privacy policy
                       child: GestureDetector(
                         onTap: () {
                           showDialog(
@@ -205,13 +207,10 @@ class _ContractorFormState extends State<ContractorForm> {
                   ],
                 ),
                 const SizedBox(height: 20),
+                //TODO : need to style this button
                 Obx(
                   () => ElevatedButton(
                     onPressed: isLoading.isFalse ? () => _submitForm() : null,
-                    style: ElevatedButton.styleFrom(
-                      shape: const StadiumBorder(),
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                    ),
                     child: const Text('Submit'),
                   ),
                 )
@@ -307,6 +306,7 @@ class _ContractorFormState extends State<ContractorForm> {
               telNumber.clear();
               yearsExperience.clear();
               selectedSkill = 'Select Skill';
+              //TODO this dialog need to be styled
               Get.defaultDialog(
                   contentPadding: const EdgeInsets.all(25),
                   onConfirm: () {

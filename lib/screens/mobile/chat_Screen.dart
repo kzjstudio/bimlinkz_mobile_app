@@ -34,6 +34,7 @@ class _ChatScreenState extends State<ChatScreen> {
         .collection('messages')
         .orderBy('timestamp', descending: true)
         .snapshots();
+    _resetUnreadCount();
   }
 
   String _getChatId() {
@@ -42,6 +43,15 @@ class _ChatScreenState extends State<ChatScreen> {
     return currentUserId.compareTo(contractorId) < 0
         ? '$currentUserId $contractorId'
         : '$contractorId $currentUserId';
+  }
+
+  Future<void> _resetUnreadCount() async {
+    final chatId = widget.chatId ?? _getChatId();
+    final currentUserId = AuthController.instance.auth.currentUser!.uid;
+
+    await FirebaseFirestore.instance.collection('Chats').doc(chatId).update({
+      'unreadCount.$currentUserId': 0,
+    });
   }
 
   Future<void> _sendMessage() async {
@@ -78,7 +88,8 @@ class _ChatScreenState extends State<ChatScreen> {
       },
       'last_message': message,
       'last_message_timestamp': FieldValue.serverTimestamp(),
-    });
+      'unread_counts.${widget.contractorId}': FieldValue.increment(1),
+    }, SetOptions(merge: true));
 
     _messageController.clear();
   }
