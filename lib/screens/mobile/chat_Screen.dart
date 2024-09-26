@@ -50,7 +50,7 @@ class _ChatScreenState extends State<ChatScreen> {
     final currentUserId = AuthController.instance.auth.currentUser!.uid;
 
     await FirebaseFirestore.instance.collection('Chats').doc(chatId).update({
-      'unread_Count.$currentUserId': 0,
+      'unread_counts$currentUserId': 0,
     });
   }
 
@@ -88,7 +88,7 @@ class _ChatScreenState extends State<ChatScreen> {
       },
       'last_message': message,
       'last_message_timestamp': FieldValue.serverTimestamp(),
-      'unread_counts.${widget.contractorId}': FieldValue.increment(1),
+      'unread_counts${widget.contractorId}': FieldValue.increment(1),
     }, SetOptions(merge: true));
 
     _messageController.clear();
