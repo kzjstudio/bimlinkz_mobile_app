@@ -2,12 +2,16 @@ class Contractor {
   final String name;
   final String email;
   final String skill;
-  // Uncomment these if you plan to use them later
+  final String id;
   // final String phoneNumber;
   // final String address;
   // final String rating;
 
-  Contractor({required this.name, required this.email, required this.skill
+  Contractor(
+      {required this.name,
+      required this.email,
+      required this.skill,
+      required this.id
       // required this.phoneNumber,
       // required this.address,
       // required this.rating,
@@ -19,6 +23,7 @@ class Contractor {
       name: data['name'] ?? 'Unknown', // Provide a default value if null
       email: data['email'] ?? 'No email', // Provide a default value if null
       skill: data['Skill'] ?? 'No skill', // Provide a default value if null
+      id: data['id'] ?? 'No id',
       // phoneNumber: data['phoneNumber'] ?? 'No phone', // Handle null with a default
       // address: data['address'] ?? 'No address', // Handle null with a default
       // rating: data['rating'] ?? 'No rating', // Handle null with a default

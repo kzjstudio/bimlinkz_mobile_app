@@ -1,8 +1,10 @@
 import 'package:bimlinkz_mobile_app/Controllers/auth_controller.dart';
 import 'package:bimlinkz_mobile_app/models/contractors.dart';
+import 'package:bimlinkz_mobile_app/screens/mobile/chat_Screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../models/jobs.dart';
 
@@ -74,12 +76,20 @@ class _ContractorsPageState extends State<SavedPage> {
                     itemCount: contractors.length,
                     itemBuilder: (context, index) {
                       Contractor contractor = contractors[index];
-                      return Card(
-                        margin:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                        child: ListTile(
-                          title: Text(contractor.name),
-                          subtitle: Text('Skill: ${contractor.skill}'),
+                      return InkWell(
+                        onTap: () {
+                          Get.to(() => ChatScreen(
+                              contractorFirstName: contractor.name,
+                              contractorLastName: contractor.name,
+                              contractorId: contractor.id));
+                        },
+                        child: Card(
+                          margin:
+                              EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                          child: ListTile(
+                            title: Text(contractor.name),
+                            subtitle: Text('Skill: ${contractor.skill}'),
+                          ),
                         ),
                       );
                     },
